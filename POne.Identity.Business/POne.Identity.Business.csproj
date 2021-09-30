@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Commands\Outputs\" />
+    <Folder Include="Events\" />
+    <Folder Include="EventHandlers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\POne.Core\POne.Core.csproj" />
+    <ProjectReference Include="..\POne.Domain\POne.Domain.csproj" />
+    <ProjectReference Include="..\POne.Identity.Domain\POne.Identity.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
