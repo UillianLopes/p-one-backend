@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using POne.Core.Extensions;
 using POne.Domain.Entities;
 using POne.Infra.Mappings;
+using System;
 
 namespace POne.Identity.Infra.Mappings
 {
@@ -46,6 +48,21 @@ namespace POne.Identity.Infra.Mappings
 
                 address.Property(a => a.ZipCode)
                     .HasMaxLength(20);
+
+                address.HasData(new object[]
+                {
+                    new
+                    {
+                        City = "Serra",
+                        Country = "Brazil",
+                        District = "Praia de capuba",
+                        Number = "20",
+                        State = "ES",
+                        Street = "Rua Dolores Araujo de Oliveira",
+                        ZipCode = "29173660",
+                        UserId = Guid.Parse("3DE581C4-3F1A-4AC3-A395-24A697EDA880")
+                    }
+                });
             });
 
             builder.OwnsOne(user => user.MobilePhone, (phone) =>
@@ -56,16 +73,49 @@ namespace POne.Identity.Infra.Mappings
                 phone.Property(p => p.Number)
                     .HasMaxLength(20)
                     .IsRequired();
+
+                phone.HasData(new object[]
+                {
+                    new
+                    {
+                        CountryCode = 55,
+                        Number = "27998321849",
+                        UserId = Guid.Parse("3DE581C4-3F1A-4AC3-A395-24A697EDA880")
+                    }
+                });
             });
 
             builder.OwnsOne(user => user.Password, (password) =>
             {
                 password.Property(p => p.Value)
                     .IsRequired();
+
+                password.HasData(new object[]
+                {
+                    new
+                    {
+                        Value = "Uil98690659-".Hash(),
+                        UserId = Guid.Parse("3DE581C4-3F1A-4AC3-A395-24A697EDA880")
+                    }
+                });
             });
 
             builder.HasMany(user => user.Accounts)
                 .WithMany(account => account.Users);
+
+            builder.HasData(new object[] {
+                new
+                {
+                    Id = Guid.Parse("3DE581C4-3F1A-4AC3-A395-24A697EDA880"),
+                    AccountId = Guid.Parse("CE4B628F-3561-49E8-9560-6E16EF46DFE6"),
+                    Creation = DateTime.Now,
+                    LastUpdate = DateTime.Now,
+                    IsDeleted = false,
+                    Name = "Uillian de Souza Lopes",
+                    Email = "uilliansl@outlook.com",
+                    BirthDate = new DateTime(1996, 3, 27)
+                }
+            });
         }
     }
 }

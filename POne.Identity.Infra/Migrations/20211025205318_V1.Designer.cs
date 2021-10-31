@@ -10,7 +10,7 @@ using POne.Identity.Infra.Connections;
 namespace POne.Identity.Infra.Migrations
 {
     [DbContext(typeof(POneIdentityDbContext))]
-    [Migration("20210929204843_V1")]
+    [Migration("20211025205318_V1")]
     partial class V1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -68,6 +68,17 @@ namespace POne.Identity.Infra.Migrations
                     b.HasIndex("ParentAccountId");
 
                     b.ToTable("Accounts", "auth");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("ce4b628f-3561-49e8-9560-6e16ef46dfe6"),
+                            Creation = new DateTime(2021, 10, 25, 17, 53, 17, 995, DateTimeKind.Local).AddTicks(9470),
+                            Email = "uilliansl@outlook.com",
+                            IsDeleted = false,
+                            LastUpdate = new DateTime(2021, 10, 25, 17, 53, 17, 995, DateTimeKind.Local).AddTicks(9478),
+                            Name = "Uillian de Souza Lopes"
+                        });
                 });
 
             modelBuilder.Entity("POne.Domain.Entities.Profile", b =>
@@ -169,6 +180,18 @@ namespace POne.Identity.Infra.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users", "auth");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("3de581c4-3f1a-4ac3-a395-24a697eda880"),
+                            BirthDate = new DateTime(1996, 3, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Creation = new DateTime(2021, 10, 25, 17, 53, 17, 991, DateTimeKind.Local).AddTicks(2858),
+                            Email = "uilliansl@outlook.com",
+                            IsDeleted = false,
+                            LastUpdate = new DateTime(2021, 10, 25, 17, 53, 17, 991, DateTimeKind.Local).AddTicks(9693),
+                            Name = "Uillian de Souza Lopes"
+                        });
                 });
 
             modelBuilder.Entity("ProfileRole", b =>
@@ -266,6 +289,19 @@ namespace POne.Identity.Infra.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("UserId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    UserId = new Guid("3de581c4-3f1a-4ac3-a395-24a697eda880"),
+                                    City = "Serra",
+                                    Country = "Brazil",
+                                    District = "Praia de capuba",
+                                    Number = "20",
+                                    State = "ES",
+                                    Street = "Rua Dolores Araujo de Oliveira",
+                                    ZipCode = "29173660"
+                                });
                         });
 
                     b.OwnsOne("POne.Core.ValueObjects.Password", "Password", b1 =>
@@ -283,6 +319,13 @@ namespace POne.Identity.Infra.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("UserId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    UserId = new Guid("3de581c4-3f1a-4ac3-a395-24a697eda880"),
+                                    Value = "$2a$11$SEyMRQIEAnJV1tHqZKTkruImz5inNLuanzqBxpCg4r9IKegFjeexO"
+                                });
                         });
 
                     b.OwnsOne("POne.Core.ValueObjects.PhoneNumber", "MobilePhone", b1 =>
@@ -304,6 +347,14 @@ namespace POne.Identity.Infra.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("UserId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    UserId = new Guid("3de581c4-3f1a-4ac3-a395-24a697eda880"),
+                                    CountryCode = 55,
+                                    Number = "27998321849"
+                                });
                         });
 
                     b.Navigation("Address");

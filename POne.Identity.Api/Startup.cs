@@ -57,14 +57,9 @@ namespace POne.Identity.Api
                 ops.Authentication.CookieLifetime = TimeSpan.FromHours(2);
             })
             .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
-            .AddConfigurationStore(config =>
-            {
-                config.ConfigureDbContext = d => d.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssemblyName));
-            })
-            .AddOperationalStore(config =>
-            {
-                config.ConfigureDbContext = d => d.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationsAssemblyName));
-            })
+            .AddInMemoryClients(IdentityServerConfig.Clients)
+            .AddInMemoryApiScopes(IdentityServerConfig.ApiScopes)
+            .AddInMemoryIdentityResources(IdentityServerConfig.IdentityResources)
             .AddDeveloperSigningCredential()
             .AddProfileService<ProfileService>();
 

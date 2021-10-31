@@ -181,6 +181,18 @@ namespace POne.Identity.Infra.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                schema: "auth",
+                table: "Accounts",
+                columns: new[] { "Id", "Creation", "Email", "IsDeleted", "LastUpdate", "Name", "ParentAccountId" },
+                values: new object[] { new Guid("ce4b628f-3561-49e8-9560-6e16ef46dfe6"), new DateTime(2021, 10, 25, 17, 53, 17, 995, DateTimeKind.Local).AddTicks(9470), "uilliansl@outlook.com", false, new DateTime(2021, 10, 25, 17, 53, 17, 995, DateTimeKind.Local).AddTicks(9478), "Uillian de Souza Lopes", null });
+
+            migrationBuilder.InsertData(
+                schema: "auth",
+                table: "Users",
+                columns: new[] { "Id", "BirthDate", "Creation", "Email", "IsDeleted", "LastUpdate", "Name", "Address_City", "Address_Country", "Address_District", "Address_Number", "Address_State", "Address_Street", "Address_ZipCode", "Password_Value", "MobilePhone_CountryCode", "MobilePhone_Number" },
+                values: new object[] { new Guid("3de581c4-3f1a-4ac3-a395-24a697eda880"), new DateTime(1996, 3, 27, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2021, 10, 25, 17, 53, 17, 991, DateTimeKind.Local).AddTicks(2858), "uilliansl@outlook.com", false, new DateTime(2021, 10, 25, 17, 53, 17, 991, DateTimeKind.Local).AddTicks(9693), "Uillian de Souza Lopes", "Serra", "Brazil", "Praia de capuba", "20", "ES", "Rua Dolores Araujo de Oliveira", "29173660", "$2a$11$SEyMRQIEAnJV1tHqZKTkruImz5inNLuanzqBxpCg4r9IKegFjeexO", 55, "27998321849" });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Accounts_ParentAccountId",
                 schema: "auth",

@@ -22,19 +22,45 @@ namespace POne.Identity.Business.CommandHandlers
         public async Task<ICommandOuput> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
             Account account;
+            User user = request;
+
 
             if (request.AccountId is not Guid accountId)
             {
                 account = request;
+                account.AddUser(user);
+
                 await _accoutRepository.CreateAync(account, cancellationToken);
+
+                return CommandOutput.Created($"User/{user.Id}", new
+                {
+                    user.Id,
+                    user.Creation,
+                    user.LastUpdate,
+                    user.Name,
+                    user.Email,
+                    user.BirthDate,
+                    Address = new
+                    {
+                        user.Address.Street,
+                        user.Address.District,
+                        user.Address.Number,
+                        user.Address.City,
+                        user.Address.State,
+                        user.Address.Country,
+                        user.Address.ZipCode
+                    },
+                    MobilePhone = new
+                    {
+                        user.MobilePhone.Number,
+                        user.MobilePhone.CountryCode
+                    }
+
+                }, "@PONE.MESSAGES.USER_CREATED");
             }
             else if (await _accoutRepository.FindByIdAync(accountId, cancellationToken) is Account searchedAccount)
                 account = searchedAccount;
             else return CommandOutput.BadRequest("@PONE.MESSAGES.INVALID_ACCOUNT_ID");
-
-            User user = request;
-
-            await _userRepository.CreateAync(request, cancellationToken);
 
             account.AddUser(user);
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace POne.Identity.Api
 {
-    public class Config
+    public class IdentityServerConfig
     {
         public static IEnumerable<IdentityResource> IdentityResources =>
            new IdentityResource[]
@@ -21,7 +21,6 @@ namespace POne.Identity.Api
         public static IEnumerable<Client> Clients =>
             new Client[]
             {
-                // m2m client credentials flow client
                 new Client
                 {
                     ClientId = "http://localhost:4200",
