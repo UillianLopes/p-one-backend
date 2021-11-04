@@ -42,8 +42,7 @@ namespace POne.Financial.Business.CommandHandlers
             if (await _categoryRepsitory.FindByIdAync(request.Id, cancellationToken) is not Category category)
                 return CommandOutput.NotFound("@PONE.MESSAGES.CATEGORY_NOT_FOUND");
 
-            category.Name = request.Name;
-            category.Description = request.Description;
+            category.Update(request.Name, request.Description);
 
             return CommandOutput.Ok(new
             {

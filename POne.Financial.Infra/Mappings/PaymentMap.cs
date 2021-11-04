@@ -14,12 +14,22 @@ namespace POne.Financial.Infra.Mappings
             base.Configure(builder);
 
             builder.Property(e => e.Value)
-                .IsRequired();
+                .IsRequired()
+                .HasColumnType("Decimal(10,4)");
+
+            builder.Property(e => e.Fees)
+                .HasColumnType("Decimal(10,4)");
+
+            builder.Property(e => e.Fine)
+                .IsRequired()
+                .HasColumnType("Decimal(10,4)");
 
             builder.HasOne(e => e.Entry)
                  .WithMany(e => e.Payments)
                  .IsRequired();
 
+            builder.HasOne(e => e.Balance)
+                 .WithMany(e => e.Payments);
         }
     }
 }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using POne.Financial.Infra.Connections;
 
 namespace POne.Financial.Infra.Migrations
 {
     [DbContext(typeof(POneFinancialDbContext))]
-    partial class POneFinancialDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211104140203_V2")]
+    partial class V2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,7 +43,7 @@ namespace POne.Financial.Infra.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Value")
-                        .HasColumnType("Decimal(10,4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -103,12 +105,11 @@ namespace POne.Financial.Infra.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
-                    b.Property<DateTime?>("DueDate")
-                        .IsRequired()
-                        .HasColumnType("datetime2");
+                    b.Property<decimal>("Fees")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("Index")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Fine")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -116,8 +117,8 @@ namespace POne.Financial.Infra.Migrations
                     b.Property<DateTime?>("LastUpdate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("RecurrenceId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("Recurrence")
+                        .HasColumnType("int");
 
                     b.Property<Guid?>("SubCategoryId")
                         .HasColumnType("uniqueidentifier");
@@ -134,13 +135,11 @@ namespace POne.Financial.Infra.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Value")
-                        .HasColumnType("Decimal(10,4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("RecurrenceId");
 
                     b.HasIndex("SubCategoryId");
 
@@ -154,7 +153,7 @@ namespace POne.Financial.Infra.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("BalanceId")
+                    b.Property<Guid>("BalanceId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Creation")
@@ -163,12 +162,6 @@ namespace POne.Financial.Infra.Migrations
                     b.Property<Guid>("EntryId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal>("Fees")
-                        .HasColumnType("Decimal(10,4)");
-
-                    b.Property<decimal>("Fine")
-                        .HasColumnType("Decimal(10,4)");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -176,7 +169,7 @@ namespace POne.Financial.Infra.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("Value")
-                        .HasColumnType("Decimal(10,4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -244,7 +237,9 @@ namespace POne.Financial.Infra.Migrations
                 {
                     b.HasOne("POne.Financial.Domain.Domain.Balance", "Balance")
                         .WithMany("Payments")
-                        .HasForeignKey("BalanceId");
+                        .HasForeignKey("BalanceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("POne.Financial.Domain.Domain.Entry", "Entry")
                         .WithMany("Payments")

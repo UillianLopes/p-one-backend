@@ -6,13 +6,19 @@ namespace POne.Financial.Domain.Domain
     {
         protected Payment() : base() { }
 
-        public Payment(Entry entry, decimal value) : this()
+        public Payment(decimal value, decimal fees, decimal fine, Entry entry, Balance balance) : this()
         {
-            Entry = entry;
             Value = value;
+            Fees = fees;
+            Fine = fine;
+            Entry = entry;
+            Balance = balance;
         }
 
-        public virtual Entry Entry { get; private set; }
         public decimal Value { get; private set; }
+        public decimal Fees { get; private set; }
+        public decimal Fine { get; private set; }
+        public virtual Entry Entry { get; private set; }
+        public virtual Balance Balance { get; private set; }
     }
 }

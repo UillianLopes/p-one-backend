@@ -25,7 +25,6 @@ namespace POne.Financial.Infra.Connections
             modelBuilder.ApplyConfiguration(new SubCategoryMap());
             modelBuilder.ApplyConfiguration(new EntryMap());
             modelBuilder.ApplyConfiguration(new PaymentMap());
-
         }
     }
 }

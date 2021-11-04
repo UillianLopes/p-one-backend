@@ -40,8 +40,7 @@ namespace POne.Financial.Business.CommandHandlers
             if (await _balanceRepsitory.FindByIdAync(request.Id, cancellationToken) is not Balance balance)
                 return CommandOutput.NotFound("@PONE.MESSAGES.BALANCE_NOT_FOUND");
 
-            balance.Name = request.Name;
-            balance.Value = request.Value;
+            balance.Update(request.Name, request.Value);
 
             return CommandOutput.Ok(new
             {

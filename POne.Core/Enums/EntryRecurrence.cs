@@ -2,7 +2,7 @@
 {
     public enum EntryRecurrence
     {
-        OneTime,
+        None,
         EveryLastMonthDay,
         Every15Days,
         Every30Days,

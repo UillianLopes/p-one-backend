@@ -21,6 +21,5 @@ namespace POne.Financial.Domain.Domain
         public Guid UserId { get; private set; }
 
         public virtual ISet<Entry> Entries { get; private set; }
-
     }
 }

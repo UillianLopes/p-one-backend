@@ -14,7 +14,8 @@ namespace POne.Financial.Infra.Mappings
             builder.ToTable("Balances", "fin");
 
             builder.Property(e => e.Value)
-                .IsRequired();
+                .IsRequired()
+                .HasColumnType("Decimal(10,4)");
 
             builder.Property(e => e.Name)
                 .IsRequired();
@@ -23,6 +24,9 @@ namespace POne.Financial.Infra.Mappings
                 .IsRequired();
 
             builder.HasIndex(e => e.UserId);
+
+            builder.HasMany(e => e.Payments)
+                .WithOne(e => e.Balance);
         }
     }
 }

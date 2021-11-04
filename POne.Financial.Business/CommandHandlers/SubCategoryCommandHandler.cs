@@ -42,8 +42,7 @@ namespace POne.Financial.Business.CommandHandlers
             if (await _subCategoryRepsitory.FindByIdAync(request.Id, cancellationToken) is not SubCategory subCategory)
                 return CommandOutput.NotFound("@PONE.MESSAGES.SUB_CATEGORY_NOT_FOUND");
 
-            subCategory.Name = request.Name;
-            subCategory.Description = request.Description;
+            subCategory.Update(request.Name, request.Description);
 
             return CommandOutput.Ok("@PONE.MESSAGES.SUB_CATEGORY_UPDATED");
         }

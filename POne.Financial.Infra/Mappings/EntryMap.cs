@@ -18,18 +18,21 @@ namespace POne.Financial.Infra.Mappings
 
             builder.HasIndex(e => e.UserId);
 
+            builder.Property(e => e.RecurrenceId);
+
+            builder.HasIndex(e => e.RecurrenceId);
+
+            builder.Property(e => e.Index);
+
             builder.Property(e => e.Type)
                 .IsRequired();
 
-            builder.Property(e => e.Recurrence)
-                .IsRequired();
-
             builder.Property(e => e.Value)
+                .IsRequired()
+                .HasColumnType("Decimal(10,4)");
+
+            builder.Property(e => e.DueDate)
                 .IsRequired();
-
-            builder.Property(e => e.Fees);
-
-            builder.Property(e => e.Fine);
 
             builder.Property(e => e.Title)
                 .IsRequired()
