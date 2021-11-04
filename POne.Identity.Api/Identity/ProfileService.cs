@@ -45,13 +45,16 @@ namespace POne.Identity.Api.Identity
             var cancellationTokenSource = new CancellationTokenSource();
 
             context.IsActive = !(await _userRepository.FindByIdAync(new Guid(subjectId), cancellationTokenSource.Token) is not User user || user.IsDeleted);
-
         }
 
         private static IEnumerable<Claim> ReadClaimsFromUser(User user)
         {
+
             yield return new Claim(JwtClaimTypes.Name, user.Name);
             yield return new Claim(JwtClaimTypes.Email, user.Email);
+
+            if (user.CurrentAccount != null)
+                yield return new Claim("account", user.CurrentAccount.Id.ToString());
 
             foreach (var account in user.Accounts)
                 yield return new Claim("accounts", account.Id.ToString());

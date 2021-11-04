@@ -36,5 +36,22 @@ namespace POne.Core.Mvc
                 _ => Ok(output),
             };
         }
+
+        public async Task<IActionResult> QueryAsync<TQuery>(TQuery command, CancellationToken cancellationToken) where TQuery : IQuery
+        {
+            var output = await _mediator
+                .Send(command, cancellationToken);
+
+            if (output.Success)
+                await _uow.SaveChangesAsync(cancellationToken);
+
+            return output.HttpStatusCode switch
+            {
+                HttpStatusCode.OK => Ok(output),
+                HttpStatusCode.BadRequest => BadRequest(output),
+                HttpStatusCode.NotFound => NotFound(output),
+                _ => Ok(output),
+            };
+        }
     }
 }

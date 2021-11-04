@@ -29,10 +29,12 @@ namespace POne.Identity.Infra.Mappings
                 .IsRequired();
 
             builder.HasMany(p => p.Profiles)
-                .WithMany(p => p.Roles);
+                .WithMany(p => p.Roles)
+                .UsingEntity(builder => builder.ToTable("ProfilesRoles"));
 
             builder.HasMany(p => p.Users)
-                .WithMany(p => p.Roles);
+                .WithMany(p => p.Roles)
+                .UsingEntity(builder => builder.ToTable("UsersRoles"));
         }
     }
 }

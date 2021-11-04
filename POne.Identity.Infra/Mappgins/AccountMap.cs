@@ -23,11 +23,15 @@ namespace POne.Identity.Infra.Mappgins
                 .IsRequired();
 
             builder.HasMany(p => p.Users)
-                .WithMany(p => p.Accounts);
+                .WithMany(p => p.Accounts)
+                .UsingEntity(builder => builder.ToTable("AccountsUsers"));
 
             builder.HasOne(p => p.ParentAccount)
-                .WithMany(p => p.Accounts);
+                .WithMany(p => p.ChildAccounts);
 
+            builder.HasMany(e => e.CurrentUsers)
+                .WithOne(e => e.CurrentAccount)
+                .OnDelete(DeleteBehavior.SetNull);
 
             builder.HasData(new object[]
             {

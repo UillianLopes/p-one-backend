@@ -1,4 +1,5 @@
 ﻿using POne.Core.CQRS;
+using POne.Core.ValueObjects;
 using POne.Domain.Entities;
 using POne.Identity.Business.Commands.Inputs.Users;
 using POne.Identity.Domain.Contracts.Repositories;
@@ -19,48 +20,80 @@ namespace POne.Identity.Business.CommandHandlers
             _accoutRepository = accoutRepository;
         }
 
-        public async Task<ICommandOuput> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+        private async Task<ICommandOuput> CreateAccountAndUserAsync(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            Account account;
-            User user = request;
+            var account = new Account(request.AccountName, request.AccountEmail);
+
+            var user = new User(
+                request.Name,
+                request.Email,
+                request.BirthDate,
+                new Address(
+                    request.Street,
+                    request.District,
+                    request.Number,
+                    request.City,
+                    request.State,
+                    request.Complement,
+                    request.ZipCode
+                ),
+                new PhoneNumber(55, request.MobilePhone),
+                new Password(request.Password),
+                account
+            );
 
 
-            if (request.AccountId is not Guid accountId)
+            account.AddUser(user);
+
+            await _accoutRepository.CreateAync(account, cancellationToken);
+
+            return CommandOutput.Created($"User/{user.Id}", new
             {
-                account = request;
-                account.AddUser(user);
-
-                await _accoutRepository.CreateAync(account, cancellationToken);
-
-                return CommandOutput.Created($"User/{user.Id}", new
+                user.Id,
+                user.Creation,
+                user.LastUpdate,
+                user.Name,
+                user.Email,
+                user.BirthDate,
+                Address = new
                 {
-                    user.Id,
-                    user.Creation,
-                    user.LastUpdate,
-                    user.Name,
-                    user.Email,
-                    user.BirthDate,
-                    Address = new
-                    {
-                        user.Address.Street,
-                        user.Address.District,
-                        user.Address.Number,
-                        user.Address.City,
-                        user.Address.State,
-                        user.Address.Country,
-                        user.Address.ZipCode
-                    },
-                    MobilePhone = new
-                    {
-                        user.MobilePhone.Number,
-                        user.MobilePhone.CountryCode
-                    }
+                    user.Address.Street,
+                    user.Address.District,
+                    user.Address.Number,
+                    user.Address.City,
+                    user.Address.State,
+                    user.Address.Country,
+                    user.Address.ZipCode
+                },
+                MobilePhone = new
+                {
+                    user.MobilePhone.Number,
+                    user.MobilePhone.CountryCode
+                },
+            }, "@PONE.MESSAGES.USER_CREATED");
 
-                }, "@PONE.MESSAGES.USER_CREATED");
-            }
-            else if (await _accoutRepository.FindByIdAync(accountId, cancellationToken) is Account searchedAccount)
-                account = searchedAccount;
-            else return CommandOutput.BadRequest("@PONE.MESSAGES.INVALID_ACCOUNT_ID");
+        }
+
+        private async Task<ICommandOuput> CreateUserInExistingAccountAsync(CreateUserCommand request, Account account, CancellationToken cancellationToken)
+        {
+            var user = new User(
+                request.Name,
+                request.Email,
+                request.BirthDate,
+                new Address(
+                    request.Street,
+                    request.District,
+                    request.Number,
+                    request.City,
+                    request.State,
+                    request.Complement,
+                    request.ZipCode
+                ),
+                new PhoneNumber(55, request.MobilePhone),
+                new Password(request.Password),
+                account
+            );
+
 
             account.AddUser(user);
 
@@ -91,6 +124,16 @@ namespace POne.Identity.Business.CommandHandlers
                 }
 
             }, "@PONE.MESSAGES.USER_CREATED");
+        }
+
+        public async Task<ICommandOuput> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+        {
+            if (request.AccountId is not Guid accountId)
+                return await CreateAccountAndUserAsync(request, cancellationToken);
+            else if (await _accoutRepository.FindByIdAync(accountId, cancellationToken) is Account account)
+                return await CreateUserInExistingAccountAsync(request, account, cancellationToken);
+
+            return CommandOutput.BadRequest("@PONE.MESSAGES.INVALID_ACCOUNT_ID");
         }
 
         public async Task<ICommandOuput> Handle(UpdateUserCommand request, CancellationToken cancellationToken)

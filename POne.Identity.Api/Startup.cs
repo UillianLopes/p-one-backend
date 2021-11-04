@@ -14,7 +14,6 @@ using POne.Identity.Infra.Connections;
 using POne.Identity.Infra.Repositories;
 using POne.Infra.UnityOfWork;
 using System;
-using System.Reflection;
 
 namespace POne.Identity.Api
 {
@@ -39,29 +38,32 @@ namespace POne.Identity.Api
                 .WithCQRSFromAssemblyOf<UserCommandHandler>()
             );
 
-            var migrationsAssemblyName = typeof(UserRepository)
-                .GetTypeInfo()
-                .Assembly
-                .GetName()
-                .Name;
+            var allowedCorsOrigns = _configuration
+                 .GetSection("AllowedCorsOrigins")
+                 .Get<string[]>();
 
             services.AddCors(cors => cors.AddPolicy("DefaultCors", config => config
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials()
-                .WithOrigins("http://localhost:4200")));
+                .WithOrigins(allowedCorsOrigns)));
+
+            var identityServerConfig = _configuration
+                .GetSection("IdentityServer")
+                .Get<IdentityServerConfig>();
 
             services.AddIdentityServer(ops =>
             {
-                ops.IssuerUri = "https://localhost:5001";
+                ops.IssuerUri = identityServerConfig.IssuerUri;
                 ops.Authentication.CookieLifetime = TimeSpan.FromHours(2);
             })
-            .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
-            .AddInMemoryClients(IdentityServerConfig.Clients)
-            .AddInMemoryApiScopes(IdentityServerConfig.ApiScopes)
-            .AddInMemoryIdentityResources(IdentityServerConfig.IdentityResources)
-            .AddDeveloperSigningCredential()
-            .AddProfileService<ProfileService>();
+           .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
+           .AddInMemoryClients(identityServerConfig.GetClients())
+           .AddInMemoryApiScopes(identityServerConfig.GetApiScopes())
+           .AddInMemoryIdentityResources(identityServerConfig.GetIdentityResources())
+           .AddInMemoryApiResources(identityServerConfig.GetApiResources())
+           .AddDeveloperSigningCredential()
+           .AddProfileService<ProfileService>();
 
             services.AddControllersWithViews();
 
@@ -87,6 +89,7 @@ namespace POne.Identity.Api
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "POne.Identity.Api v1"));
             }
+
             app.UseCors("DefaultCors");
             app.UseStaticFiles();
             app.UseHttpsRedirection();

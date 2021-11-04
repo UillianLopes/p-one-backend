@@ -1,6 +1,4 @@
 ﻿using POne.Core.CQRS;
-using POne.Core.ValueObjects;
-using POne.Domain.Entities;
 using System;
 
 namespace POne.Identity.Business.Commands.Inputs.Users
@@ -26,29 +24,5 @@ namespace POne.Identity.Business.Commands.Inputs.Users
         public string AccountName { get; set; }
         public string AccountEmail { get; set; }
 
-        public static implicit operator User(CreateUserCommand command)
-        {
-            return new User(
-                command.Name,
-                command.Email,
-                command.BirthDate,
-                new Address(
-                    command.Street,
-                    command.District,
-                    command.Number,
-                    command.City,
-                    command.State,
-                    command.Complement,
-                    command.ZipCode
-                ),
-                new PhoneNumber(55, command.MobilePhone),
-                new Password(command.Password)
-            );
-        }
-
-        public static implicit operator Account(CreateUserCommand command)
-        {
-            return new Account(command.AccountName, command.AccountEmail);
-        }
     }
 }

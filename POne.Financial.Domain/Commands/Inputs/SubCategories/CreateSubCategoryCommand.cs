@@ -1,8 +1,8 @@
 ﻿using POne.Core.CQRS;
 
-namespace POne.Financial.Business.Commands.Inputs.Categories
+namespace POne.Financial.Domain.Commands.Inputs.SubCategories
 {
-    public class CreateCategoryCommand : ICommand
+    public class CreateSubCategoryCommand : ICommand
     {
         public string Name { get; set; }
         public string Description { get; set; }

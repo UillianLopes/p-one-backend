@@ -29,8 +29,10 @@ namespace POne.Core.CQRS
         public static CommandOutput Unauthorized(params string[] messagens) => new(HttpStatusCode.Unauthorized, messagens, null);
 
         public static CommandOutput NotFound(params string[] messagens) => new(HttpStatusCode.NotFound, messagens, null);
-
+        
         public static CommandOutput Ok(object data, params string[] messagens) => new(HttpStatusCode.OK, messagens, data);
+
+        public static CommandOutput Ok(params string[] messagens) => Ok(null, messagens);
 
         public static CommandOutput Created(string uri, object data, params string[] messagens) => new(HttpStatusCode.Created, messagens, data, uri);
 

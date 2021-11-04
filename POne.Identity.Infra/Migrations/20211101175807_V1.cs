@@ -91,6 +91,7 @@ namespace POne.Identity.Infra.Migrations
                     MobilePhone_CountryCode = table.Column<int>(type: "int", nullable: true),
                     MobilePhone_Number = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     Password_Value = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CurrentAccountId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Creation = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastUpdate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
@@ -98,10 +99,17 @@ namespace POne.Identity.Infra.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Users_Accounts_CurrentAccountId",
+                        column: x => x.CurrentAccountId,
+                        principalSchema: "auth",
+                        principalTable: "Accounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProfileRole",
+                name: "ProfilesRoles",
                 schema: "auth",
                 columns: table => new
                 {
@@ -110,16 +118,16 @@ namespace POne.Identity.Infra.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProfileRole", x => new { x.ProfilesId, x.RolesId });
+                    table.PrimaryKey("PK_ProfilesRoles", x => new { x.ProfilesId, x.RolesId });
                     table.ForeignKey(
-                        name: "FK_ProfileRole_Profiles_ProfilesId",
+                        name: "FK_ProfilesRoles_Profiles_ProfilesId",
                         column: x => x.ProfilesId,
                         principalSchema: "auth",
                         principalTable: "Profiles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProfileRole_Roles_RolesId",
+                        name: "FK_ProfilesRoles_Roles_RolesId",
                         column: x => x.RolesId,
                         principalSchema: "auth",
                         principalTable: "Roles",
@@ -128,7 +136,7 @@ namespace POne.Identity.Infra.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AccountUser",
+                name: "AccountsUsers",
                 schema: "auth",
                 columns: table => new
                 {
@@ -137,16 +145,16 @@ namespace POne.Identity.Infra.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AccountUser", x => new { x.AccountsId, x.UsersId });
+                    table.PrimaryKey("PK_AccountsUsers", x => new { x.AccountsId, x.UsersId });
                     table.ForeignKey(
-                        name: "FK_AccountUser_Accounts_AccountsId",
+                        name: "FK_AccountsUsers_Accounts_AccountsId",
                         column: x => x.AccountsId,
                         principalSchema: "auth",
                         principalTable: "Accounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_AccountUser_Users_UsersId",
+                        name: "FK_AccountsUsers_Users_UsersId",
                         column: x => x.UsersId,
                         principalSchema: "auth",
                         principalTable: "Users",
@@ -155,7 +163,7 @@ namespace POne.Identity.Infra.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RoleUser",
+                name: "UsersRoles",
                 schema: "auth",
                 columns: table => new
                 {
@@ -164,16 +172,16 @@ namespace POne.Identity.Infra.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RoleUser", x => new { x.RolesId, x.UsersId });
+                    table.PrimaryKey("PK_UsersRoles", x => new { x.RolesId, x.UsersId });
                     table.ForeignKey(
-                        name: "FK_RoleUser_Roles_RolesId",
+                        name: "FK_UsersRoles_Roles_RolesId",
                         column: x => x.RolesId,
                         principalSchema: "auth",
                         principalTable: "Roles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_RoleUser_Users_UsersId",
+                        name: "FK_UsersRoles_Users_UsersId",
                         column: x => x.UsersId,
                         principalSchema: "auth",
                         principalTable: "Users",
@@ -185,13 +193,13 @@ namespace POne.Identity.Infra.Migrations
                 schema: "auth",
                 table: "Accounts",
                 columns: new[] { "Id", "Creation", "Email", "IsDeleted", "LastUpdate", "Name", "ParentAccountId" },
-                values: new object[] { new Guid("ce4b628f-3561-49e8-9560-6e16ef46dfe6"), new DateTime(2021, 10, 25, 17, 53, 17, 995, DateTimeKind.Local).AddTicks(9470), "uilliansl@outlook.com", false, new DateTime(2021, 10, 25, 17, 53, 17, 995, DateTimeKind.Local).AddTicks(9478), "Uillian de Souza Lopes", null });
+                values: new object[] { new Guid("ce4b628f-3561-49e8-9560-6e16ef46dfe6"), new DateTime(2021, 11, 1, 14, 58, 7, 245, DateTimeKind.Local).AddTicks(6653), "uilliansl@outlook.com", false, new DateTime(2021, 11, 1, 14, 58, 7, 245, DateTimeKind.Local).AddTicks(6658), "Uillian de Souza Lopes", null });
 
             migrationBuilder.InsertData(
                 schema: "auth",
                 table: "Users",
-                columns: new[] { "Id", "BirthDate", "Creation", "Email", "IsDeleted", "LastUpdate", "Name", "Address_City", "Address_Country", "Address_District", "Address_Number", "Address_State", "Address_Street", "Address_ZipCode", "Password_Value", "MobilePhone_CountryCode", "MobilePhone_Number" },
-                values: new object[] { new Guid("3de581c4-3f1a-4ac3-a395-24a697eda880"), new DateTime(1996, 3, 27, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2021, 10, 25, 17, 53, 17, 991, DateTimeKind.Local).AddTicks(2858), "uilliansl@outlook.com", false, new DateTime(2021, 10, 25, 17, 53, 17, 991, DateTimeKind.Local).AddTicks(9693), "Uillian de Souza Lopes", "Serra", "Brazil", "Praia de capuba", "20", "ES", "Rua Dolores Araujo de Oliveira", "29173660", "$2a$11$SEyMRQIEAnJV1tHqZKTkruImz5inNLuanzqBxpCg4r9IKegFjeexO", 55, "27998321849" });
+                columns: new[] { "Id", "BirthDate", "Creation", "CurrentAccountId", "Email", "IsDeleted", "LastUpdate", "Name", "Address_City", "Address_Country", "Address_District", "Address_Number", "Address_State", "Address_Street", "Address_ZipCode", "Password_Value", "MobilePhone_CountryCode", "MobilePhone_Number" },
+                values: new object[] { new Guid("3de581c4-3f1a-4ac3-a395-24a697eda880"), new DateTime(1996, 3, 27, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2021, 11, 1, 14, 58, 7, 239, DateTimeKind.Local).AddTicks(7009), new Guid("ce4b628f-3561-49e8-9560-6e16ef46dfe6"), "uilliansl@outlook.com", false, new DateTime(2021, 11, 1, 14, 58, 7, 240, DateTimeKind.Local).AddTicks(2359), "Uillian de Souza Lopes", "Serra", "Brazil", "Praia de capuba", "20", "ES", "Rua Dolores Araujo de Oliveira", "29173660", "$2a$11$PPEkrX0S3lRuW31Olxe7Be5zwoRlLG0k1zpfMAWKkBk7SmTTNRoO2", 55, "27998321849" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Accounts_ParentAccountId",
@@ -200,40 +208,42 @@ namespace POne.Identity.Infra.Migrations
                 column: "ParentAccountId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AccountUser_UsersId",
+                name: "IX_AccountsUsers_UsersId",
                 schema: "auth",
-                table: "AccountUser",
+                table: "AccountsUsers",
                 column: "UsersId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProfileRole_RolesId",
+                name: "IX_ProfilesRoles_RolesId",
                 schema: "auth",
-                table: "ProfileRole",
+                table: "ProfilesRoles",
                 column: "RolesId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RoleUser_UsersId",
+                name: "IX_Users_CurrentAccountId",
                 schema: "auth",
-                table: "RoleUser",
+                table: "Users",
+                column: "CurrentAccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UsersRoles_UsersId",
+                schema: "auth",
+                table: "UsersRoles",
                 column: "UsersId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AccountUser",
+                name: "AccountsUsers",
                 schema: "auth");
 
             migrationBuilder.DropTable(
-                name: "ProfileRole",
+                name: "ProfilesRoles",
                 schema: "auth");
 
             migrationBuilder.DropTable(
-                name: "RoleUser",
-                schema: "auth");
-
-            migrationBuilder.DropTable(
-                name: "Accounts",
+                name: "UsersRoles",
                 schema: "auth");
 
             migrationBuilder.DropTable(
@@ -246,6 +256,10 @@ namespace POne.Identity.Infra.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users",
+                schema: "auth");
+
+            migrationBuilder.DropTable(
+                name: "Accounts",
                 schema: "auth");
         }
     }

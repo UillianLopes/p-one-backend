@@ -8,7 +8,8 @@ namespace POne.Domain.Entities
         protected Account() : base()
         {
             Users = new HashSet<User>();
-            Accounts = new HashSet<Account>();
+            ChildAccounts = new HashSet<Account>();
+            CurrentUsers = new HashSet<User>();
         }
 
         public Account(string name, string email) : this()
@@ -20,7 +21,8 @@ namespace POne.Domain.Entities
         public string Name { get; private set; }
         public string Email { get; private set; }
         public virtual ISet<User> Users { get; private set; }
-        public virtual ISet<Account> Accounts { get; private set; }
+        public virtual ISet<User> CurrentUsers { get; private set; }
+        public virtual ISet<Account> ChildAccounts { get; private set; }
         public virtual Account ParentAccount { get; private set; }
 
         public void AddUser(User user)
@@ -33,10 +35,10 @@ namespace POne.Domain.Entities
 
         public void AddAccount(Account account)
         {
-            if (Accounts.Contains(account))
+            if (ChildAccounts.Contains(account))
                 return;
 
-            Accounts.Add(account);
+            ChildAccounts.Add(account);
         }
 
         public void RemoveUser(User user)
@@ -46,7 +48,7 @@ namespace POne.Domain.Entities
 
         public void RemoveAccount(Account account)
         {
-            Accounts.Remove(account);
+            ChildAccounts.Remove(account);
         }
     }
 }

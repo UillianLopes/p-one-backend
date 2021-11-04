@@ -5,11 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Commands\Outputs\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\POne.Core\POne.Core.csproj" />
+    <ProjectReference Include="..\POne.Financial.Domain\POne.Financial.Domain.csproj" />
   </ItemGroup>
 
 </Project>

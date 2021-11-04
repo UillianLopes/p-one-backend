@@ -1,10 +1,13 @@
 ﻿
 using MediatR;
 using MediatR.Extensions.FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using POne.Api.Implementations;
 using POne.Core.Contracts;
 using System;
 using System.Reflection;
+using System.Security.Principal;
 
 namespace POne.Api.Extensions
 {
@@ -27,6 +30,12 @@ namespace POne.Api.Extensions
             if (configuration.ValidatorsAssembly is Assembly validatorsAssembly)
                 services.AddFluentValidation(new[] { validatorsAssembly }, ServiceLifetime.Scoped);
 
+            services.AddHttpContextAccessor();
+            services.AddTransient<IPrincipal>(provider => provider
+                .GetRequiredService<IHttpContextAccessor>()
+                .HttpContext
+                .User);
+            services.AddSingleton<IAuthenticatedUser, AuthenticatedUser>();
         }
     }
 

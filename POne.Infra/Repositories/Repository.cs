@@ -2,6 +2,8 @@
 using POne.Core.Contracts;
 using POne.Core.Entities;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,9 +20,16 @@ namespace POne.Infra.Repositories
 
         public void Delete(TEntity entity) => _dbContext.Set<TEntity>().Remove(entity);
 
+        public void DeleteRange(TEntity[] entity) => _dbContext.Set<TEntity>().RemoveRange(entity);
+
         public Task<TEntity> FindByIdAync(Guid id, CancellationToken cancellationToken) => _dbContext
             .Set<TEntity>()
             .FirstOrDefaultAsync(entity => entity.Id == id, cancellationToken);
+
+        public Task<List<TEntity>> FindByIdsAync(Guid[] ids, CancellationToken cancellationToken) => _dbContext
+            .Set<TEntity>()
+            .Where(entity => ids.Contains(entity.Id))
+            .ToListAsync(cancellationToken);
 
         public Task UpdateAsync(TEntity entity, CancellationToken cancellationToken) => Task.Run(() => _dbContext.Set<TEntity>().Update(entity), cancellationToken);
     }

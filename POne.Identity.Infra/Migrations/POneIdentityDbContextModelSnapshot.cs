@@ -16,7 +16,7 @@ namespace POne.Identity.Infra.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.10")
+                .HasAnnotation("ProductVersion", "5.0.11")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("AccountUser", b =>
@@ -31,7 +31,7 @@ namespace POne.Identity.Infra.Migrations
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("AccountUser");
+                    b.ToTable("AccountsUsers");
                 });
 
             modelBuilder.Entity("POne.Domain.Entities.Account", b =>
@@ -71,10 +71,10 @@ namespace POne.Identity.Infra.Migrations
                         new
                         {
                             Id = new Guid("ce4b628f-3561-49e8-9560-6e16ef46dfe6"),
-                            Creation = new DateTime(2021, 10, 25, 17, 53, 17, 995, DateTimeKind.Local).AddTicks(9470),
+                            Creation = new DateTime(2021, 11, 1, 14, 58, 7, 245, DateTimeKind.Local).AddTicks(6653),
                             Email = "uilliansl@outlook.com",
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 10, 25, 17, 53, 17, 995, DateTimeKind.Local).AddTicks(9478),
+                            LastUpdate = new DateTime(2021, 11, 1, 14, 58, 7, 245, DateTimeKind.Local).AddTicks(6658),
                             Name = "Uillian de Souza Lopes"
                         });
                 });
@@ -159,6 +159,9 @@ namespace POne.Identity.Infra.Migrations
                     b.Property<DateTime>("Creation")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid?>("CurrentAccountId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(254)
@@ -177,6 +180,8 @@ namespace POne.Identity.Infra.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CurrentAccountId");
+
                     b.ToTable("Users", "auth");
 
                     b.HasData(
@@ -184,10 +189,11 @@ namespace POne.Identity.Infra.Migrations
                         {
                             Id = new Guid("3de581c4-3f1a-4ac3-a395-24a697eda880"),
                             BirthDate = new DateTime(1996, 3, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Creation = new DateTime(2021, 10, 25, 17, 53, 17, 991, DateTimeKind.Local).AddTicks(2858),
+                            Creation = new DateTime(2021, 11, 1, 14, 58, 7, 239, DateTimeKind.Local).AddTicks(7009),
+                            CurrentAccountId = new Guid("ce4b628f-3561-49e8-9560-6e16ef46dfe6"),
                             Email = "uilliansl@outlook.com",
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 10, 25, 17, 53, 17, 991, DateTimeKind.Local).AddTicks(9693),
+                            LastUpdate = new DateTime(2021, 11, 1, 14, 58, 7, 240, DateTimeKind.Local).AddTicks(2359),
                             Name = "Uillian de Souza Lopes"
                         });
                 });
@@ -204,7 +210,7 @@ namespace POne.Identity.Infra.Migrations
 
                     b.HasIndex("RolesId");
 
-                    b.ToTable("ProfileRole");
+                    b.ToTable("ProfilesRoles");
                 });
 
             modelBuilder.Entity("RoleUser", b =>
@@ -219,7 +225,7 @@ namespace POne.Identity.Infra.Migrations
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("RoleUser");
+                    b.ToTable("UsersRoles");
                 });
 
             modelBuilder.Entity("AccountUser", b =>
@@ -240,7 +246,7 @@ namespace POne.Identity.Infra.Migrations
             modelBuilder.Entity("POne.Domain.Entities.Account", b =>
                 {
                     b.HasOne("POne.Domain.Entities.Account", "ParentAccount")
-                        .WithMany("Accounts")
+                        .WithMany("ChildAccounts")
                         .HasForeignKey("ParentAccountId");
 
                     b.Navigation("ParentAccount");
@@ -248,6 +254,11 @@ namespace POne.Identity.Infra.Migrations
 
             modelBuilder.Entity("POne.Domain.Entities.User", b =>
                 {
+                    b.HasOne("POne.Domain.Entities.Account", "CurrentAccount")
+                        .WithMany("CurrentUsers")
+                        .HasForeignKey("CurrentAccountId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.OwnsOne("POne.Core.ValueObjects.Address", "Address", b1 =>
                         {
                             b1.Property<Guid>("UserId")
@@ -322,7 +333,7 @@ namespace POne.Identity.Infra.Migrations
                                 new
                                 {
                                     UserId = new Guid("3de581c4-3f1a-4ac3-a395-24a697eda880"),
-                                    Value = "$2a$11$SEyMRQIEAnJV1tHqZKTkruImz5inNLuanzqBxpCg4r9IKegFjeexO"
+                                    Value = "$2a$11$PPEkrX0S3lRuW31Olxe7Be5zwoRlLG0k1zpfMAWKkBk7SmTTNRoO2"
                                 });
                         });
 
@@ -356,6 +367,8 @@ namespace POne.Identity.Infra.Migrations
                         });
 
                     b.Navigation("Address");
+
+                    b.Navigation("CurrentAccount");
 
                     b.Navigation("MobilePhone");
 
@@ -394,7 +407,9 @@ namespace POne.Identity.Infra.Migrations
 
             modelBuilder.Entity("POne.Domain.Entities.Account", b =>
                 {
-                    b.Navigation("Accounts");
+                    b.Navigation("ChildAccounts");
+
+                    b.Navigation("CurrentUsers");
                 });
 #pragma warning restore 612, 618
         }

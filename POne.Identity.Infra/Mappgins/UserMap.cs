@@ -101,7 +101,8 @@ namespace POne.Identity.Infra.Mappings
             });
 
             builder.HasMany(user => user.Accounts)
-                .WithMany(account => account.Users);
+                .WithMany(account => account.Users)
+                .UsingEntity(builder => builder.ToTable("AccountsUsers"));
 
             builder.HasData(new object[] {
                 new
@@ -113,9 +114,14 @@ namespace POne.Identity.Infra.Mappings
                     IsDeleted = false,
                     Name = "Uillian de Souza Lopes",
                     Email = "uilliansl@outlook.com",
-                    BirthDate = new DateTime(1996, 3, 27)
+                    BirthDate = new DateTime(1996, 3, 27),
+                    CurrentAccountId = Guid.Parse("CE4B628F-3561-49E8-9560-6E16EF46DFE6")
                 }
             });
+
+            builder.HasOne(e => e.CurrentAccount)
+                .WithMany(e => e.CurrentUsers)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

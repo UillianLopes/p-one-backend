@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using POne.Financial.Business.Commands.Inputs.Categories;
+using POne.Financial.Domain.Commands.Inputs.Categories;
 
-namespace POne.Financial.Business.Commands.Validators.Categories
+namespace POne.Financial.Domain.Commands.Validators.Categories
 {
     public class CreateCategoryCommandValidator : AbstractValidator<CreateCategoryCommand>
     {
