@@ -74,7 +74,11 @@ namespace POne.Financial.Infra.Repositories
                         Id = e.SubCategory.Id,
                         Title = e.SubCategory.Name
                     } : null
-                }).ToListAsync(cancellationToken);
+                })
+                .Skip((filter.Page - 1) * filter.PageSize)
+                .Take(filter.PageSize)
+                .AsNoTracking()
+                .ToListAsync(cancellationToken);
         }
     }
 }

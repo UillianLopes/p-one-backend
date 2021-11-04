@@ -4,9 +4,9 @@ using System.Text.Json.Serialization;
 
 namespace POne.Core.CQRS
 {
-    public class CommandOutput : ICommandOuput
+    public class CommandOutput<T> : ICommandOuput<T> where T : class
     {
-        private CommandOutput(HttpStatusCode httpStausCode, string[] messages, object data, string uri = null)
+        protected CommandOutput(HttpStatusCode httpStausCode, string[] messages, T data, string uri = null)
         {
             HttpStatusCode = httpStausCode;
             Messages = messages;
@@ -21,24 +21,30 @@ namespace POne.Core.CQRS
         public HttpStatusCode HttpStatusCode { get; private set; }
 
         public string[] Messages { get; private set; }
-        public object Data { get; private set; }
+        public T Data { get; private set; }
 
         public bool Success { get => new[] { HttpStatusCode.Created, HttpStatusCode.OK }.Contains(HttpStatusCode); }
 
+        public static CommandOutput<T> Unauthorized(params string[] messagens) => new(HttpStatusCode.Unauthorized, messagens, null);
 
-        public static CommandOutput Unauthorized(params string[] messagens) => new(HttpStatusCode.Unauthorized, messagens, null);
+        public static CommandOutput<T> NotFound(params string[] messagens) => new(HttpStatusCode.NotFound, messagens, null);
 
-        public static CommandOutput NotFound(params string[] messagens) => new(HttpStatusCode.NotFound, messagens, null);
-        
-        public static CommandOutput Ok(object data, params string[] messagens) => new(HttpStatusCode.OK, messagens, data);
+        public static CommandOutput<T> Ok(T data, params string[] messagens) => new(HttpStatusCode.OK, messagens, data);
 
-        public static CommandOutput Ok(params string[] messagens) => Ok(null, messagens);
+        public static CommandOutput<T> Ok(params string[] messagens) => Ok(null, messagens);
 
-        public static CommandOutput Created(string uri, object data, params string[] messagens) => new(HttpStatusCode.Created, messagens, data, uri);
+        public static CommandOutput<T> Created(string uri, T data, params string[] messagens) => new(HttpStatusCode.Created, messagens, data, uri);
 
-        public static CommandOutput BadRequest(object data, params string[] messagens) => new(HttpStatusCode.BadRequest, messagens, data);
-
-
+        public static CommandOutput<T> BadRequest(T data, params string[] messagens) => new(HttpStatusCode.BadRequest, messagens, data);
 
     }
+
+    public class CommandOutput : CommandOutput<object>
+    {
+        protected CommandOutput(HttpStatusCode httpStausCode, string[] messages, object data, string uri = null) : base(httpStausCode, messages, data, uri)
+        {
+        }
+    }
+
+
 }

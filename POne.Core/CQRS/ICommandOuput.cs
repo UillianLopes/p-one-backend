@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace POne.Core.CQRS
 {
+
     public interface ICommandOuput
     {
         [JsonIgnore]
@@ -15,8 +16,13 @@ namespace POne.Core.CQRS
         bool Success { get; }
 
         string[] Messages { get; }
-
-        object Data { get; }
-
     }
+
+    public interface ICommandOuput<T> : ICommandOuput
+    {
+        T Data { get; }
+    }
+
+
+
 }
