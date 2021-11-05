@@ -3,6 +3,6 @@
     public enum EntryValueDistribuition
     {
         Divide,
-        Repeat
+        Repeat,
     }
 }

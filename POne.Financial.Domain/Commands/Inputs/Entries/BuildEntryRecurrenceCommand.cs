@@ -4,7 +4,7 @@ using System;
 
 namespace POne.Financial.Domain.Commands.Inputs.Entries
 {
-    public class ProccessEntryRecurrenceCommand : ICommand
+    public class BuildEntryRecurrenceCommand : ICommand
     {
         public EntryRecurrence Recurrence { get; set; }
         public int RecurrenceTimes { get; set; }

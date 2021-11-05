@@ -14,25 +14,28 @@ using System.Threading.Tasks;
 
 namespace POne.Financial.Business.CommandHandlers
 {
-    public class EntryCommandHandler : ICommandHandler<ProccessEntryRecurrenceCommand>,
+    public class EntryCommandHandler : ICommandHandler<BuildEntryRecurrenceCommand>,
         ICommandHandler<CreateEntryCommand>,
         ICommandHandler<DeleteEntryCommand>,
-        ICommandHandler<DeleteEntriesCommand>
+        ICommandHandler<DeleteEntriesCommand>,
+        ICommandHandler<PayEntryCommand>
     {
         private readonly IAuthenticatedUser _authenticatedUser;
         private readonly IEntryRepository _entryRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly ISubCategoryRepository _subCategoryRepository;
+        private readonly IBalanceRepository _balanceRepository;
 
-        public EntryCommandHandler(IAuthenticatedUser authenticatedUser, IEntryRepository entryRepository, ICategoryRepository categoryRepository, ISubCategoryRepository subCategoryRepository)
+        public EntryCommandHandler(IAuthenticatedUser authenticatedUser, IEntryRepository entryRepository, ICategoryRepository categoryRepository, ISubCategoryRepository subCategoryRepository, IBalanceRepository balanceRepository)
         {
             _authenticatedUser = authenticatedUser;
             _entryRepository = entryRepository;
             _categoryRepository = categoryRepository;
             _subCategoryRepository = subCategoryRepository;
+            _balanceRepository = balanceRepository;
         }
 
-        private static IEnumerable<ProcessEntryRecurrencyItem> CreateEntries(ProccessEntryRecurrenceCommand request)
+        private static IEnumerable<ProcessEntryRecurrencyItem> CreateEntries(BuildEntryRecurrenceCommand request)
         {
             var firstDueDate = request.DueDate;
             var value = request.ValueDistribuition switch
@@ -43,7 +46,7 @@ namespace POne.Financial.Business.CommandHandlers
 
             for (var index = 0; index < request.RecurrenceTimes; index++)
             {
-                
+
                 var dueDate = request.Recurrence switch
                 {
                     EntryRecurrence.Every15Days => firstDueDate.AddDays(index * 15),
@@ -63,7 +66,7 @@ namespace POne.Financial.Business.CommandHandlers
             }
         }
 
-        public async Task<ICommandOuput> Handle(ProccessEntryRecurrenceCommand request, CancellationToken cancellationToken)
+        public async Task<ICommandOuput> Handle(BuildEntryRecurrenceCommand request, CancellationToken cancellationToken)
         {
             return await Task.Run(() =>
             {
@@ -117,6 +120,18 @@ namespace POne.Financial.Business.CommandHandlers
             return CommandOutput.Ok("@PONE.MESSAGES.ENTRIES_DELETED");
         }
 
+        public async Task<ICommandOuput> Handle(PayEntryCommand request, CancellationToken cancellationToken)
+        {
+            if (await _entryRepository.FindByIdAync(request.Id, cancellationToken) is not Entry entry)
+                return CommandOutput.NotFound("@PONE.MESSAGES.ENTRY_NOT_FOUND");
 
+            if (await _balanceRepository.FindByIdAync(request.Id, cancellationToken) is not Balance balance)
+                return CommandOutput.NotFound("@PONE.MESSAGES.BALANCE_NOT_FOUND");
+
+            entry.Pay(balance, request.Value, request.Fees, request.Fine);
+
+            return CommandOutput.Ok("@PONE.MESSAGES.ENTRY_PAID");
+
+        }
     }
 }
