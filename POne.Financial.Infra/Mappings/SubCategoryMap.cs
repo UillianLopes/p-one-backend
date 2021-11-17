@@ -20,17 +20,12 @@ namespace POne.Financial.Infra.Mappings
             builder.Property(e => e.Description)
                 .HasMaxLength(250);
 
-            builder.Property(e => e.AccountId);
-
-            builder.HasIndex(e => e.AccountId);
-
-            builder.Property(e => e.UserId)
-                .IsRequired();
-
-            builder.HasIndex(e => e.UserId);
-
             builder.HasMany(e => e.Entries)
                 .WithOne(e => e.SubCategory);
+
+            builder.HasOne(e => e.Category)
+                .WithMany(e => e.SubCategories)
+                .IsRequired();
         }
     }
 }

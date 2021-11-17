@@ -31,6 +31,13 @@ namespace POne.Financial.Infra.Mappings
 
             builder.HasMany(e => e.Entries)
                 .WithOne(e => e.Category);
+
+            builder.Property(e => e.Type)
+                .IsRequired();
+
+            builder.HasMany(e => e.SubCategories)
+                .WithOne(e => e.Category)
+                .IsRequired();
         }
     }
 }

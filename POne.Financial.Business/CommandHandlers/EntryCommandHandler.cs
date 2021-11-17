@@ -40,20 +40,20 @@ namespace POne.Financial.Business.CommandHandlers
             var firstDueDate = request.DueDate;
             var value = request.ValueDistribuition switch
             {
-                EntryValueDistribuition.Divide => request.Value / request.RecurrenceTimes,
+                EntryValueDistribuition.Divide => request.Value / request.Times,
                 _ => request.Value
             };
 
-            for (var index = 0; index < request.RecurrenceTimes; index++)
+            for (var index = 0; index < request.Times; index++)
             {
 
                 var dueDate = request.Recurrence switch
                 {
                     EntryRecurrence.Every15Days => firstDueDate.AddDays(index * 15),
                     EntryRecurrence.Every30Days => firstDueDate.AddDays(index * 30),
-                    EntryRecurrence.EveryExactNumberOfDays => firstDueDate.AddDays(index * request.RecurrenceDays),
+                    EntryRecurrence.EveryExactNumberOfDays => firstDueDate.AddDays(index * request.IntervalInDays),
                     EntryRecurrence.EveryLastMonthDay => firstDueDate.AddMonths(index).GoToLastDayOfMonth(),
-                    EntryRecurrence.EveveryDay => firstDueDate.AddMonths(index).GoToThatDay(request.RecurrenceDays),
+                    EntryRecurrence.EveveryDay => firstDueDate.AddMonths(index).GoToThatDay(request.Day),
                     _ => firstDueDate
                 };
 
@@ -131,7 +131,6 @@ namespace POne.Financial.Business.CommandHandlers
             entry.Pay(balance, request.Value, request.Fees, request.Fine);
 
             return CommandOutput.Ok("@PONE.MESSAGES.ENTRY_PAID");
-
         }
     }
 }

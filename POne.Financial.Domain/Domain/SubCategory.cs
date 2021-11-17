@@ -12,15 +12,19 @@ namespace POne.Financial.Domain.Domain
             Entries = new HashSet<Entry>();
         }
 
-        public SubCategory(string name, string description, Guid userId, Guid? accountId) : base(name, description)
+        public SubCategory(Category category, string name, string description) : base(name, description)
         {
-            UserId = userId;
-            AccountId = accountId;
+            Category = category;
         }
 
-        public Guid? AccountId { get; private set; }
-        public Guid UserId { get; private set; }
-
         public virtual ISet<Entry> Entries { get; private set; }
+        public virtual Category Category { get; private set; }
+
+        public void Update(string name, string description, Category category)
+        {
+            Update(name, description);
+            Category = category;
+        }
+
     }
 }

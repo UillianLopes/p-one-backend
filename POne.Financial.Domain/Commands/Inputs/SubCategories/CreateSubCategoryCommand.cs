@@ -1,4 +1,5 @@
 ﻿using POne.Core.CQRS;
+using System;
 
 namespace POne.Financial.Domain.Commands.Inputs.SubCategories
 {
@@ -6,5 +7,6 @@ namespace POne.Financial.Domain.Commands.Inputs.SubCategories
     {
         public string Name { get; set; }
         public string Description { get; set; }
+        public Guid CategoryId { get; set; }
     }
 }

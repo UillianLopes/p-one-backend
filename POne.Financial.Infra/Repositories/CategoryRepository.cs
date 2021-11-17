@@ -26,7 +26,8 @@ namespace POne.Financial.Infra.Repositories
             {
                 Name = c.Name,
                 Description = c.Description,
-                Id = c.Id
+                Id = c.Id,
+                Type = c.Type,
             })
             .AsNoTracking()
             .ToListAsync(cancellationToken);

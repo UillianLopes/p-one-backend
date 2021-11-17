@@ -1,4 +1,5 @@
-﻿using System;
+﻿using POne.Core.Enums;
+using System;
 
 namespace POne.Financial.Domain.Queries.Outputs.Categories
 {
@@ -7,5 +8,6 @@ namespace POne.Financial.Domain.Queries.Outputs.Categories
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public EntryType Type { get; set; }
     }
 }

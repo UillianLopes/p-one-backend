@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace POne.Financial.Business.CommandHandlers
 {
-    public class SubCategoryCommandHandler : ICommandHandler<CreateCategoryCommand>, 
-        ICommandHandler<UpdateCategoryCommand>, 
-        ICommandHandler<DeleteCategoryCommand>, 
+    public class SubCategoryCommandHandler : ICommandHandler<CreateCategoryCommand>,
+        ICommandHandler<UpdateCategoryCommand>,
+        ICommandHandler<DeleteCategoryCommand>,
         ICommandHandler<DeleteCategoriesCommand>
     {
         private readonly ICategoryRepository _categoryRepsitory;
@@ -25,7 +25,7 @@ namespace POne.Financial.Business.CommandHandlers
 
         public async Task<ICommandOuput> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
         {
-            var category = new Category(request.Name, request.Description, _authenticatedUser.Id, _authenticatedUser.AccountId);
+            var category = new Category(request.Name, request.Description, request.Type, _authenticatedUser.Id, _authenticatedUser.AccountId);
 
             await _categoryRepsitory.CreateAync(category, cancellationToken);
 
@@ -33,7 +33,8 @@ namespace POne.Financial.Business.CommandHandlers
             {
                 category.Id,
                 category.Name,
-                category.Description
+                category.Description,
+                category.Type,
             }, "@PONE.MESSAGES.CATEGORY_CREATED");
         }
 
@@ -42,13 +43,14 @@ namespace POne.Financial.Business.CommandHandlers
             if (await _categoryRepsitory.FindByIdAync(request.Id, cancellationToken) is not Category category)
                 return CommandOutput.NotFound("@PONE.MESSAGES.CATEGORY_NOT_FOUND");
 
-            category.Update(request.Name, request.Description);
+            category.Update(request.Name, request.Description, request.Type);
 
             return CommandOutput.Ok(new
             {
                 category.Id,
                 category.Name,
-                category.Description
+                category.Description,
+                category.Type
             }, "@PONE.MESSAGES.CATEGORY_UPDATED");
         }
 

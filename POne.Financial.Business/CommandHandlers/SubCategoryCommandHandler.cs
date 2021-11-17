@@ -3,6 +3,7 @@ using POne.Core.CQRS;
 using POne.Financial.Domain.Commands.Inputs.SubCategories;
 using POne.Financial.Domain.Contracts;
 using POne.Financial.Domain.Domain;
+using POne.Financial.Domain.Queries.Outputs.Categories;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,17 +16,23 @@ namespace POne.Financial.Business.CommandHandlers
         ICommandHandler<DeleteSubCategoriesCommand>
     {
         private readonly ISubCategoryRepository _subCategoryRepsitory;
+        private readonly ICategoryRepository _categoryRepsitory;
         private readonly IAuthenticatedUser _authenticatedUser;
 
-        public CategoryCommandHandler(ISubCategoryRepository subCategoryRepsitory, IAuthenticatedUser authenticatedUser)
+        public CategoryCommandHandler(ISubCategoryRepository subCategoryRepsitory, IAuthenticatedUser authenticatedUser, ICategoryRepository categoryRepsitory)
         {
             _subCategoryRepsitory = subCategoryRepsitory;
             _authenticatedUser = authenticatedUser;
+            _categoryRepsitory = categoryRepsitory;
         }
 
         public async Task<ICommandOuput> Handle(CreateSubCategoryCommand request, CancellationToken cancellationToken)
         {
-            var subCategory = new SubCategory(request.Name, request.Description, _authenticatedUser.Id, _authenticatedUser.AccountId);
+
+            if (await _categoryRepsitory.FindByIdAync(request.CategoryId, cancellationToken) is not Category category)
+                return CommandOutput.NotFound("@PONE.MESSAGES.CATEGORY_NOT_FOUND");
+
+            var subCategory = new SubCategory(category, request.Name, request.Description);
 
             await _subCategoryRepsitory.CreateAync(subCategory, cancellationToken);
 
@@ -33,18 +40,38 @@ namespace POne.Financial.Business.CommandHandlers
             {
                 subCategory.Id,
                 subCategory.Name,
-                subCategory.Description
+                subCategory.Description,
+                Category = new CategoryOuput
+                {
+                    Name = category.Name,
+                    Id = category.Id,
+                    Description = category.Description
+                }
             }, "@PONE.MESSAGES.SUB_CATEGORY_CREATED");
         }
 
         public async Task<ICommandOuput> Handle(UpdateSubCategoryCommand request, CancellationToken cancellationToken)
         {
+            if (await _categoryRepsitory.FindByIdAync(request.CategoryId, cancellationToken) is not Category category)
+                return CommandOutput.NotFound("@PONE.MESSAGES.CATEGORY_NOT_FOUND");
+
             if (await _subCategoryRepsitory.FindByIdAync(request.Id, cancellationToken) is not SubCategory subCategory)
                 return CommandOutput.NotFound("@PONE.MESSAGES.SUB_CATEGORY_NOT_FOUND");
 
-            subCategory.Update(request.Name, request.Description);
+            subCategory.Update(request.Name, request.Description, category);
 
-            return CommandOutput.Ok("@PONE.MESSAGES.SUB_CATEGORY_UPDATED");
+            return CommandOutput.Ok(new
+            {
+                subCategory.Id,
+                subCategory.Name,
+                subCategory.Description,
+                Category = new CategoryOuput
+                {
+                    Name = category.Name,
+                    Id = category.Id,
+                    Description = category.Description
+                }
+            }, "@PONE.MESSAGES.SUB_CATEGORY_UPDATED");
         }
 
         public async Task<ICommandOuput> Handle(DeleteSubCategoryCommand request, CancellationToken cancellationToken)
