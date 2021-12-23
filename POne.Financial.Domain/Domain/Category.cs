@@ -23,8 +23,8 @@ namespace POne.Financial.Domain.Domain
         public Guid? AccountId { get; private set; }
         public Guid UserId { get; private set; }
         public EntryType Type { get; private set; }
-        public virtual ISet<Entry> Entries { get; private set; }
-        public virtual ISet<SubCategory> SubCategories { get; private set; }
+        public virtual ISet<Entry> Entries { get; }
+        public virtual ISet<SubCategory> SubCategories { get; }
 
         public void Update(string name, string description, EntryType type)
         {

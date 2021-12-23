@@ -1,5 +1,6 @@
 ﻿using POne.Core.Contracts;
 using POne.Financial.Domain.Domain;
+using POne.Financial.Domain.Queries.Inputs.Categories;
 using POne.Financial.Domain.Queries.Outputs.Categories;
 using System.Collections.Generic;
 using System.Threading;
@@ -9,6 +10,6 @@ namespace POne.Financial.Domain.Contracts
 {
     public interface ICategoryRepository : IRepository<Category>
     {
-        Task<List<CategoryOuput>> GetAllAsync(CancellationToken cancellationToken);
+        Task<List<CategoryOuput>> GetAllAsync(GetAllCategories query, CancellationToken cancellationToken);
     }
 }

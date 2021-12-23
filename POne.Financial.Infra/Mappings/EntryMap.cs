@@ -1,7 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using POne.Core.Enums;
 using POne.Financial.Domain.Domain;
 using POne.Infra.Mappings;
+using System;
+using System.Linq.Expressions;
 
 namespace POne.Financial.Infra.Mappings
 {
@@ -25,6 +29,7 @@ namespace POne.Financial.Infra.Mappings
             builder.Property(e => e.Index);
 
             builder.Property(e => e.Type)
+                .HasConversion((e) => e.ToString(), (e) => Enum.IsDefined(typeof(EntryType), e) ? (EntryType)Enum.Parse(typeof(EntryType), e) : default)
                 .IsRequired();
 
             builder.Property(e => e.Value)
@@ -37,6 +42,9 @@ namespace POne.Financial.Infra.Mappings
             builder.Property(e => e.Title)
                 .IsRequired()
                 .HasMaxLength(150);
+
+            builder.Property(e => e.BarCode)
+                .HasMaxLength(100);
 
             builder.Property(e => e.Description)
                 .HasMaxLength(250);

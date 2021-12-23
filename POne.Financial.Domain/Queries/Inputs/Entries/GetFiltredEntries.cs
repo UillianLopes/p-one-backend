@@ -6,8 +6,6 @@ namespace POne.Financial.Domain.Queries.Inputs.Entries
 {
     public class GetFiltredEntries : IQuery
     {
-        public int Page { get; set; } = 1;
-        public int PageSize { get; set; } = 50;
 
         public string Text { get; set; }
         public Guid[] Categories { get; set; }

@@ -1,6 +1,7 @@
 ﻿using POne.Core.CQRS;
 using POne.Financial.Domain.Contracts;
 using POne.Financial.Domain.Queries.Inputs.Entries;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 

@@ -2,10 +2,12 @@
 using POne.Core.Contracts;
 using POne.Financial.Domain.Contracts;
 using POne.Financial.Domain.Domain;
+using POne.Financial.Domain.Queries.Inputs.SubCategories;
 using POne.Financial.Domain.Queries.Outputs.Categories;
 using POne.Financial.Domain.Queries.Outputs.SubCategories;
 using POne.Financial.Infra.Connections;
 using POne.Infra.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -19,24 +21,33 @@ namespace POne.Financial.Infra.Repositories
 
         public SubCategoryRepository(IAuthenticatedUser authenticatedUser, POneFinancialDbContext dbContext) : base(dbContext) => _authenticatedUser = authenticatedUser;
 
-        public Task<List<SubCategoryOutput>> GetAllAsync(CancellationToken cancellationToken) => _dbContext
-            .SubCategories
-            .Where(c => c.Category.AccountId == _authenticatedUser.AccountId)
-            .OrderBy(c => c.Name)
-            .Select(c => new SubCategoryOutput
-            {
-                Name = c.Name,
-                Description = c.Description,
-                Id = c.Id,
-                Category = new CategoryOuput
+        public Task<List<SubCategoryOutput>> GetAllAsync(GetAllSubCategories filter, CancellationToken cancellationToken)
+        {
+            var query = _dbContext
+               .SubCategories
+               .Where(c => c.Category.AccountId == _authenticatedUser.AccountId);
+
+            if (filter.CategoryId is Guid categoryId && categoryId != Guid.Empty)
+                query = query.Where(c => c.Category.Id == categoryId);
+
+
+            return query
+                .OrderBy(c => c.Name)
+                .Select(c => new SubCategoryOutput
                 {
-                    Name = c.Category.Name,
-                    Id = c.Category.Id,
-                    Description = c.Category.Description,
-                    Type = c.Category.Type,
-                }
-            })
-            .AsNoTracking()
-            .ToListAsync(cancellationToken);
+                    Name = c.Name,
+                    Description = c.Description,
+                    Id = c.Id,
+                    Category = new CategoryOuput
+                    {
+                        Name = c.Category.Name,
+                        Id = c.Category.Id,
+                        Description = c.Category.Description,
+                        Type = c.Category.Type,
+                    }
+                })
+                .AsNoTracking()
+                .ToListAsync(cancellationToken);
+        }
     }
 }

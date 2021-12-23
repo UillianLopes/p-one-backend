@@ -3,6 +3,7 @@ using POne.Core.Contracts;
 using POne.Financial.Domain.Contracts;
 using POne.Financial.Domain.Domain;
 using POne.Financial.Domain.Queries.Outputs.Balances;
+using POne.Financial.Domain.Queries.Outputs.Banks;
 using POne.Financial.Infra.Connections;
 using POne.Infra.Repositories;
 using System.Collections.Generic;
@@ -24,9 +25,12 @@ namespace POne.Financial.Infra.Repositories
             .OrderBy(c => c.Name)
             .Select(c => new BalanceOutput
             {
+                Id = c.Id,
                 Name = c.Name,
                 Value = c.Value,
-                Id = c.Id
+                Agency = c.Agency,
+                Bank = c.Bank != null ? new BankOutput { Id = c.Bank.Id, Name = c.Bank.Name, Code = c.Bank.Code } : null,
+                Number = c.Number
             })
             .AsNoTracking()
             .ToListAsync(cancellationToken);

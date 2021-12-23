@@ -37,6 +37,7 @@ namespace POne.Financial.Api.Controllers
         public Task<IActionResult> DeleteAsync([FromQuery] DeleteCategoriesCommand command, CancellationToken cancellationToken) => SendAsync(command, cancellationToken);
 
         [HttpGet]
-        public Task<IActionResult> GetAllAsync(CancellationToken cancellationToken) => QueryAsync(new GetAllCategories(), cancellationToken);
+        public Task<IActionResult> GetAllAsync([FromQuery] GetAllCategories query, CancellationToken cancellationToken) => QueryAsync(query, cancellationToken);
+
     }
 }

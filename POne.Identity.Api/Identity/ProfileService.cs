@@ -52,6 +52,7 @@ namespace POne.Identity.Api.Identity
 
             yield return new Claim(JwtClaimTypes.Name, user.Name);
             yield return new Claim(JwtClaimTypes.Email, user.Email);
+            yield return new Claim(JwtClaimTypes.Id, user.Id.ToString());
 
             if (user.CurrentAccount != null)
                 yield return new Claim("account", user.CurrentAccount.Id.ToString());

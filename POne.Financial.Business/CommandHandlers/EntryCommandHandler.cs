@@ -82,20 +82,53 @@ namespace POne.Financial.Business.CommandHandlers
             if (await _categoryRepository.FindByIdAync(request.CategoryId, cancellationToken) is not Category category)
                 return CommandOutput.NotFound("PONE.MESSAGES.CATEGORY_NOT_FOUND");
 
-            if (await _subCategoryRepository.FindByIdAync(request.SubCategoryId, cancellationToken) is not SubCategory subCategory)
-                return CommandOutput.NotFound("PONE.MESSAGES.SUB_CATEGORY_NOT_FOUND");
+            SubCategory subCategory = null;
 
-            Guid? recurrenceId = request.Items.Count > 1 ? Guid.NewGuid() : null;
+            if (request.SubCategoryId is Guid subCategoryId)
+                subCategory = await _subCategoryRepository.FindByIdAync(subCategoryId, cancellationToken);
+
+            if (!request.Recurrences.Any())
+            {
+                var entry = new Entry(
+                    _authenticatedUser.Id,
+                    null, 1, 1,
+                    request.Type,
+                    request.Value,
+                    request.DueDate,
+                    request.Title,
+                    request.BarCode,
+                    request.Description,
+                    category,
+                    subCategory
+                );
+
+                await _entryRepository.CreateAync(entry, cancellationToken);
+                return CommandOutput.Created("/entries", entry.Id, "PONE.MESSAGES.ENTRIES_CREATED");
+            }
 
             var entryIds = new List<Guid>();
+            var recurrenceId = Guid.NewGuid();
 
-            foreach (var item in request.Items)
+            foreach (var item in request.Recurrences)
             {
-                var entry = new Entry(_authenticatedUser.Id, recurrenceId, item.Index, request.Type, item.Value, item.DueDate, request.Title, request.Description, category, subCategory);
+                var entry = new Entry(
+                    _authenticatedUser.Id,
+                    recurrenceId,
+                    item.Index,
+                    request.Recurrences.Count,
+                    request.Type,
+                    item.Value,
+                    item.DueDate,
+                    request.Title,
+                    request.BarCode,
+                    request.Description,
+                    category,
+                    subCategory
+                );
+
                 await _entryRepository.CreateAync(entry, cancellationToken);
                 entryIds.Add(entry.Id);
             }
-
 
             return CommandOutput.Created("/entries", entryIds, "PONE.MESSAGES.ENTRIES_CREATED");
         }

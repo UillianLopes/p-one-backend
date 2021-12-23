@@ -16,6 +16,8 @@ namespace POne.Financial.Domain.Queries.Outputs.Entries
         public AutoCompleteItem Category { get; set; }
         public AutoCompleteItem SubCategory { get; set; }
         public bool IsPaid { get; set; }
-
+        public int Recurrences { get; set; }
+        public Guid Id { get; set; }
+        public string BarCode { get; set; }
     }
 }

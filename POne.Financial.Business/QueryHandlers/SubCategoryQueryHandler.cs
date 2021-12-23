@@ -15,9 +15,9 @@ namespace POne.Financial.Business.QueryHandlers
             _subCategoryRepository = subCategoryRepository;
         }
 
-        public async Task<IQueryOutput> Handle(GetAllSubCategories _, CancellationToken cancellationToken)
+        public async Task<IQueryOutput> Handle(GetAllSubCategories query, CancellationToken cancellationToken)
         {
-            var subCategories = await _subCategoryRepository.GetAllAsync(cancellationToken);
+            var subCategories = await _subCategoryRepository.GetAllAsync(query, cancellationToken);
 
             return QueryOutput.Ok(subCategories);
         }

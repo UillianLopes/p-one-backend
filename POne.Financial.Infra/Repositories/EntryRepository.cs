@@ -26,10 +26,8 @@ namespace POne.Financial.Infra.Repositories
             var entries = _dbContext
                 .Entries
                 .Where(entry => entry.UserId == _authenticatedUser.Id &&
-                (
-                    (entry.DueDate != null && entry.DueDate.Value.Year == filter.Year && entry.DueDate.Value.Month == filter.Month) ||
-                    (entry.DueDate == null && entry.Creation.Year == filter.Year && entry.Creation.Month == filter.Month)
-                ));
+                    entry.DueDate.Year == filter.Year && entry.DueDate.Month == filter.Month
+                );
 
             if (filter.Text is string text)
                 entries = entries.Where(entry => EF.Functions.Like(entry.Title.ToLower(), $"{text.ToLower()}%"));
@@ -58,25 +56,28 @@ namespace POne.Financial.Infra.Repositories
             return entries
                 .Select(e => new EntryOutput
                 {
+                    Id = e.Id,
                     Type = e.Type,
+                    Recurrences = e.Recurrences,
                     Value = e.Value,
                     IsPaid = e.Payments.Sum(p => p.Value) > e.Value,
                     Index = e.Index,
                     Title = e.Title,
+                    DueDate = e.DueDate,
                     Description = e.Description,
+                    BarCode = e.BarCode,
                     Category = e.Category != null ? new AutoCompleteItem
                     {
                         Id = e.Category.Id,
                         Title = e.Category.Name
                     } : null,
-                    SubCategory = e.Category != null ? new AutoCompleteItem
+                    SubCategory = e.SubCategory != null ? new AutoCompleteItem
                     {
                         Id = e.SubCategory.Id,
                         Title = e.SubCategory.Name
                     } : null
                 })
-                .Skip((filter.Page - 1) * filter.PageSize)
-                .Take(filter.PageSize)
+                .OrderBy(x => x.Title)
                 .AsNoTracking()
                 .ToListAsync(cancellationToken);
         }

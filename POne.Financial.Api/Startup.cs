@@ -96,6 +96,7 @@ namespace POne.Financial.Api
                 c.OperationFilter<AuthorizeCheckOperationFilter>();
             });
 
+            services.AddScoped<IBankRepository, BankRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ISubCategoryRepository, SubCategoryRepository>();
             services.AddScoped<IEntryRepository, EntryRepository>();

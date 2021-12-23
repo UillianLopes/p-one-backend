@@ -2,7 +2,7 @@
 {
     public enum EntryType
     {
-        Debit,
-        Credit
+        Credit = 1,
+        Debit = 2,
     }
 }

@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using POne.Core.Enums;
 using POne.Financial.Domain.Domain;
 using POne.Infra.Mappings;
+using System;
 
 namespace POne.Financial.Infra.Mappings
 {
@@ -33,6 +35,7 @@ namespace POne.Financial.Infra.Mappings
                 .WithOne(e => e.Category);
 
             builder.Property(e => e.Type)
+                .HasConversion((e) => e.ToString(), (e) => Enum.IsDefined(typeof(EntryType), e) ? (EntryType)Enum.Parse(typeof(EntryType), e) : default)
                 .IsRequired();
 
             builder.HasMany(e => e.SubCategories)

@@ -1,4 +1,5 @@
 ﻿using POne.Core.Entities;
+using POne.Core.Enums;
 using System;
 using System.Collections.Generic;
 
@@ -10,26 +11,38 @@ namespace POne.Financial.Domain.Domain
         {
         }
 
-        public Balance(Guid userId, string name, decimal value) : this()
+        public Balance(Guid userId, decimal value, string name, Bank bank, string number, string agency, BalanceType type)
         {
             UserId = userId;
             Value = value;
             Name = name;
+            Bank = bank;
+            Number = number;
+            Agency = agency;
+            Type = type;
         }
 
         public Guid UserId { get; private set; }
         public decimal Value { get; private set; }
         public string Name { get; private set; }
-
-        public virtual ISet<Payment> Payments { get; private set; }
+        public string Number { get; private set; }
+        public string Agency { get; private set; }
+        public BalanceType Type { get; private set; }
+        public virtual Bank Bank { get; private set; }
+        public virtual ISet<Payment> Payments { get; }
 
         public virtual void Add(decimal value) => Value += value;
         public virtual void Subtract(decimal value) => Value -= value;
 
-        public void Update(string name, decimal value)
+        public void Update(decimal value, string name, Bank bank, string number, string agency)
         {
-            Name = name;
             Value = value;
+            Name = name;
+            Bank = bank;
+            Number = number;
+            Agency = agency;
         }
+
+
     }
 }
