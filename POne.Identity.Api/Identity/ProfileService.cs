@@ -53,15 +53,6 @@ namespace POne.Identity.Api.Identity
             yield return new Claim(JwtClaimTypes.Name, user.Name);
             yield return new Claim(JwtClaimTypes.Email, user.Email);
             yield return new Claim(JwtClaimTypes.Id, user.Id.ToString());
-
-            if (user.CurrentAccount != null)
-                yield return new Claim("account", user.CurrentAccount.Id.ToString());
-
-            foreach (var account in user.Accounts)
-                yield return new Claim("accounts", account.Id.ToString());
-
-            foreach (var role in user.Roles)
-                yield return new Claim(JwtClaimTypes.Role, role.Key);
         }
     }
 }

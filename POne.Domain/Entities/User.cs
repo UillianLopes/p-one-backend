@@ -7,7 +7,7 @@ namespace POne.Domain.Entities
 {
     public class User : Entity
     {
-        public User(string name, string email, DateTime birthDate, Address address, PhoneNumber mobilePhone, Password password, Account currentAccount) : this()
+        public User(string name, string email, DateTime birthDate, Address address, PhoneNumber mobilePhone, Password password) : this()
         {
             Name = name;
             Email = email;
@@ -15,9 +15,7 @@ namespace POne.Domain.Entities
             Address = address;
             MobilePhone = mobilePhone;
             Password = password;
-            Accounts = new HashSet<Account>();
             Roles = new HashSet<Role>();
-            CurrentAccount = currentAccount;
         }
 
         protected User() : base() { }
@@ -28,8 +26,6 @@ namespace POne.Domain.Entities
         public virtual Address Address { get; private set; }
         public virtual PhoneNumber MobilePhone { get; private set; }
         public virtual Password Password { get; private set; }
-        public virtual Account CurrentAccount { get; private set; }
-        public virtual ISet<Account> Accounts { get; private set; }
         public virtual ISet<Role> Roles { get; private set; }
 
         public void Update(string name, string email, DateTime birthDate)

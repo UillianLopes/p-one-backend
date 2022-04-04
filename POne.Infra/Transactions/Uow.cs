@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using POne.Core.Contracts;
 using POne.Core.Entities;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -20,18 +21,25 @@ namespace POne.Infra.UnityOfWork
 
         public async Task SaveChangesAsync(CancellationToken cancellationToken)
         {
-
-            await _dbContext.SaveChangesAsync(cancellationToken);
-
-            foreach (var entry in _dbContext.ChangeTracker.Entries())
+            try
             {
-                if (entry.Entity is not Entity entity)
-                    continue;
+                await _dbContext.SaveChangesAsync(cancellationToken);
 
-                foreach (var command in entity.Events)
-                    await _mediator.Publish(command, cancellationToken);
+                foreach (var entry in _dbContext.ChangeTracker.Entries())
+                {
+                    if (entry.Entity is not Entity entity)
+                        continue;
 
-                entity.ClearEvents();
+                    foreach (var command in entity.Events)
+                        await _mediator.Publish(command, cancellationToken);
+
+                    entity.ClearEvents();
+                }
+
+            }
+            catch (Exception)
+            {
+                throw;
             }
 
         }

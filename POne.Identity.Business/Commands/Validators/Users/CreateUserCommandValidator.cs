@@ -22,16 +22,6 @@ namespace POne.Identity.Business.Commands.Validators.Users
                 .NotNull()
                 .NotEmpty()
                 .WithMessage("@PONE.MESSAGES.USERS.INVALID_EMAIL");
-
-            RuleFor(cm => cm.AccountName)
-                .NotNull()
-                .WithMessage("@PONE.MESSAGES.USERS.INVALID_ACCOUNT_NAME")
-                .When(e => e.AccountId == null);
-
-            RuleFor(cm => cm.AccountEmail)
-                .NotNull()
-                .WithMessage("@PONE.MESSAGES.USERS.INVALID_ACCOUNT_EMAIL")
-                .When(e => e.AccountId == null);
         }
     }
 }

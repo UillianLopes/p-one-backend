@@ -1,5 +1,5 @@
 ﻿using POne.Core.Contracts;
-using POne.Financial.Domain.Domain;
+using POne.Financial.Domain.Entities;
 using POne.Financial.Domain.Queries.Inputs.Entries;
 using POne.Financial.Domain.Queries.Outputs.Entries;
 using System.Collections.Generic;

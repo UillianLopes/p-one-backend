@@ -2,7 +2,7 @@
 using POne.Core.CQRS;
 using POne.Financial.Domain.Commands.Inputs.SubCategories;
 using POne.Financial.Domain.Contracts;
-using POne.Financial.Domain.Domain;
+using POne.Financial.Domain.Entities;
 using POne.Financial.Domain.Queries.Outputs.Categories;
 using System.Collections.Generic;
 using System.Threading;
@@ -29,23 +29,27 @@ namespace POne.Financial.Business.CommandHandlers
         public async Task<ICommandOuput> Handle(CreateSubCategoryCommand request, CancellationToken cancellationToken)
         {
 
-            if (await _categoryRepsitory.FindByIdAync(request.CategoryId, cancellationToken) is not Category category)
+            if (await _categoryRepsitory
+                .FindByIdAync(request.CategoryId, cancellationToken) is not Category category)
                 return CommandOutput.NotFound("@PONE.MESSAGES.CATEGORY_NOT_FOUND");
 
-            var subCategory = new SubCategory(category, request.Name, request.Description);
+            var subCategory = new SubCategory(category, request.Name, request.Description, request.Color);
 
-            await _subCategoryRepsitory.CreateAync(subCategory, cancellationToken);
+            await _subCategoryRepsitory
+                .CreateAync(subCategory, cancellationToken);
 
             return CommandOutput.Created($"/category/{subCategory.Id}", new
             {
                 subCategory.Id,
                 subCategory.Name,
                 subCategory.Description,
+                subCategory.Color,
                 Category = new CategoryOuput
                 {
                     Name = category.Name,
                     Id = category.Id,
-                    Description = category.Description
+                    Description = category.Description,
+                    Color = category.Color
                 }
             }, "@PONE.MESSAGES.SUB_CATEGORY_CREATED");
         }
@@ -58,18 +62,20 @@ namespace POne.Financial.Business.CommandHandlers
             if (await _subCategoryRepsitory.FindByIdAync(request.Id, cancellationToken) is not SubCategory subCategory)
                 return CommandOutput.NotFound("@PONE.MESSAGES.SUB_CATEGORY_NOT_FOUND");
 
-            subCategory.Update(request.Name, request.Description, category);
+            subCategory.Update(request.Name, request.Description, request.Color, category);
 
             return CommandOutput.Ok(new
             {
                 subCategory.Id,
                 subCategory.Name,
                 subCategory.Description,
+                subCategory.Color,
                 Category = new CategoryOuput
                 {
                     Name = category.Name,
                     Id = category.Id,
-                    Description = category.Description
+                    Description = category.Description,
+                    Color = category.Color
                 }
             }, "@PONE.MESSAGES.SUB_CATEGORY_UPDATED");
         }

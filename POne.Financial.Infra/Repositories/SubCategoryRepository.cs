@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using POne.Core.Contracts;
 using POne.Financial.Domain.Contracts;
-using POne.Financial.Domain.Domain;
+using POne.Financial.Domain.Entities;
 using POne.Financial.Domain.Queries.Inputs.SubCategories;
 using POne.Financial.Domain.Queries.Outputs.Categories;
 using POne.Financial.Domain.Queries.Outputs.SubCategories;
@@ -25,7 +25,7 @@ namespace POne.Financial.Infra.Repositories
         {
             var query = _dbContext
                .SubCategories
-               .Where(c => c.Category.AccountId == _authenticatedUser.AccountId);
+               .Where(c => c.Category.UserId == _authenticatedUser.Id);
 
             if (filter.CategoryId is Guid categoryId && categoryId != Guid.Empty)
                 query = query.Where(c => c.Category.Id == categoryId);
@@ -38,12 +38,14 @@ namespace POne.Financial.Infra.Repositories
                     Name = c.Name,
                     Description = c.Description,
                     Id = c.Id,
+                    Color = c.Color,
                     Category = new CategoryOuput
                     {
                         Name = c.Category.Name,
                         Id = c.Category.Id,
                         Description = c.Category.Description,
                         Type = c.Category.Type,
+                        Color = c.Category.Color
                     }
                 })
                 .AsNoTracking()

@@ -5,7 +5,7 @@ using POne.Core.Extensions;
 using POne.Financial.Domain.Commands.Inputs.Entries;
 using POne.Financial.Domain.Commands.Outputs.Entries;
 using POne.Financial.Domain.Contracts;
-using POne.Financial.Domain.Domain;
+using POne.Financial.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,9 +24,9 @@ namespace POne.Financial.Business.CommandHandlers
         private readonly IEntryRepository _entryRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly ISubCategoryRepository _subCategoryRepository;
-        private readonly IBalanceRepository _balanceRepository;
+        private readonly IWalletRepository _balanceRepository;
 
-        public EntryCommandHandler(IAuthenticatedUser authenticatedUser, IEntryRepository entryRepository, ICategoryRepository categoryRepository, ISubCategoryRepository subCategoryRepository, IBalanceRepository balanceRepository)
+        public EntryCommandHandler(IAuthenticatedUser authenticatedUser, IEntryRepository entryRepository, ICategoryRepository categoryRepository, ISubCategoryRepository subCategoryRepository, IWalletRepository balanceRepository)
         {
             _authenticatedUser = authenticatedUser;
             _entryRepository = entryRepository;
@@ -120,7 +120,7 @@ namespace POne.Financial.Business.CommandHandlers
                     item.Value,
                     item.DueDate,
                     request.Title,
-                    request.BarCode,
+                    item.BarCode,
                     request.Description,
                     category,
                     subCategory
@@ -158,7 +158,7 @@ namespace POne.Financial.Business.CommandHandlers
             if (await _entryRepository.FindByIdAync(request.Id, cancellationToken) is not Entry entry)
                 return CommandOutput.NotFound("@PONE.MESSAGES.ENTRY_NOT_FOUND");
 
-            if (await _balanceRepository.FindByIdAync(request.Id, cancellationToken) is not Balance balance)
+            if (await _balanceRepository.FindByIdAync(request.BalanceId, cancellationToken) is not Wallet balance)
                 return CommandOutput.NotFound("@PONE.MESSAGES.BALANCE_NOT_FOUND");
 
             entry.Pay(balance, request.Value, request.Fees, request.Fine);

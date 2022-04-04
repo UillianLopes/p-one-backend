@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using POne.Core.Enums;
-using POne.Financial.Domain.Domain;
+using POne.Financial.Domain.Entities;
 using POne.Infra.Mappings;
 using System;
 
@@ -22,10 +22,6 @@ namespace POne.Financial.Infra.Mappings
             builder.Property(e => e.Description)
                 .HasMaxLength(500);
 
-            builder.Property(e => e.AccountId);
-
-            builder.HasIndex(e => e.AccountId);
-
             builder.Property(e => e.UserId)
                 .IsRequired();
 
@@ -33,6 +29,9 @@ namespace POne.Financial.Infra.Mappings
 
             builder.HasMany(e => e.Entries)
                 .WithOne(e => e.Category);
+
+            builder.Property(e => e.Color)
+                .HasMaxLength(7);
 
             builder.Property(e => e.Type)
                 .HasConversion((e) => e.ToString(), (e) => Enum.IsDefined(typeof(EntryType), e) ? (EntryType)Enum.Parse(typeof(EntryType), e) : default)

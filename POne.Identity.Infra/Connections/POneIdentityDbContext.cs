@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using POne.Identity.Infra.Mappgins;
 using POne.Identity.Infra.Mappings;
 
 namespace POne.Identity.Infra.Connections
@@ -20,7 +19,6 @@ namespace POne.Identity.Infra.Connections
             modelBuilder.ApplyConfiguration(new UserMap());
             modelBuilder.ApplyConfiguration(new ProfileMap());
             modelBuilder.ApplyConfiguration(new RoleMap());
-            modelBuilder.ApplyConfiguration(new AccountMap());
             base.OnModelCreating(modelBuilder);
         }
     }

@@ -76,7 +76,7 @@ namespace POne.Identity.Infra.Mappings
 
                 phone.HasData(new object[]
                 {
-                    new
+                    new 
                     {
                         CountryCode = 55,
                         Number = "27998321849",
@@ -100,10 +100,6 @@ namespace POne.Identity.Infra.Mappings
                 });
             });
 
-            builder.HasMany(user => user.Accounts)
-                .WithMany(account => account.Users)
-                .UsingEntity(builder => builder.ToTable("AccountsUsers"));
-
             builder.HasData(new object[] {
                 new
                 {
@@ -119,9 +115,6 @@ namespace POne.Identity.Infra.Mappings
                 }
             });
 
-            builder.HasOne(e => e.CurrentAccount)
-                .WithMany(e => e.CurrentUsers)
-                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

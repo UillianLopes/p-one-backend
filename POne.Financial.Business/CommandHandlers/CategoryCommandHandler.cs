@@ -2,7 +2,7 @@
 using POne.Core.CQRS;
 using POne.Financial.Domain.Commands.Inputs.Categories;
 using POne.Financial.Domain.Contracts;
-using POne.Financial.Domain.Domain;
+using POne.Financial.Domain.Entities;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,7 +25,7 @@ namespace POne.Financial.Business.CommandHandlers
 
         public async Task<ICommandOuput> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
         {
-            var category = new Category(request.Name, request.Description, request.Type, _authenticatedUser.Id, _authenticatedUser.AccountId);
+            var category = new Category(request.Name, request.Description, request.Color, request.Type, _authenticatedUser.Id);
 
             await _categoryRepsitory.CreateAync(category, cancellationToken);
 
@@ -35,6 +35,7 @@ namespace POne.Financial.Business.CommandHandlers
                 category.Name,
                 category.Description,
                 category.Type,
+                category.Color
             }, "@PONE.MESSAGES.CATEGORY_CREATED");
         }
 
@@ -43,14 +44,15 @@ namespace POne.Financial.Business.CommandHandlers
             if (await _categoryRepsitory.FindByIdAync(request.Id, cancellationToken) is not Category category)
                 return CommandOutput.NotFound("@PONE.MESSAGES.CATEGORY_NOT_FOUND");
 
-            category.Update(request.Name, request.Description, request.Type);
+            category.Update(request.Name, request.Description, request.Color, request.Type);
 
             return CommandOutput.Ok(new
             {
                 category.Id,
                 category.Name,
                 category.Description,
-                category.Type
+                category.Type,
+                category.Color
             }, "@PONE.MESSAGES.CATEGORY_UPDATED");
         }
 

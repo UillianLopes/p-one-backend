@@ -42,9 +42,6 @@ namespace POne.Core.Mvc
             var output = await _mediator
                 .Send(command, cancellationToken);
 
-            if (output.Success)
-                await _uow.SaveChangesAsync(cancellationToken);
-
             return output.HttpStatusCode switch
             {
                 HttpStatusCode.OK => Ok(output),

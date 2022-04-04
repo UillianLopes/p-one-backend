@@ -1,5 +1,5 @@
 ﻿using POne.Core.Contracts;
-using POne.Financial.Domain.Domain;
+using POne.Financial.Domain.Entities;
 
 namespace POne.Financial.Domain.Contracts
 {

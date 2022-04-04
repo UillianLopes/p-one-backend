@@ -11,6 +11,7 @@ namespace POne.Financial.Domain.Queries.Inputs.Entries
         public Guid[] Categories { get; set; }
         public Guid[] SubCategories { get; set; }
         public EntryType? Type { get; set; }
+        public EntryPaymentStatus? PaymentStatus { get; set; }
         public bool? IsPaid { get; set; }
 
         public int Month { get; set; }

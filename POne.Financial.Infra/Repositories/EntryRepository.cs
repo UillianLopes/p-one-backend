@@ -3,7 +3,7 @@ using POne.Core.Contracts;
 using POne.Core.Enums;
 using POne.Core.Extensions.Items;
 using POne.Financial.Domain.Contracts;
-using POne.Financial.Domain.Domain;
+using POne.Financial.Domain.Entities;
 using POne.Financial.Domain.Queries.Inputs.Entries;
 using POne.Financial.Domain.Queries.Outputs.Entries;
 using POne.Financial.Infra.Connections;
@@ -54,30 +54,32 @@ namespace POne.Financial.Infra.Repositories
                     entries = entries.Where(entry => entry.Payments.Sum(p => p.Value) < entry.Value);
 
             return entries
+                .OrderByDescending(x => x.Creation)
                 .Select(e => new EntryOutput
                 {
                     Id = e.Id,
                     Type = e.Type,
                     Recurrences = e.Recurrences,
                     Value = e.Value,
-                    IsPaid = e.Payments.Sum(p => p.Value) > e.Value,
                     Index = e.Index,
                     Title = e.Title,
                     DueDate = e.DueDate,
                     Description = e.Description,
                     BarCode = e.BarCode,
+                    PaidValue = e.Payments.Sum((payment) => payment.Value),
                     Category = e.Category != null ? new AutoCompleteItem
                     {
                         Id = e.Category.Id,
-                        Title = e.Category.Name
+                        Title = e.Category.Name,
+                        Color = e.Category.Color
                     } : null,
                     SubCategory = e.SubCategory != null ? new AutoCompleteItem
                     {
                         Id = e.SubCategory.Id,
-                        Title = e.SubCategory.Name
+                        Title = e.SubCategory.Name,
+                        Color = e.SubCategory.Color
                     } : null
                 })
-                .OrderBy(x => x.Title)
                 .AsNoTracking()
                 .ToListAsync(cancellationToken);
         }

@@ -12,128 +12,57 @@ namespace POne.Identity.Business.CommandHandlers
     public class UserCommandHandler : ICommandHandler<CreateUserCommand>, ICommandHandler<UpdateUserCommand>, ICommandHandler<AuthenticateUserCommand>
     {
         private readonly IUserRepository _userRepository;
-        private readonly IAccountRepository _accoutRepository;
 
-        public UserCommandHandler(IUserRepository userRepository, IAccountRepository accoutRepository)
+        public UserCommandHandler(IUserRepository userRepository)
         {
             _userRepository = userRepository;
-            _accoutRepository = accoutRepository;
-        }
-
-        private async Task<ICommandOuput> CreateAccountAndUserAsync(CreateUserCommand request, CancellationToken cancellationToken)
-        {
-            var account = new Account(request.AccountName, request.AccountEmail);
-
-            var user = new User(
-                request.Name,
-                request.Email,
-                request.BirthDate,
-                new Address(
-                    request.Street,
-                    request.District,
-                    request.Number,
-                    request.City,
-                    request.State,
-                    request.Complement,
-                    request.ZipCode
-                ),
-                new PhoneNumber(55, request.MobilePhone),
-                new Password(request.Password),
-                account
-            );
-
-
-            account.AddUser(user);
-
-            await _accoutRepository.CreateAync(account, cancellationToken);
-
-            return CommandOutput.Created($"User/{user.Id}", new
-            {
-                user.Id,
-                user.Creation,
-                user.LastUpdate,
-                user.Name,
-                user.Email,
-                user.BirthDate,
-                Address = new
-                {
-                    user.Address.Street,
-                    user.Address.District,
-                    user.Address.Number,
-                    user.Address.City,
-                    user.Address.State,
-                    user.Address.Country,
-                    user.Address.ZipCode
-                },
-                MobilePhone = new
-                {
-                    user.MobilePhone.Number,
-                    user.MobilePhone.CountryCode
-                },
-            }, "@PONE.MESSAGES.USER_CREATED");
-
-        }
-
-        private async Task<ICommandOuput> CreateUserInExistingAccountAsync(CreateUserCommand request, Account account, CancellationToken cancellationToken)
-        {
-            var user = new User(
-                request.Name,
-                request.Email,
-                request.BirthDate,
-                new Address(
-                    request.Street,
-                    request.District,
-                    request.Number,
-                    request.City,
-                    request.State,
-                    request.Complement,
-                    request.ZipCode
-                ),
-                new PhoneNumber(55, request.MobilePhone),
-                new Password(request.Password),
-                account
-            );
-
-
-            account.AddUser(user);
-
-            await _accoutRepository.UpdateAsync(account, cancellationToken);
-
-            return CommandOutput.Created($"User/{user.Id}", new
-            {
-                user.Id,
-                user.Creation,
-                user.LastUpdate,
-                user.Name,
-                user.Email,
-                user.BirthDate,
-                Address = new
-                {
-                    user.Address.Street,
-                    user.Address.District,
-                    user.Address.Number,
-                    user.Address.City,
-                    user.Address.State,
-                    user.Address.Country,
-                    user.Address.ZipCode
-                },
-                MobilePhone = new
-                {
-                    user.MobilePhone.Number,
-                    user.MobilePhone.CountryCode
-                }
-
-            }, "@PONE.MESSAGES.USER_CREATED");
         }
 
         public async Task<ICommandOuput> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            if (request.AccountId is not Guid accountId)
-                return await CreateAccountAndUserAsync(request, cancellationToken);
-            else if (await _accoutRepository.FindByIdAync(accountId, cancellationToken) is Account account)
-                return await CreateUserInExistingAccountAsync(request, account, cancellationToken);
+            var user = new User(
+                          request.Name,
+                          request.Email,
+                          request.BirthDate,
+                          new Address(
+                              request.Street,
+                              request.District,
+                              request.Number,
+                              request.City,
+                              request.State,
+                              request.Complement,
+                              request.ZipCode
+                          ),
+                          new PhoneNumber(55, request.MobilePhone),
+                          new Password(request.Password)
+                      );
 
-            return CommandOutput.BadRequest("@PONE.MESSAGES.INVALID_ACCOUNT_ID");
+            await _userRepository.CreateAync(user, cancellationToken);
+
+            return CommandOutput.Created($"User/{user.Id}", new
+            {
+                user.Id,
+                user.Creation,
+                user.LastUpdate,
+                user.Name,
+                user.Email,
+                user.BirthDate,
+                Address = new
+                {
+                    user.Address.Street,
+                    user.Address.District,
+                    user.Address.Number,
+                    user.Address.City,
+                    user.Address.State,
+                    user.Address.Country,
+                    user.Address.ZipCode
+                },
+                MobilePhone = new
+                {
+                    user.MobilePhone.Number,
+                    user.MobilePhone.CountryCode
+                },
+            }, "@PONE.MESSAGES.USER_CREATED");
         }
 
         public async Task<ICommandOuput> Handle(UpdateUserCommand request, CancellationToken cancellationToken)

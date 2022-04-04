@@ -2,7 +2,7 @@
 using POne.Core.Contracts;
 using POne.Core.Enums;
 using POne.Financial.Domain.Contracts;
-using POne.Financial.Domain.Domain;
+using POne.Financial.Domain.Entities;
 using POne.Financial.Domain.Queries.Inputs.Categories;
 using POne.Financial.Domain.Queries.Outputs.Categories;
 using POne.Financial.Infra.Connections;
@@ -24,7 +24,7 @@ namespace POne.Financial.Infra.Repositories
         {
             var query = _dbContext
                 .Categories
-                .Where(c => c.AccountId == _authenticatedUser.AccountId);
+                .Where(c => c.UserId == _authenticatedUser.Id);
 
             if (filter.Type is EntryType type)
                 query = query.Where(c => c.Type == type);
@@ -37,6 +37,7 @@ namespace POne.Financial.Infra.Repositories
                     Description = c.Description,
                     Id = c.Id,
                     Type = c.Type,
+                    Color = c.Color
                 })
                 .AsNoTracking()
                 .ToListAsync(cancellationToken);

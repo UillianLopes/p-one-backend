@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using POne.Financial.Domain.Domain;
+using POne.Financial.Domain.Entities;
 using POne.Infra.Mappings;
 
 namespace POne.Financial.Infra.Mappings
@@ -16,6 +16,9 @@ namespace POne.Financial.Infra.Mappings
             builder.Property(e => e.Name)
                 .IsRequired()
                 .HasMaxLength(150);
+
+            builder.Property(e => e.Color)
+                .HasMaxLength(7);
 
             builder.Property(e => e.Description)
                 .HasMaxLength(250);

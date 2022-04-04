@@ -55,7 +55,7 @@ namespace POne.Identity.Api
             services.AddIdentityServer(ops =>
             {
                 ops.IssuerUri = identityServerConfig.IssuerUri;
-                ops.Authentication.CookieLifetime = TimeSpan.FromHours(2);
+                ops.Authentication.CookieLifetime = TimeSpan.FromDays(2);
             })
            .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
            .AddInMemoryClients(identityServerConfig.GetClients())
@@ -76,9 +76,7 @@ namespace POne.Identity.Api
                 });
             });
 
-
             services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IAccountRepository, AccountRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

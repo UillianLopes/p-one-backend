@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using POne.Financial.Domain.Domain;
+using POne.Financial.Domain.Entities;
 using POne.Infra.Mappings;
 
 namespace POne.Financial.Infra.Mappings

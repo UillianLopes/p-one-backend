@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using POne.Financial.Domain.Contracts;
-using POne.Financial.Domain.Domain;
+using POne.Financial.Domain.Entities;
 using POne.Financial.Domain.Queries.Inputs.Banks;
 using POne.Financial.Domain.Queries.Outputs.Banks;
 using POne.Financial.Infra.Connections;

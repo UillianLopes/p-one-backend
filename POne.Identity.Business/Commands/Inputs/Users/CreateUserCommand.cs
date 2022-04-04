@@ -20,9 +20,6 @@ namespace POne.Identity.Business.Commands.Inputs.Users
         public string State { get; set; }
         public string ReferencePoint { get; set; }
         public string Complement { get; set; }
-        public Guid? AccountId { get; set; }
-        public string AccountName { get; set; }
-        public string AccountEmail { get; set; }
 
     }
 }

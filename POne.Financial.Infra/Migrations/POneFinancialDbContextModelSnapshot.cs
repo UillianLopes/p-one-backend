@@ -22,16 +22,9 @@ namespace POne.Financial.Infra.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("POne.Financial.Domain.Domain.Balance", b =>
+            modelBuilder.Entity("POne.Financial.Domain.Entities.Balance", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Agency")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<Guid?>("BankId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Creation")
@@ -43,34 +36,20 @@ namespace POne.Financial.Infra.Migrations
                     b.Property<DateTime?>("LastUpdate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Number")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<decimal>("Value")
                         .HasColumnType("Decimal(10,4)");
 
+                    b.Property<Guid>("WalletId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("BankId");
+                    b.HasIndex("WalletId");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Balances", "fin");
+                    b.ToTable("Balance", "fin");
                 });
 
-            modelBuilder.Entity("POne.Financial.Domain.Domain.Bank", b =>
+            modelBuilder.Entity("POne.Financial.Domain.Entities.Bank", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
@@ -103,1550 +82,1551 @@ namespace POne.Financial.Infra.Migrations
                         {
                             Id = new Guid("98084106-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "0",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1107),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1117),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Bankpar S.A."
                         },
                         new
                         {
                             Id = new Guid("98084138-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "1",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1119),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1120),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco do Brasil S.A."
                         },
                         new
                         {
                             Id = new Guid("9808413f-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "3",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1121),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1122),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco da Amazônia S.A."
                         },
                         new
                         {
                             Id = new Guid("98084143-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "4",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1123),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1123),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco do Nordeste do Brasil S.A."
                         },
                         new
                         {
                             Id = new Guid("98084146-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "12",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1124),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1124),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Standard de Investimentos S.A."
                         },
                         new
                         {
                             Id = new Guid("98084149-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "14",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1125),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1125),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Natixis Brasil S.A. Banco Múltiplo"
                         },
                         new
                         {
                             Id = new Guid("9808414b-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "19",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1127),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1127),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Azteca do Brasil S.A."
                         },
                         new
                         {
                             Id = new Guid("9808414e-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "21",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1128),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1128),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "BANESTES S.A. Banco do Estado do Espírito Santo"
                         },
                         new
                         {
                             Id = new Guid("98084151-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "24",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1129),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1130),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco de Pernambuco S.A. – BANDEPE"
                         },
                         new
                         {
                             Id = new Guid("98084153-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "25",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1130),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1131),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Alfa S.A."
                         },
                         new
                         {
                             Id = new Guid("98084156-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "29",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1132),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1132),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Banerj S.A."
                         },
                         new
                         {
                             Id = new Guid("9808415a-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "31",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1133),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1133),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Beg S.A."
                         },
                         new
                         {
                             Id = new Guid("9808415d-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "33",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1136),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1136),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Santander (Brasil) S.A."
                         },
                         new
                         {
                             Id = new Guid("9808415f-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "36",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1137),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1137),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Bradesco BBI S.A."
                         },
                         new
                         {
                             Id = new Guid("98084162-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "37",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1138),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1138),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco do Estado do Pará S.A."
                         },
                         new
                         {
                             Id = new Guid("98084165-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "39",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1139),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1140),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco do Estado do Piauí S.A. – BEP"
                         },
                         new
                         {
                             Id = new Guid("98084168-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "40",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1140),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1141),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Cargill S.A."
                         },
                         new
                         {
                             Id = new Guid("9808416b-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "41",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1142),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1142),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco do Estado do Rio Grande do Sul S.A."
                         },
                         new
                         {
                             Id = new Guid("9808416e-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "44",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1143),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1143),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco BVA S.A."
                         },
                         new
                         {
                             Id = new Guid("98084171-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "45",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1144),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1144),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Opportunity S.A."
                         },
                         new
                         {
                             Id = new Guid("98084175-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "47",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1145),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1145),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco do Estado de Sergipe S.A."
                         },
                         new
                         {
                             Id = new Guid("98084178-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "62",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1146),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1147),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Hipercard Banco Múltiplo S.A."
                         },
                         new
                         {
                             Id = new Guid("9808417b-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "63",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1147),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1148),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Ibi S.A. Banco Múltiplo"
                         },
                         new
                         {
                             Id = new Guid("9808417d-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "64",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1148),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1149),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Goldman Sachs do Brasil Banco Múltiplo S.A."
                         },
                         new
                         {
                             Id = new Guid("98084180-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "65",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1150),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1150),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Bracce S.A."
                         },
                         new
                         {
                             Id = new Guid("98084182-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "66",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1151),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1151),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Morgan Stanley S.A."
                         },
                         new
                         {
                             Id = new Guid("98084185-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "69",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1152),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1152),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "BPN Brasil Banco Múltiplo S.A."
                         },
                         new
                         {
                             Id = new Guid("98084187-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "70",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1153),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1154),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "BRB – Banco de Brasília S.A."
                         },
                         new
                         {
                             Id = new Guid("9808418a-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "72",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1154),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1155),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Rural Mais S.A."
                         },
                         new
                         {
                             Id = new Guid("9808418c-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "73",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1156),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1156),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "BB Banco Popular do Brasil S.A."
                         },
                         new
                         {
                             Id = new Guid("9808418e-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "74",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1157),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1157),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco J. Safra S.A."
                         },
                         new
                         {
                             Id = new Guid("98084191-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "75",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1158),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1158),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco CR2 S.A."
                         },
                         new
                         {
                             Id = new Guid("98084193-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "76",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1159),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1159),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco KDB S.A."
                         },
                         new
                         {
                             Id = new Guid("98084195-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "077-9",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1160),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1161),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Intermedium S.A."
                         },
                         new
                         {
                             Id = new Guid("98084197-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "78",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1161),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1162),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "BES Investimento do Brasil S.A.-Banco de Investimento"
                         },
                         new
                         {
                             Id = new Guid("98084199-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "79",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1162),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1163),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "JBS Banco S.A."
                         },
                         new
                         {
                             Id = new Guid("9808419c-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "081-7",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1164),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1164),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Concórdia Banco S.A."
                         },
                         new
                         {
                             Id = new Guid("9808419f-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "082-5",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1165),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1165),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Topázio S.A."
                         },
                         new
                         {
                             Id = new Guid("980841a1-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "083-3",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1166),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1166),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco da China Brasil S.A."
                         },
                         new
                         {
                             Id = new Guid("980841a3-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "84",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1167),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1167),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Unicred Norte do Paraná"
                         },
                         new
                         {
                             Id = new Guid("980841a6-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "085-x",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1168),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1169),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Cooperativa Central de Crédito Urbano-CECRED"
                         },
                         new
                         {
                             Id = new Guid("980841a8-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "086-8",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1169),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1170),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "OBOE Crédito Financiamento e Investimento S.A."
                         },
                         new
                         {
                             Id = new Guid("980841ab-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "087-6",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1171),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1171),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Cooperativa Unicred Central Santa Catarina"
                         },
                         new
                         {
                             Id = new Guid("980841ae-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "088-4",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1172),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1172),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Randon S.A."
                         },
                         new
                         {
                             Id = new Guid("980841b1-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "089-2",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1173),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1173),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Cooperativa de Crédito Rural da Região de Mogiana"
                         },
                         new
                         {
                             Id = new Guid("980841b3-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "090-2",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1174),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1175),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Cooperativa Central de Economia e Crédito Mutuo das Unicreds"
                         },
                         new
                         {
                             Id = new Guid("980841b5-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "091-4",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1175),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1176),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Unicred Central do Rio Grande do Sul"
                         },
                         new
                         {
                             Id = new Guid("980841b8-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "092-2",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1176),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1177),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Brickell S.A. Crédito, financiamento e Investimento"
                         },
                         new
                         {
                             Id = new Guid("980841ba-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "094-2",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1178),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1178),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Petra S.A."
                         },
                         new
                         {
                             Id = new Guid("980841bc-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "96",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1179),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1179),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco BM&F de Serviços de Liquidação e Custódia S.A"
                         },
                         new
                         {
                             Id = new Guid("980841bf-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "097-3",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1180),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1180),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Cooperativa Central de Crédito Noroeste Brasileiro Ltda."
                         },
                         new
                         {
                             Id = new Guid("980841c1-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "098-1",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1181),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1182),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Credicorol Cooperativa de Crédito Rural"
                         },
                         new
                         {
                             Id = new Guid("980841c4-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "099-x",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1182),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1183),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Cooperativa Central de Economia e Credito Mutuo das Unicreds"
                         },
                         new
                         {
                             Id = new Guid("980841c6-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "104",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1183),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1184),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Caixa Econômica Federal"
                         },
                         new
                         {
                             Id = new Guid("980841c9-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "107",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1185),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1185),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco BBM S.A."
                         },
                         new
                         {
                             Id = new Guid("980841cb-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "168",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1186),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1186),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "HSBC Finance (Brasil) S.A. – Banco Múltiplo"
                         },
                         new
                         {
                             Id = new Guid("980841ce-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "184",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1187),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1187),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Itaú BBA S.A."
                         },
                         new
                         {
                             Id = new Guid("980841d0-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "204",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1188),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1189),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Bradesco Cartões S.A."
                         },
                         new
                         {
                             Id = new Guid("980841d3-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "208",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1189),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1190),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco BTG Pactual S.A."
                         },
                         new
                         {
                             Id = new Guid("980841d8-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "212",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1190),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1191),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Matone S.A."
                         },
                         new
                         {
                             Id = new Guid("980841da-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "213",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1192),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1192),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Arbi S.A."
                         },
                         new
                         {
                             Id = new Guid("980841dd-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "214",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1193),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1193),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Dibens S.A."
                         },
                         new
                         {
                             Id = new Guid("980841e0-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "215",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1194),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1194),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Comercial e de Investimento Sudameris S.A."
                         },
                         new
                         {
                             Id = new Guid("980841e3-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "217",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1195),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1195),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco John Deere S.A."
                         },
                         new
                         {
                             Id = new Guid("980841e5-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "218",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1196),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1197),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Bonsucesso S.A."
                         },
                         new
                         {
                             Id = new Guid("980841e8-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "222",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1197),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1198),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Credit Agricole Brasil S.A."
                         },
                         new
                         {
                             Id = new Guid("980841ea-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "224",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1199),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1199),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Fibra S.A."
                         },
                         new
                         {
                             Id = new Guid("980841ed-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "225",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1200),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1200),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Brascan S.A."
                         },
                         new
                         {
                             Id = new Guid("980841f0-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "229",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1201),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1201),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Cruzeiro do Sul S.A."
                         },
                         new
                         {
                             Id = new Guid("980841f3-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "230",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1202),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1202),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Unicard Banco Múltiplo S.A."
                         },
                         new
                         {
                             Id = new Guid("980841f6-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "233",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1203),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1204),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco GE Capital S.A."
                         },
                         new
                         {
                             Id = new Guid("980841f9-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "237",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1204),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1205),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Bradesco S.A."
                         },
                         new
                         {
                             Id = new Guid("980841fc-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "241",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1206),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1206),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Clássico S.A."
                         },
                         new
                         {
                             Id = new Guid("980841ff-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "243",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1207),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1207),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Máxima S.A."
                         },
                         new
                         {
                             Id = new Guid("98084202-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "246",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1208),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1208),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco ABC Brasil S.A."
                         },
                         new
                         {
                             Id = new Guid("98084205-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "248",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1209),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1209),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Boavista Interatlântico S.A."
                         },
                         new
                         {
                             Id = new Guid("98084207-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "249",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1210),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1210),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Investcred Unibanco S.A."
                         },
                         new
                         {
                             Id = new Guid("9808420a-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "250",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1211),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1212),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Schahin S.A."
                         },
                         new
                         {
                             Id = new Guid("9808420d-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "254",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1212),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1213),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Paraná Banco S.A."
                         },
                         new
                         {
                             Id = new Guid("9808420f-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "263",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1214),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1214),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Cacique S.A."
                         },
                         new
                         {
                             Id = new Guid("98084212-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "265",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1215),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1215),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Fator S.A."
                         },
                         new
                         {
                             Id = new Guid("98084214-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "266",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1216),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1216),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Cédula S.A."
                         },
                         new
                         {
                             Id = new Guid("98084216-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "300",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1217),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1217),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco de La Nacion Argentina"
                         },
                         new
                         {
                             Id = new Guid("98084219-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "318",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1218),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1219),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco BMG S.A."
                         },
                         new
                         {
                             Id = new Guid("9808421b-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "320",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1219),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1220),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Industrial e Comercial S.A."
                         },
                         new
                         {
                             Id = new Guid("9808421d-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "341",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1221),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1221),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Itaú Unibanco S.A."
                         },
                         new
                         {
                             Id = new Guid("98084220-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "356",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1222),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1222),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Real S.A."
                         },
                         new
                         {
                             Id = new Guid("98084222-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "366",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1223),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1223),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Société Générale Brasil S.A."
                         },
                         new
                         {
                             Id = new Guid("98084224-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "370",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1224),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1225),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco WestLB do Brasil S.A."
                         },
                         new
                         {
                             Id = new Guid("98084227-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "376",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1225),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1226),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco J. P. Morgan S.A."
                         },
                         new
                         {
                             Id = new Guid("98084229-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "389",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1226),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1227),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Mercantil do Brasil S.A."
                         },
                         new
                         {
                             Id = new Guid("9808422b-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "394",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1228),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1228),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Bradesco Financiamentos S.A."
                         },
                         new
                         {
                             Id = new Guid("9808422e-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "399",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1229),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1229),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "HSBC Bank Brasil S.A. – Banco Múltiplo"
                         },
                         new
                         {
                             Id = new Guid("98084230-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "409",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1230),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1230),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Unibanco – União de Bancos Brasileiros S.A."
                         },
                         new
                         {
                             Id = new Guid("98084232-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "412",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1231),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1231),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Capital S.A."
                         },
                         new
                         {
                             Id = new Guid("98084235-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "422",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1232),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1233),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Safra S.A."
                         },
                         new
                         {
                             Id = new Guid("98084238-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "453",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1233),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1234),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Rural S.A."
                         },
                         new
                         {
                             Id = new Guid("9808423b-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "456",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1235),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1235),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco de Tokyo-Mitsubishi UFJ Brasil S.A."
                         },
                         new
                         {
                             Id = new Guid("9808423d-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "464",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1236),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1236),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Sumitomo Mitsui Brasileiro S.A."
                         },
                         new
                         {
                             Id = new Guid("98084240-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "473",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1237),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1237),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Caixa Geral – Brasil S.A."
                         },
                         new
                         {
                             Id = new Guid("98084243-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "477",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1238),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1238),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Citibank N.A."
                         },
                         new
                         {
                             Id = new Guid("98084245-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "479",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1239),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1240),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco ItaúBank S.A"
                         },
                         new
                         {
                             Id = new Guid("98084248-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "487",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1240),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1241),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Deutsche Bank S.A. – Banco Alemão"
                         },
                         new
                         {
                             Id = new Guid("9808424b-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "488",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1241),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1242),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "JPMorgan Chase Bank"
                         },
                         new
                         {
                             Id = new Guid("9808424d-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "492",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1242),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1243),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "ING Bank N.V."
                         },
                         new
                         {
                             Id = new Guid("98084250-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "494",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1244),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1244),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco de La Republica Oriental del Uruguay"
                         },
                         new
                         {
                             Id = new Guid("98084252-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "495",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1245),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1245),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco de La Provincia de Buenos Aires"
                         },
                         new
                         {
                             Id = new Guid("98084256-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "505",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1246),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1246),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Credit Suisse (Brasil) S.A."
                         },
                         new
                         {
                             Id = new Guid("98084259-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "600",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1247),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1247),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Luso Brasileiro S.A."
                         },
                         new
                         {
                             Id = new Guid("9808425c-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "604",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1266),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1267),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Industrial do Brasil S.A."
                         },
                         new
                         {
                             Id = new Guid("98084260-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "610",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1268),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1268),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco VR S.A."
                         },
                         new
                         {
                             Id = new Guid("98084262-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "611",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1269),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1269),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Paulista S.A."
                         },
                         new
                         {
                             Id = new Guid("98084265-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "612",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1270),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1270),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Guanabara S.A."
                         },
                         new
                         {
                             Id = new Guid("98084268-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "613",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1271),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1272),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Pecúnia S.A."
                         },
                         new
                         {
                             Id = new Guid("9808426a-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "623",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1272),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1273),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Panamericano S.A."
                         },
                         new
                         {
                             Id = new Guid("9808426c-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "626",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1274),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1274),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Ficsa S.A."
                         },
                         new
                         {
                             Id = new Guid("9808426f-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "630",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1275),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1275),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Intercap S.A."
                         },
                         new
                         {
                             Id = new Guid("98084271-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "633",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1276),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1276),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Rendimento S.A."
                         },
                         new
                         {
                             Id = new Guid("98084273-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "634",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1277),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1278),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Triângulo S.A."
                         },
                         new
                         {
                             Id = new Guid("98084276-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "637",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1279),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1279),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Sofisa S.A."
                         },
                         new
                         {
                             Id = new Guid("98084278-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "638",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1280),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1281),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Prosper S.A."
                         },
                         new
                         {
                             Id = new Guid("9808427b-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "641",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1281),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1282),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Alvorada S.A."
                         },
                         new
                         {
                             Id = new Guid("9808427d-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "643",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1282),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1283),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Pine S.A."
                         },
                         new
                         {
                             Id = new Guid("9808427f-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "652",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1284),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1285),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Itaú Unibanco Holding S.A."
                         },
                         new
                         {
                             Id = new Guid("98084282-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "653",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1285),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1286),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Indusval S.A."
                         },
                         new
                         {
                             Id = new Guid("98084285-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "654",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1286),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1287),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco A.J.Renner S.A."
                         },
                         new
                         {
                             Id = new Guid("98084288-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "655",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1288),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1288),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Votorantim S.A."
                         },
                         new
                         {
                             Id = new Guid("9808428a-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "707",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1289),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1289),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Daycoval S.A."
                         },
                         new
                         {
                             Id = new Guid("9808428d-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "719",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1290),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1290),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banif-Banco Internacional do Funchal (Brasil)S.A."
                         },
                         new
                         {
                             Id = new Guid("9808428f-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "721",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1291),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1291),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Credibel S.A."
                         },
                         new
                         {
                             Id = new Guid("98084291-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "724",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1292),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1292),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Porto Seguro S.A."
                         },
                         new
                         {
                             Id = new Guid("98084294-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "734",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1293),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1294),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Gerdau S.A."
                         },
                         new
                         {
                             Id = new Guid("98084296-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "735",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1294),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1295),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Pottencial S.A."
                         },
                         new
                         {
                             Id = new Guid("98084299-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "738",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1296),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1296),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Morada S.A."
                         },
                         new
                         {
                             Id = new Guid("9808429b-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "739",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1297),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1297),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco BGN S.A."
                         },
                         new
                         {
                             Id = new Guid("9808429f-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "740",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1298),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1298),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Barclays S.A."
                         },
                         new
                         {
                             Id = new Guid("980842a1-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "741",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1299),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1299),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Ribeirão Preto S.A."
                         },
                         new
                         {
                             Id = new Guid("980842a3-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "743",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1300),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1301),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Semear S.A."
                         },
                         new
                         {
                             Id = new Guid("980842a6-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "744",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1301),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1302),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "BankBoston N.A."
                         },
                         new
                         {
                             Id = new Guid("980842a8-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "745",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1302),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1303),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Citibank S.A."
                         },
                         new
                         {
                             Id = new Guid("980842ab-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "746",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1304),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1304),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Modal S.A."
                         },
                         new
                         {
                             Id = new Guid("980842ae-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "747",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1305),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1305),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Rabobank International Brasil S.A."
                         },
                         new
                         {
                             Id = new Guid("980842b1-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "748",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1306),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1306),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Cooperativo Sicredi S.A."
                         },
                         new
                         {
                             Id = new Guid("980842b3-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "749",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1307),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1308),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Simples S.A."
                         },
                         new
                         {
                             Id = new Guid("980842b6-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "751",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1308),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1309),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Dresdner Bank Brasil S.A. – Banco Múltiplo"
                         },
                         new
                         {
                             Id = new Guid("980842b8-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "752",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1309),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1310),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco BNP Paribas Brasil S.A."
                         },
                         new
                         {
                             Id = new Guid("980842bb-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "753",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1311),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1311),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "NBC Bank Brasil S.A. – Banco Múltiplo"
                         },
                         new
                         {
                             Id = new Guid("980842c3-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "755",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1312),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1312),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Bank of America Merrill Lynch Banco Múltiplo S.A."
                         },
                         new
                         {
                             Id = new Guid("980842c7-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "756",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1313),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1313),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Cooperativo do Brasil S.A. – BANCOOB"
                         },
                         new
                         {
                             Id = new Guid("980842ca-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "757",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1314),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1314),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco KEB do Brasil S.A."
                         },
                         new
                         {
                             Id = new Guid("980842cd-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "M10",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1315),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1316),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Moneo S.A."
                         },
                         new
                         {
                             Id = new Guid("980842d0-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "M11",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1316),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1317),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco IBM S.A."
                         },
                         new
                         {
                             Id = new Guid("980842d3-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "M20",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1318),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1318),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Toyota do Brasil S.A."
                         },
                         new
                         {
                             Id = new Guid("980842d6-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "M21",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1319),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1319),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Daimlerchrysler S.A."
                         },
                         new
                         {
                             Id = new Guid("980842da-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "M03",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1320),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1320),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Fiat S.A."
                         },
                         new
                         {
                             Id = new Guid("980842dd-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "M12",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1321),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1321),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Maxinvest S.A."
                         },
                         new
                         {
                             Id = new Guid("980842df-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "M22",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1322),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1322),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Honda S.A."
                         },
                         new
                         {
                             Id = new Guid("980842e2-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "M13",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1323),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1324),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Tricury S.A."
                         },
                         new
                         {
                             Id = new Guid("980842e4-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "M14",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1324),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1325),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Volkswagen S.A."
                         },
                         new
                         {
                             Id = new Guid("980842e7-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "M23",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1325),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1326),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Volvo (Brasil) S.A."
                         },
                         new
                         {
                             Id = new Guid("980842ea-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "M15",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1327),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1327),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco BRJ S.A."
                         },
                         new
                         {
                             Id = new Guid("980842ed-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "M06",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1328),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1328),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco de Lage Landen Brasil S.A."
                         },
                         new
                         {
                             Id = new Guid("980842f0-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "M24",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1329),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1329),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco PSA Finance Brasil S.A."
                         },
                         new
                         {
                             Id = new Guid("980842f3-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "M07",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1330),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1331),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco GMAC S.A."
                         },
                         new
                         {
                             Id = new Guid("980842f5-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "M16",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1331),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1332),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Rodobens S.A."
                         },
                         new
                         {
                             Id = new Guid("980842f8-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "M08",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1333),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1333),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Citicard S.A."
                         },
                         new
                         {
                             Id = new Guid("980842fa-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "M17",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1334),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1334),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Ourinvest S.A."
                         },
                         new
                         {
                             Id = new Guid("980842fd-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "M18",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1335),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1335),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Ford S.A."
                         },
                         new
                         {
                             Id = new Guid("98084300-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "M09",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1336),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1336),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco Itaucred Financiamentos S.A."
                         },
                         new
                         {
                             Id = new Guid("98084303-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "M19",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1337),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1338),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco CNH Capital S.A."
                         },
                         new
                         {
                             Id = new Guid("98084306-61f1-11ec-9517-00155d6d9d2f"),
                             Code = "M19",
-                            Creation = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1338),
+                            Creation = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2021, 12, 20, 21, 7, 40, 956, DateTimeKind.Local).AddTicks(1339),
+                            LastUpdate = new DateTime(2022, 2, 19, 21, 0, 0, 0, DateTimeKind.Local),
                             Name = "Banco CNH Capital S.A."
                         });
                 });
 
-            modelBuilder.Entity("POne.Financial.Domain.Domain.Category", b =>
+            modelBuilder.Entity("POne.Financial.Domain.Entities.Category", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("AccountId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Color")
+                        .HasMaxLength(7)
+                        .HasColumnType("nvarchar(7)");
 
                     b.Property<DateTime>("Creation")
                         .HasColumnType("datetime2");
@@ -1675,14 +1655,12 @@ namespace POne.Financial.Infra.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountId");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("Categories", "fin");
                 });
 
-            modelBuilder.Entity("POne.Financial.Domain.Domain.Entry", b =>
+            modelBuilder.Entity("POne.Financial.Domain.Entities.Entry", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
@@ -1750,7 +1728,7 @@ namespace POne.Financial.Infra.Migrations
                     b.ToTable("Entries", "fin");
                 });
 
-            modelBuilder.Entity("POne.Financial.Domain.Domain.Payment", b =>
+            modelBuilder.Entity("POne.Financial.Domain.Entities.Payment", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
@@ -1788,13 +1766,17 @@ namespace POne.Financial.Infra.Migrations
                     b.ToTable("Payment", "fin");
                 });
 
-            modelBuilder.Entity("POne.Financial.Domain.Domain.SubCategory", b =>
+            modelBuilder.Entity("POne.Financial.Domain.Entities.SubCategory", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Color")
+                        .HasMaxLength(7)
+                        .HasColumnType("nvarchar(7)");
 
                     b.Property<DateTime>("Creation")
                         .HasColumnType("datetime2");
@@ -1821,22 +1803,76 @@ namespace POne.Financial.Infra.Migrations
                     b.ToTable("SubCategories", "fin");
                 });
 
-            modelBuilder.Entity("POne.Financial.Domain.Domain.Balance", b =>
+            modelBuilder.Entity("POne.Financial.Domain.Entities.Wallet", b =>
                 {
-                    b.HasOne("POne.Financial.Domain.Domain.Bank", "Bank")
-                        .WithMany("Balances")
-                        .HasForeignKey("BankId");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Navigation("Bank");
+                    b.Property<string>("Agency")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<Guid?>("BankId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Color")
+                        .HasMaxLength(7)
+                        .HasColumnType("nvarchar(7)");
+
+                    b.Property<DateTime>("Creation")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastUpdate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Number")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Value")
+                        .HasColumnType("Decimal(10,4)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BankId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Wallets", "fin");
                 });
 
-            modelBuilder.Entity("POne.Financial.Domain.Domain.Entry", b =>
+            modelBuilder.Entity("POne.Financial.Domain.Entities.Balance", b =>
                 {
-                    b.HasOne("POne.Financial.Domain.Domain.Category", "Category")
+                    b.HasOne("POne.Financial.Domain.Entities.Wallet", "Wallet")
+                        .WithMany("Balances")
+                        .HasForeignKey("WalletId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Wallet");
+                });
+
+            modelBuilder.Entity("POne.Financial.Domain.Entities.Entry", b =>
+                {
+                    b.HasOne("POne.Financial.Domain.Entities.Category", "Category")
                         .WithMany("Entries")
                         .HasForeignKey("CategoryId");
 
-                    b.HasOne("POne.Financial.Domain.Domain.SubCategory", "SubCategory")
+                    b.HasOne("POne.Financial.Domain.Entities.SubCategory", "SubCategory")
                         .WithMany("Entries")
                         .HasForeignKey("SubCategoryId");
 
@@ -1845,13 +1881,13 @@ namespace POne.Financial.Infra.Migrations
                     b.Navigation("SubCategory");
                 });
 
-            modelBuilder.Entity("POne.Financial.Domain.Domain.Payment", b =>
+            modelBuilder.Entity("POne.Financial.Domain.Entities.Payment", b =>
                 {
-                    b.HasOne("POne.Financial.Domain.Domain.Balance", "Balance")
+                    b.HasOne("POne.Financial.Domain.Entities.Wallet", "Balance")
                         .WithMany("Payments")
                         .HasForeignKey("BalanceId");
 
-                    b.HasOne("POne.Financial.Domain.Domain.Entry", "Entry")
+                    b.HasOne("POne.Financial.Domain.Entities.Entry", "Entry")
                         .WithMany("Payments")
                         .HasForeignKey("EntryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1862,9 +1898,9 @@ namespace POne.Financial.Infra.Migrations
                     b.Navigation("Entry");
                 });
 
-            modelBuilder.Entity("POne.Financial.Domain.Domain.SubCategory", b =>
+            modelBuilder.Entity("POne.Financial.Domain.Entities.SubCategory", b =>
                 {
-                    b.HasOne("POne.Financial.Domain.Domain.Category", "Category")
+                    b.HasOne("POne.Financial.Domain.Entities.Category", "Category")
                         .WithMany("SubCategories")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1873,31 +1909,42 @@ namespace POne.Financial.Infra.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("POne.Financial.Domain.Domain.Balance", b =>
+            modelBuilder.Entity("POne.Financial.Domain.Entities.Wallet", b =>
                 {
-                    b.Navigation("Payments");
+                    b.HasOne("POne.Financial.Domain.Entities.Bank", "Bank")
+                        .WithMany("Wallets")
+                        .HasForeignKey("BankId");
+
+                    b.Navigation("Bank");
                 });
 
-            modelBuilder.Entity("POne.Financial.Domain.Domain.Bank", b =>
+            modelBuilder.Entity("POne.Financial.Domain.Entities.Bank", b =>
                 {
-                    b.Navigation("Balances");
+                    b.Navigation("Wallets");
                 });
 
-            modelBuilder.Entity("POne.Financial.Domain.Domain.Category", b =>
+            modelBuilder.Entity("POne.Financial.Domain.Entities.Category", b =>
                 {
                     b.Navigation("Entries");
 
                     b.Navigation("SubCategories");
                 });
 
-            modelBuilder.Entity("POne.Financial.Domain.Domain.Entry", b =>
+            modelBuilder.Entity("POne.Financial.Domain.Entities.Entry", b =>
                 {
                     b.Navigation("Payments");
                 });
 
-            modelBuilder.Entity("POne.Financial.Domain.Domain.SubCategory", b =>
+            modelBuilder.Entity("POne.Financial.Domain.Entities.SubCategory", b =>
                 {
                     b.Navigation("Entries");
+                });
+
+            modelBuilder.Entity("POne.Financial.Domain.Entities.Wallet", b =>
+                {
+                    b.Navigation("Balances");
+
+                    b.Navigation("Payments");
                 });
 #pragma warning restore 612, 618
         }

@@ -9,9 +9,12 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using POne.Api.Extensions;
 using POne.Core.Auth;
+using POne.Financial.Api.Facades;
+using POne.Financial.Api.Hubs;
 using POne.Financial.Business.CommandHandlers;
 using POne.Financial.Domain.Commands.Validators.Categories;
 using POne.Financial.Domain.Contracts;
+using POne.Financial.Domain.Contracts.Facades;
 using POne.Financial.Infra.Connections;
 using POne.Financial.Infra.Repositories;
 using POne.Infra.UnityOfWork;
@@ -54,8 +57,8 @@ namespace POne.Financial.Api
                 .WithOrigins(allowedCorsOrigns)));
 
             var identityServerProtectedApiConfig = _configuration
-                    .GetSection("IdentityServer")
-                    .Get<IdentityServerProtectedApiConfig>();
+                .GetSection("IdentityServer")
+                .Get<IdentityServerProtectedApiConfig>();
 
             services.AddControllersWithViews();
             services.AddAuthentication("token")
@@ -87,7 +90,7 @@ namespace POne.Financial.Api
                             TokenUrl = new Uri("https://localhost:5001/connect/token"),
                             Scopes = new Dictionary<string, string>
                             {
-                                { "ponefinancialapi", "POne Financial Api full access" },
+                                { "ponefinancialapi", "POne Financial Api Full Access" }
                             },
                         }
                     }
@@ -96,12 +99,17 @@ namespace POne.Financial.Api
                 c.OperationFilter<AuthorizeCheckOperationFilter>();
             });
 
+            services.AddSingleton<NotificationsHub>();
+
             services.AddScoped<IBankRepository, BankRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ISubCategoryRepository, SubCategoryRepository>();
             services.AddScoped<IEntryRepository, EntryRepository>();
             services.AddScoped<IPaymentRepository, PaymentRepository>();
-            services.AddScoped<IBalanceRepository, BalanceRepository>();
+            services.AddScoped<IWalletRepository, WalletRepository>();
+            services.AddScoped<IDashboardRepository, DashboardRepository>();
+            services.AddSingleton<ISignalRFacade, SignalRFacade>();
+            services.AddSignalR();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -117,6 +125,7 @@ namespace POne.Financial.Api
                     c.OAuthScopes("ponefinancialapi");
                 });
             }
+
             app.UseCors("DefaultCors");
             app.UseStaticFiles();
             app.UseHttpsRedirection();
@@ -126,6 +135,7 @@ namespace POne.Financial.Api
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<NotificationsHub>("/hubs/notifications");
                 endpoints.MapDefaultControllerRoute();
             });
         }

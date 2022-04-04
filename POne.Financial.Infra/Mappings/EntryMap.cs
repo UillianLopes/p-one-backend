@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using POne.Core.Enums;
-using POne.Financial.Domain.Domain;
+using POne.Financial.Domain.Entities;
 using POne.Infra.Mappings;
 using System;
 using System.Linq.Expressions;

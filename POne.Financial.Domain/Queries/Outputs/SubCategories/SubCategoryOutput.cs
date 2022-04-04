@@ -9,5 +9,6 @@ namespace POne.Financial.Domain.Queries.Outputs.SubCategories
         public string Name { get; set; }
         public string Description { get; set; }
         public CategoryOuput Category { get; set; }
+        public string Color { get; set; }
     }
 }

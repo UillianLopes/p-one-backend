@@ -5,7 +5,7 @@ namespace POne.Domain.Entities
 {
     public class Contact : Entity
     {
-        public virtual Account Account { get; private set; }
+        public User User { get; private set; }
         public virtual PhoneNumber Number { get; private set; }
         public virtual string Name { get; private set; }
     }
