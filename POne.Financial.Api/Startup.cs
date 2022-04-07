@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -108,8 +109,10 @@ namespace POne.Financial.Api
             services.AddScoped<IPaymentRepository, PaymentRepository>();
             services.AddScoped<IWalletRepository, WalletRepository>();
             services.AddScoped<IDashboardRepository, DashboardRepository>();
-            services.AddSingleton<ISignalRFacade, SignalRFacade>();
+            services.AddScoped<INotificationRepository, NotificationRepository>();
+            services.AddScoped<INotificationsHubFacade, NotificationsHubFacade>();
             services.AddSignalR();
+            services.AddSingleton<IUserIdProvider, UserIdProvider>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -13,6 +13,7 @@ namespace POne.Financial.Infra.Connections
         public DbSet<Entry> Entries { get; protected set; }
         public DbSet<Payment> Payments { get; protected set; }
         public DbSet<Bank> Banks { get; protected set; }
+        public DbSet<Notification> Notifications { get; protected set; }
 
         public POneFinancialDbContext(DbContextOptions options) : base(options)
         {
@@ -29,6 +30,7 @@ namespace POne.Financial.Infra.Connections
             modelBuilder.ApplyConfiguration(new EntryMap());
             modelBuilder.ApplyConfiguration(new PaymentMap());
             modelBuilder.ApplyConfiguration(new BalanceMap());
+            modelBuilder.ApplyConfiguration(new NotificationMap());
 
         }
     }

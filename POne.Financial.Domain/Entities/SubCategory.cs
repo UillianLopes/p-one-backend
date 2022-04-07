@@ -1,5 +1,5 @@
 ﻿using POne.Core.Entities;
-using System;
+using POne.Financial.Domain.Events;
 using System.Collections.Generic;
 
 namespace POne.Financial.Domain.Entities
@@ -15,6 +15,7 @@ namespace POne.Financial.Domain.Entities
         public SubCategory(Category category, string name, string description, string color) : base(name, description, color)
         {
             Category = category;
+            AddEvent(NotifyEvent.Success("Sub category created", $"The sub category {name} was created with success"));
         }
 
         public virtual ISet<Entry> Entries { get; private set; }

@@ -1,5 +1,6 @@
 ﻿using POne.Core.Entities;
 using POne.Core.Enums;
+using POne.Financial.Domain.Events;
 using System;
 using System.Collections.Generic;
 
@@ -17,6 +18,8 @@ namespace POne.Financial.Domain.Entities
         {
             UserId = userId;
             Type = type;
+
+            AddEvent(NotifyEvent.Success("Category created", $"The category {name} was created with success"));
         }
 
         public Guid UserId { get; private set; }

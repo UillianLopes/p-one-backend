@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace POne.Core.Extensions.Items
+namespace POne.Core.Extensions.Models
 {
-    public class AutoCompleteItem
+    public class AutoCompleteModel
     {
         public Guid Id { get; set; }
         public string Title { get; set; }

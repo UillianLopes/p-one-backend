@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using POne.Core.Contracts;
 using POne.Core.Enums;
-using POne.Core.Extensions.Items;
+using POne.Core.Extensions.Models;
 using POne.Financial.Domain.Contracts;
 using POne.Financial.Domain.Entities;
 using POne.Financial.Domain.Queries.Inputs.Entries;
@@ -19,6 +19,7 @@ namespace POne.Financial.Infra.Repositories
     public class EntryRepository : Repository<POneFinancialDbContext, Entry>, IEntryRepository
     {
         private readonly IAuthenticatedUser _authenticatedUser;
+
         public EntryRepository(IAuthenticatedUser authenticatedUser, POneFinancialDbContext dbContext) : base(dbContext) => _authenticatedUser = authenticatedUser;
 
         public Task<List<EntryOutput>> GetAllAsync(GetFiltredEntries filter, CancellationToken cancellationToken)
@@ -67,13 +68,13 @@ namespace POne.Financial.Infra.Repositories
                     Description = e.Description,
                     BarCode = e.BarCode,
                     PaidValue = e.Payments.Sum((payment) => payment.Value),
-                    Category = e.Category != null ? new AutoCompleteItem
+                    Category = e.Category != null ? new AutoCompleteModel
                     {
                         Id = e.Category.Id,
                         Title = e.Category.Name,
                         Color = e.Category.Color
                     } : null,
-                    SubCategory = e.SubCategory != null ? new AutoCompleteItem
+                    SubCategory = e.SubCategory != null ? new AutoCompleteModel
                     {
                         Id = e.SubCategory.Id,
                         Title = e.SubCategory.Name,

@@ -1,6 +1,9 @@
-﻿namespace POne.Core.CQRS
+﻿using MediatR;
+
+
+namespace POne.Core.CQRS
 {
-    public interface IEvent
+    public interface IEvent : INotification
     {
     }
 }
