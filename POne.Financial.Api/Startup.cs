@@ -112,7 +112,7 @@ namespace POne.Financial.Api
             services.AddScoped<INotificationRepository, NotificationRepository>();
             services.AddScoped<INotificationsHubFacade, NotificationsHubFacade>();
             services.AddSignalR();
-            services.AddSingleton<IUserIdProvider, UserIdProvider>();
+            services.AddTransient<IUserIdProvider, UserIdProvider>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

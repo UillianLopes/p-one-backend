@@ -17,11 +17,9 @@ namespace POne.Financial.Business.QueryHandlers
 
         public async Task<IQueryOutput> Handle(GetBalanceOverTime request, CancellationToken cancellationToken)
         {
-            if (request.UseMock)
-            {
-               
-            }
-            var output = await _dashboardRepository.GetBalanceOverTimeAsync(request, cancellationToken);
+
+            var output = await _dashboardRepository
+                .GetBalanceOverTimeAsync(request, cancellationToken);
 
             return QueryOutput.Ok(output);
         }
