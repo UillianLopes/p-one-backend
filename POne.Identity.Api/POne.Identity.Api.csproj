@@ -19,7 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\POne.Admin.Business\POne.Admin.Business.csproj" />
     <ProjectReference Include="..\POne.Api\POne.Api.csproj" />
     <ProjectReference Include="..\POne.Core\POne.Core.csproj" />
     <ProjectReference Include="..\POne.Identity.Business\POne.Identity.Business.csproj" />
