@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31605.320
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "POne.Identity.Infra", "POne.Identity.Infra\POne.Identity.Infra.csproj", "{6A956B80-F0CA-44C8-9587-E4FC5C2DC976}"
 EndProject
@@ -39,17 +39,32 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "00 - Shared", "00 - Shared"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "POne.Api", "POne.Api\POne.Api.csproj", "{735C14AC-44FC-49EF-A779-2E318F4A4C88}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "POne.App.Domain", "POne.App.Domain\POne.App.Domain.csproj", "{0E3C7FD3-3CAC-4F0E-B2E1-C317CB5BD990}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "POne.App.Domain", "POne.App.Domain\POne.App.Domain.csproj", "{0E3C7FD3-3CAC-4F0E-B2E1-C317CB5BD990}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "04 - Financial", "04 - Financial", "{271E9717-E4CA-49BE-BD7F-C5F8F16B1454}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "POne.Financial.Api", "POne.Financial.Api\POne.Financial.Api.csproj", "{B10876AA-CD60-47F4-BA64-CB22857DC4A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "POne.Financial.Api", "POne.Financial.Api\POne.Financial.Api.csproj", "{B10876AA-CD60-47F4-BA64-CB22857DC4A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "POne.Financial.Business", "POne.Financial.Business\POne.Financial.Business.csproj", "{7B9BD238-33E3-4EDB-A92A-C995ADF82344}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "POne.Financial.Business", "POne.Financial.Business\POne.Financial.Business.csproj", "{7B9BD238-33E3-4EDB-A92A-C995ADF82344}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "POne.Financial.Domain", "POne.Financial.Domain\POne.Financial.Domain.csproj", "{46C43068-0FBB-459A-B072-A82270749B80}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "POne.Financial.Domain", "POne.Financial.Domain\POne.Financial.Domain.csproj", "{46C43068-0FBB-459A-B072-A82270749B80}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "POne.Financial.Infra", "POne.Financial.Infra\POne.Financial.Infra.csproj", "{98940AF6-DA4B-4377-8CAB-D3CDE0455814}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "POne.Financial.Infra", "POne.Financial.Infra\POne.Financial.Infra.csproj", "{98940AF6-DA4B-4377-8CAB-D3CDE0455814}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "05 - Notifier", "05 - Notifier", "{70A74F67-1902-4F94-A4D5-B36A8E33F23C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "POne.Notifier.Domain", "POne.Notifier.Domain\POne.Notifier.Domain.csproj", "{876B1E3D-D7A4-4031-AD9A-8901B1CAEE70}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "POne.Notifier.Infra", "POne.Notifier.Infra\POne.Notifier.Infra.csproj", "{824DC0F7-865D-48D8-8EAE-A79CA0709C0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "POne.Notifier.Api", "POne.Notifier.Api\POne.Notifier.Api.csproj", "{88BF301F-585B-4893-8040-C239B7BD6CC2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "POne.Notifier.Business", "POne.Notifier.Business\POne.Notifier.Business.csproj", "{40D0763D-7585-4B28-A745-C15239F19B83}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{39D82153-A067-4353-B613-09BF569F8884}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -133,6 +148,22 @@ Global
 		{98940AF6-DA4B-4377-8CAB-D3CDE0455814}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{98940AF6-DA4B-4377-8CAB-D3CDE0455814}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{98940AF6-DA4B-4377-8CAB-D3CDE0455814}.Release|Any CPU.Build.0 = Release|Any CPU
+		{876B1E3D-D7A4-4031-AD9A-8901B1CAEE70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{876B1E3D-D7A4-4031-AD9A-8901B1CAEE70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{876B1E3D-D7A4-4031-AD9A-8901B1CAEE70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{876B1E3D-D7A4-4031-AD9A-8901B1CAEE70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{824DC0F7-865D-48D8-8EAE-A79CA0709C0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{824DC0F7-865D-48D8-8EAE-A79CA0709C0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{824DC0F7-865D-48D8-8EAE-A79CA0709C0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{824DC0F7-865D-48D8-8EAE-A79CA0709C0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88BF301F-585B-4893-8040-C239B7BD6CC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88BF301F-585B-4893-8040-C239B7BD6CC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88BF301F-585B-4893-8040-C239B7BD6CC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88BF301F-585B-4893-8040-C239B7BD6CC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40D0763D-7585-4B28-A745-C15239F19B83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40D0763D-7585-4B28-A745-C15239F19B83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40D0763D-7585-4B28-A745-C15239F19B83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40D0763D-7585-4B28-A745-C15239F19B83}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -157,6 +188,10 @@ Global
 		{7B9BD238-33E3-4EDB-A92A-C995ADF82344} = {271E9717-E4CA-49BE-BD7F-C5F8F16B1454}
 		{46C43068-0FBB-459A-B072-A82270749B80} = {271E9717-E4CA-49BE-BD7F-C5F8F16B1454}
 		{98940AF6-DA4B-4377-8CAB-D3CDE0455814} = {271E9717-E4CA-49BE-BD7F-C5F8F16B1454}
+		{876B1E3D-D7A4-4031-AD9A-8901B1CAEE70} = {70A74F67-1902-4F94-A4D5-B36A8E33F23C}
+		{824DC0F7-865D-48D8-8EAE-A79CA0709C0C} = {70A74F67-1902-4F94-A4D5-B36A8E33F23C}
+		{88BF301F-585B-4893-8040-C239B7BD6CC2} = {70A74F67-1902-4F94-A4D5-B36A8E33F23C}
+		{40D0763D-7585-4B28-A745-C15239F19B83} = {70A74F67-1902-4F94-A4D5-B36A8E33F23C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB173A27-51F9-4EC1-BA21-21270EBBE7E6}

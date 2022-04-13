@@ -1,7 +1,5 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,19 +8,15 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using POne.Api.Extensions;
 using POne.Core.Auth;
-using POne.Financial.Api.Facades;
-using POne.Financial.Api.Hubs;
+using POne.Financial.Api.Swagger;
 using POne.Financial.Business.CommandHandlers;
 using POne.Financial.Domain.Commands.Validators.Categories;
 using POne.Financial.Domain.Contracts;
-using POne.Financial.Domain.Contracts.Facades;
 using POne.Financial.Infra.Connections;
 using POne.Financial.Infra.Repositories;
 using POne.Infra.UnityOfWork;
-using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace POne.Financial.Api
 {
@@ -100,7 +94,6 @@ namespace POne.Financial.Api
                 c.OperationFilter<AuthorizeCheckOperationFilter>();
             });
 
-            services.AddSingleton<NotificationsHub>();
 
             services.AddScoped<IBankRepository, BankRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
@@ -109,10 +102,7 @@ namespace POne.Financial.Api
             services.AddScoped<IPaymentRepository, PaymentRepository>();
             services.AddScoped<IWalletRepository, WalletRepository>();
             services.AddScoped<IDashboardRepository, DashboardRepository>();
-            services.AddScoped<INotificationRepository, NotificationRepository>();
-            services.AddScoped<INotificationsHubFacade, NotificationsHubFacade>();
             services.AddSignalR();
-            services.AddTransient<IUserIdProvider, UserIdProvider>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -138,42 +128,10 @@ namespace POne.Financial.Api
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHub<NotificationsHub>("/hubs/notifications");
                 endpoints.MapDefaultControllerRoute();
             });
         }
     }
 
-    public class AuthorizeCheckOperationFilter : IOperationFilter
-    {
-        public void Apply(OpenApiOperation operation, OperationFilterContext context)
-        {
-            var hasAuthorize = context.MethodInfo.DeclaringType.GetCustomAttributes(true).OfType<AuthorizeAttribute>().Any() ||
-                               context.MethodInfo.GetCustomAttributes(true).OfType<AuthorizeAttribute>().Any();
 
-            if (hasAuthorize)
-            {
-                operation.Responses.Add("401", new OpenApiResponse { Description = "Unauthorized" });
-                operation.Responses.Add("403", new OpenApiResponse { Description = "Forbidden" });
-
-                operation.Security = new List<OpenApiSecurityRequirement>()
-                {
-                    new OpenApiSecurityRequirement
-                    {
-                        {
-                            new OpenApiSecurityScheme
-                            {
-                                Reference = new OpenApiReference
-                                {
-                                    Type = ReferenceType.SecurityScheme,
-                                    Id = "oauth2"
-                                }
-                            },
-                            new List<string>() { "ponefinancialapi" }
-                        }
-                    }
-                };
-            }
-        }
-    }
 }

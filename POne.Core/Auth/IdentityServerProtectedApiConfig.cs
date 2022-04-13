@@ -5,5 +5,7 @@
         public string IssuerUri { get; set; }
         public string Audience { get; set; }
         public bool ValidateAudience { get; set; }
+        public bool ValidateIssuer { get; set; }
     }
+
 }
