@@ -17,6 +17,14 @@ namespace POne.Financial.Infra.Repositories
             _authenticatedUser = authenticatedUser;
         }
 
+        public Task<List<Notification>> GetUnreadNotificationsAsync(CancellationToken cancellationToken)
+        {
+            return _dbContext.Notifications
+                .Where(n => (n.UserId == _authenticatedUser.Id || n.UserId == null) && 
+                    !n.NotificationStates.Any(ns => ns.UserId == _authenticatedUser.Id && ns.IsRead))
+                .ToListAsync(cancellationToken);
+        }
+
         public Task<List<NotificationOutput>> GetUnreadNotificationsAsync(GetUnreadNotifications request, CancellationToken cancellationToken)
         {
             return _dbContext.Notifications

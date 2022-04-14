@@ -8,5 +8,7 @@ namespace POne.Notifier.Domain.Contracts.Repositories
     public interface INotificationRepository : IRepository<Notification>
     {
         Task<List<NotificationOutput>> GetUnreadNotificationsAsync(GetUnreadNotifications request, CancellationToken cancellationToken);
+
+        Task<List<Notification>> GetUnreadNotificationsAsync(CancellationToken cancellationToken);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using POne.Core.Contracts;
 using POne.Core.Entities;
 using System;
@@ -25,28 +26,25 @@ namespace POne.Infra.UnityOfWork
             {
                 await _dbContext.SaveChangesAsync(cancellationToken);
 
-                var eventEmmited = false;
-
                 foreach (var entry in _dbContext.ChangeTracker.Entries())
                 {
                     if (entry.Entity is not Entity entity)
                         continue;
 
-                    foreach (var command in entity.Events)
-                    {
-                        if (!eventEmmited)
-                            eventEmmited = true;
 
-                        await _mediator.Publish(command, cancellationToken);
-                    }
+                    foreach (var command in entity.Events)
+                        try
+                        {
+                            await _mediator.Publish(command, cancellationToken);
+                        }
+                        catch (Exception ex)
+                        {
+                            continue;
+                        }
 
 
                     entity.ClearEvents();
                 }
-
-                if (eventEmmited)
-                    await _dbContext.SaveChangesAsync(cancellationToken);
-
             }
             catch (Exception)
             {

@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using POne.Notifier.Domain.Commands.Inputs;
+using POne.Domain.Commands.Inputs;
 
 namespace POne.Notifier.Business.CommandValidators.Notification
 {

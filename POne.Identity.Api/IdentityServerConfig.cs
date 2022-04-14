@@ -17,6 +17,7 @@ namespace POne.Identity.Api
         public string[] PostLogoutRedirectUris { get; set; }
         public bool RequirePkce { get; set; }
         public bool RequireClientSecret { get; set; }
+        public string[] ClientSecrets { get; set; }
     }
 
     public class IdentityServerConfigApi
@@ -66,7 +67,9 @@ namespace POne.Identity.Api
             RedirectUris = c.RedirectUris,
             PostLogoutRedirectUris = c.PostLogoutRedirectUris,
             RequirePkce = c.RequirePkce,
-            RequireClientSecret = c.RequireClientSecret
+            RequireClientSecret = c.RequireClientSecret,
+            ClientSecrets = c.ClientSecrets is string[] clientSecrets ? clientSecrets.Select((s) => new Secret(s.Sha256())).ToList() : null,
+            AccessTokenLifetime = 10800,
         });
 
 

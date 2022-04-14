@@ -8,15 +8,19 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using POne.Api.Extensions;
 using POne.Core.Auth;
+using POne.Core.Options;
+using POne.Financial.Api.Facades;
 using POne.Financial.Api.Swagger;
 using POne.Financial.Business.CommandHandlers;
 using POne.Financial.Domain.Commands.Validators.Categories;
 using POne.Financial.Domain.Contracts;
+using POne.Financial.Domain.Contracts.Facades;
 using POne.Financial.Infra.Connections;
 using POne.Financial.Infra.Repositories;
 using POne.Infra.UnityOfWork;
 using System;
 using System.Collections.Generic;
+using static IdentityModel.OidcConstants;
 
 namespace POne.Financial.Api
 {
@@ -102,7 +106,28 @@ namespace POne.Financial.Api
             services.AddScoped<IPaymentRepository, PaymentRepository>();
             services.AddScoped<IWalletRepository, WalletRepository>();
             services.AddScoped<IDashboardRepository, DashboardRepository>();
+            services.AddScoped<INotifierApiFacade, NotifierApiFacade>();
+            services.AddSingleton<IdentityApiFacade>();
+
             services.AddSignalR();
+
+
+            var endpointsSection = _configuration
+                .GetSection("ApiEndpoints");
+
+            var endpoints = endpointsSection.Get<ApiEndpointOptions>();
+
+            services.Configure<ApiEndpointOptions>(endpointsSection);
+
+            services.AddHttpClient("POne.Notifier.Api.Client", (opts) =>
+            {
+                opts.BaseAddress = new Uri(endpoints.NotifierApiEndpoint);
+            });
+
+            services.AddHttpClient("POne.Identity.Api.Client", (opts) =>
+            {
+                opts.BaseAddress = new Uri(endpoints.IdentityApiEndpoint);
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

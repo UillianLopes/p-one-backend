@@ -1,5 +1,5 @@
 ﻿using POne.Core.Entities;
-using POne.Financial.Domain.Events;
+using POne.Core.Events;
 using System.Collections.Generic;
 
 namespace POne.Financial.Domain.Entities

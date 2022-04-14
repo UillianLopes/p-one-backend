@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using POne.Core.Contracts;
 using POne.Core.Mvc;
+using POne.Domain.Commands.Inputs;
 using POne.Notifier.Domain.Commands.Inputs;
 using POne.Notifier.Domain.Queries.Inputs.Notifications;
 
@@ -27,5 +28,7 @@ namespace POne.Notifier.Api.Controllers
 
         [HttpPut("{id}/[action]")]
         public Task<IActionResult> MarkAsUnreadAsync([FromRoute] Guid id, CancellationToken cancellationToken) => SendAsync(new MarkNotificationAsUnreadCommand { Id = id }, cancellationToken);
+        [HttpPut("[action]")]
+        public Task<IActionResult> MarkAllNotificationsAsReadAsync(CancellationToken cancellationToken) => SendAsync(new MarkAllNotificationsAsReadCommand(), cancellationToken);
     }
 }

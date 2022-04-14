@@ -14,7 +14,7 @@ namespace POne.Financial.Domain.Entities
             Balances = new HashSet<Balance>();
         }
 
-        public Wallet(Guid userId, decimal value, string name, Bank bank, string number, string agency, BalanceType type, string color)
+        public Wallet(Guid userId, decimal value, string name, Bank bank, string number, string agency, BalanceType type, string color) : this()
         {
             UserId = userId;
             Value = value;

@@ -1,6 +1,6 @@
 ﻿using POne.Core.Entities;
 using POne.Core.Enums;
-using POne.Financial.Domain.Events;
+using POne.Core.Events;
 using System;
 using System.Collections.Generic;
 

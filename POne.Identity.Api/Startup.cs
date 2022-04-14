@@ -63,7 +63,8 @@ namespace POne.Identity.Api
            .AddInMemoryIdentityResources(identityServerConfig.GetIdentityResources())
            .AddInMemoryApiResources(identityServerConfig.GetApiResources())
            .AddDeveloperSigningCredential()
-           .AddProfileService<ProfileService>();
+           .AddProfileService<ProfileService>()
+           .AddRedirectUriValidator<CustomRedirectUriValidator>();
 
             services.AddControllersWithViews();
 
