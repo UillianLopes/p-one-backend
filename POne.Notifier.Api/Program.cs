@@ -144,6 +144,8 @@ app.UseEndpoints(endpoints =>
     endpoints.MapDefaultControllerRoute();
 });
 
+app.UseForwardedHeaders();
+
 if (Environment.GetEnvironmentVariables().Contains("MIGRATE"))
 {
     using var scope = app.Services.CreateScope();
@@ -155,7 +157,6 @@ if (Environment.GetEnvironmentVariables().Contains("MIGRATE"))
 
     await context.Database.MigrateAsync();
 }
-
 
 app.Run();
 

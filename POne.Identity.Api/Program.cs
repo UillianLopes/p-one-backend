@@ -15,6 +15,7 @@ using POne.Identity.Infra.Connections;
 using POne.Identity.Infra.Repositories;
 using POne.Infra.UnityOfWork;
 using System;
+using System.Linq;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +46,8 @@ services.AddPOneApi(builder => builder
 var allowedCorsOrigns = configuration
      .GetSection("AllowedCorsOrigins")
      .Get<string[]>();
+
+Console.WriteLine($"ALLOWED CORS ORIGINS -> {allowedCorsOrigns?.Aggregate((a, b) => $"{a}|{b}")}");
 
 services.AddCors(cors => cors.AddPolicy("DefaultCors", config => config
     .AllowAnyHeader()
@@ -102,5 +105,16 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapDefaultControllerRoute();
 });
+
+if (Environment.GetEnvironmentVariables().Contains("MIGRATE"))
+{
+    using var scope = app.Services.CreateScope();
+
+    using var context = scope
+        .ServiceProvider
+        .GetRequiredService<POneIdentityDbContext>();
+
+    context.Database.Migrate();
+}
 
 app.Run();

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -54,7 +55,14 @@ services.AddCors(cors => cors.AddPolicy("DefaultCors", config => config
     .AllowAnyHeader()
     .AllowAnyMethod()
     .AllowCredentials()
-    .WithOrigins(allowedCorsOrigns)));
+    .WithOrigins(allowedCorsOrigns)
+    .SetIsOriginAllowed((orign) =>
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine($"ORIGIN -> {orign}");
+        Console.ForegroundColor = ConsoleColor.White;
+        return true;
+    })));
 
 var identityServerProtectedApiConfig = configuration
     .GetSection("IdentityServer")
@@ -156,5 +164,22 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapDefaultControllerRoute();
 });
+
+
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
+
+if (Environment.GetEnvironmentVariables().Contains("MIGRATE"))
+{
+    using var scope = app.Services.CreateScope();
+
+    using var context = scope
+        .ServiceProvider
+        .GetRequiredService<POneFinancialDbContext>();
+
+    context.Database.Migrate();
+}
 
 app.Run();

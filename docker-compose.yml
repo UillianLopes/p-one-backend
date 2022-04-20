@@ -7,14 +7,15 @@ services:
     image: uillian/pone.com:poneidentityapi
     build:
       context: .
-      dockerfile: POne.Identity.Dockerfile
+      dockerfile: .\POne.Identity.Api\Dockerfile
     ports:
-      - 5001:443
+      - 5001:5001
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=https://+:5001;http://+:5000
       - ASPNETCORE_Kestrel__Certificates__Default__Password=98690659
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/ssl/certificate.pfx
+      - MIGRATE=true
     networks:
       poneapi:
         ipv4_address: "192.168.0.51"
@@ -24,16 +25,18 @@ services:
       - "pone.sqlserver:192.168.0.54"
     volumes:
       - ./ssl:/app/ssl
+      - ./scripts:/app/scripts
     depends_on:
       - ponesqlserver
+    entrypoint: ["./scripts/wait-for-it.sh", "pone.sqlserver:1433", "-t", "120", "--", "dotnet", "POne.Identity.Api.dll"]
 
   ponefinancialapi:
     image: uillian/pone.com:ponefinancialapi
     build:
       context: .
-      dockerfile: "POne.Financial.Dockerfile"
+      dockerfile: .\POne.Financial.Api\Dockerfile
     ports:
-      - 6001:443
+      - 6001:6001
     networks:
       poneapi:
         ipv4_address: "192.168.0.52"
@@ -41,25 +44,28 @@ services:
       - "pone.identityapi.com:192.168.0.51"
       - "pone.notifierapi.com:192.168.0.53"
       - "pone.sqlserver:192.168.0.54"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=98690659
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/ssl/certificate.pfx
     volumes:
       - ./ssl:/app/ssl
+      - ./scripts:/app/scripts
     depends_on:
       - ponesqlserver
       - ponenotifierapi
       - poneidentityapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=https://+:6001;http://+:6000
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=98690659
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/ssl/certificate.pfx
+      - MIGRATE=true
+    entrypoint: ["./scripts/wait-for-it.sh", "pone.sqlserver:1433", "-t", "120", "--", "dotnet", "POne.Financial.Api.dll"]
 
   ponenotifierapi:
     image: uillian/pone.com:ponenotifierapi
     build:
       context: .
-      dockerfile: "POne.Notifier.Dockerfile"
+      dockerfile: .\POne.Notifier.Api\Dockerfile
     ports:
-      - 7001:443
+      - 7001:7001
     networks:
       poneapi:
         ipv4_address: "192.168.0.53"
@@ -67,30 +73,33 @@ services:
       - "pone.identityapi.com:192.168.0.51"
       - "pone.financialapi.com:192.168.0.52"
       - "pone.sqlserver:192.168.0.54"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=98690659
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/ssl/certificate.pfx
-
     volumes:
       - ./ssl:/app/ssl
+      - ./scripts:/app/scripts
     depends_on:
       - ponesqlserver
       - poneidentityapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=https://+:7001;http://+:7000
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=98690659
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/ssl/certificate.pfx
+      - MIGRATE=true
+    entrypoint: ["./scripts/wait-for-it.sh", "pone.sqlserver:1433", "-t", "120", "--", "dotnet", "POne.Notifier.Api.dll"]
 
   ponesqlserver:
-    image: mcr.microsoft.com/mssql/server:2017-latest
+    image: "mcr.microsoft.com/mssql/server"
     environment:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=999888777
-    ports:
-      - 14433:1433
+      SA_PASSWORD: "SQLDocker98-"
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: Express
     networks:
       poneapi:
         ipv4_address: "192.168.0.54"
+    ports:
+      - 1833:1433
     volumes:
-      - ~/docker/mssql:/var/opt/mssql
+      - ~/pone/pone.sqlserver:/var/opt/mssql/data
 
 networks:
   poneapi:
