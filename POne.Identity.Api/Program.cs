@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -61,7 +62,7 @@ var identityServerConfig = configuration
 
 services.AddIdentityServer(ops =>
 {
-    ops.IssuerUri = identityServerConfig.IssuerUri;
+    ops.IssuerUri = identityServerConfig.Issuer;
     ops.Authentication.CookieLifetime = TimeSpan.FromDays(2);
 })
 .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
@@ -96,7 +97,9 @@ app.UseSwagger();
 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "POne.Identity.Api v1"));
 app.UseCors("DefaultCors");
 app.UseStaticFiles();
-app.UseHttpsRedirection();
+if (!env.IsDocker())
+    app.UseHttpsRedirection();
+
 app.UseRouting();
 app.UseIdentityServer();
 app.UseAuthorization();
@@ -104,6 +107,11 @@ app.UseAuthorization();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapDefaultControllerRoute();
+});
+
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
 });
 
 if (Environment.GetEnvironmentVariables().Contains("MIGRATE"))

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -51,6 +52,7 @@ var allowedCorsOrigns = configuration
      .GetSection("AllowedCorsOrigins")
      .Get<string[]>();
 
+
 services.AddCors(cors => cors.AddPolicy("DefaultCors", config => config
     .AllowAnyHeader()
     .AllowAnyMethod()
@@ -65,7 +67,7 @@ services.AddControllersWithViews();
 services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.Authority = identityServerProtectedApiConfig.IssuerUri;
+        options.Authority = identityServerProtectedApiConfig.Issuer;
         options.Audience = identityServerProtectedApiConfig.Audience;
 
         options.TokenValidationParameters = new TokenValidationParameters
@@ -144,7 +146,10 @@ app.UseEndpoints(endpoints =>
     endpoints.MapDefaultControllerRoute();
 });
 
-app.UseForwardedHeaders();
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
 
 if (Environment.GetEnvironmentVariables().Contains("MIGRATE"))
 {

@@ -32,7 +32,7 @@ namespace POne.Identity.Api
 
     public class IdentityServerConfig
     {
-        public string IssuerUri { get; set; }
+        public string Issuer { get; set; }
         public List<IdentityServerConfigClient> Clients { get; set; }
         public List<IdentityServerConfigApi> ApiResources { get; set; }
         public string[] ApiScopes { get; set; }

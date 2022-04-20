@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +26,7 @@ var builder = WebApplication
     .CreateBuilder(args);
 
 var configuration = builder.Configuration;
+configuration.AddEnvironmentVariables();
 
 var services = builder.Services;
 
@@ -55,24 +57,17 @@ services.AddCors(cors => cors.AddPolicy("DefaultCors", config => config
     .AllowAnyHeader()
     .AllowAnyMethod()
     .AllowCredentials()
-    .WithOrigins(allowedCorsOrigns)
-    .SetIsOriginAllowed((orign) =>
-    {
-        Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine($"ORIGIN -> {orign}");
-        Console.ForegroundColor = ConsoleColor.White;
-        return true;
-    })));
+    .WithOrigins(allowedCorsOrigns)));
 
 var identityServerProtectedApiConfig = configuration
     .GetSection("IdentityServer")
     .Get<IdentityServerProtectedApiConfig>();
 
 services.AddControllersWithViews();
-services.AddAuthentication("token")
-    .AddJwtBearer("token", options =>
+services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
     {
-        options.Authority = identityServerProtectedApiConfig.IssuerUri;
+        options.Authority = identityServerProtectedApiConfig.Issuer;
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateAudience = identityServerProtectedApiConfig.ValidateAudience,
@@ -87,6 +82,7 @@ services.AddSwaggerGen(c =>
         Version = "v1"
     });
 
+    
     c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
     {
         Type = SecuritySchemeType.OAuth2,
@@ -94,12 +90,12 @@ services.AddSwaggerGen(c =>
         {
             Implicit = new OpenApiOAuthFlow
             {
-                AuthorizationUrl = new Uri("https://localhost:5001/connect/authorize"),
-                TokenUrl = new Uri("https://localhost:5001/connect/token"),
+                AuthorizationUrl = new Uri($"{identityServerProtectedApiConfig.Issuer}/connect/authorize"),
+                TokenUrl = new Uri($"{identityServerProtectedApiConfig.Issuer}/connect/token"),
                 Scopes = new Dictionary<string, string>
-                            {
-                                { "ponefinancialapi", "POne Financial Api Full Access" }
-                            },
+                {
+                    { "ponefinancialapi", "POne Financial Api Full Access" }
+                },
             }
         }
     });
@@ -140,10 +136,8 @@ services.AddHttpClient("POne.Identity.Api.Client", (opts) =>
 var app = builder.Build();
 var env = app.Environment;
 
-if (env.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-}
+
+app.UseDeveloperExceptionPage();
 
 app.UseSwagger();
 app.UseSwaggerUI(options =>

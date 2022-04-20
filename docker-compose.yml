@@ -9,13 +9,9 @@ services:
       context: .
       dockerfile: .\POne.Identity.Api\Dockerfile
     ports:
-      - 5001:5001
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Docker
-      - ASPNETCORE_URLS=https://+:5001;http://+:5000
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=98690659
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/ssl/certificate.pfx
-      - MIGRATE=true
+      - 5000:5000
+    env_file:
+      - ./docker-compose.env
     networks:
       poneapi:
         ipv4_address: "192.168.0.51"
@@ -26,6 +22,8 @@ services:
     volumes:
       - ./ssl:/app/ssl
       - ./scripts:/app/scripts
+    environment:
+      - ASPNETCORE_URLS=https://+:5001;http://+:5000
     depends_on:
       - ponesqlserver
     entrypoint: ["./scripts/wait-for-it.sh", "pone.sqlserver:1433", "-t", "120", "--", "dotnet", "POne.Identity.Api.dll"]
@@ -41,7 +39,7 @@ services:
       poneapi:
         ipv4_address: "192.168.0.52"
     extra_hosts:
-      - "pone.identityapi.com:192.168.0.51"
+      - "pone.com:192.168.0.51"
       - "pone.notifierapi.com:192.168.0.53"
       - "pone.sqlserver:192.168.0.54"
     volumes:
@@ -52,11 +50,10 @@ services:
       - ponenotifierapi
       - poneidentityapi
     environment:
-      - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=https://+:6001;http://+:6000
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=98690659
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/ssl/certificate.pfx
-      - MIGRATE=true
+    env_file:
+      - ./docker-compose.env
+
     entrypoint: ["./scripts/wait-for-it.sh", "pone.sqlserver:1433", "-t", "120", "--", "dotnet", "POne.Financial.Api.dll"]
 
   ponenotifierapi:
@@ -70,7 +67,7 @@ services:
       poneapi:
         ipv4_address: "192.168.0.53"
     extra_hosts:
-      - "pone.identityapi.com:192.168.0.51"
+      - "pone.com:192.168.0.51"
       - "pone.financialapi.com:192.168.0.52"
       - "pone.sqlserver:192.168.0.54"
     volumes:
@@ -80,11 +77,9 @@ services:
       - ponesqlserver
       - poneidentityapi
     environment:
-      - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=https://+:7001;http://+:7000
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=98690659
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/ssl/certificate.pfx
-      - MIGRATE=true
+    env_file:
+      - ./docker-compose.env
     entrypoint: ["./scripts/wait-for-it.sh", "pone.sqlserver:1433", "-t", "120", "--", "dotnet", "POne.Notifier.Api.dll"]
 
   ponesqlserver:
