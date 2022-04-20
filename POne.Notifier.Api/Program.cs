@@ -68,8 +68,6 @@ services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.Authority = identityServerProtectedApiConfig.Issuer;
-        options.Audience = identityServerProtectedApiConfig.Audience;
-
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateAudience = identityServerProtectedApiConfig.ValidateAudience,
@@ -158,7 +156,6 @@ if (Environment.GetEnvironmentVariables().Contains("MIGRATE"))
     using var context = scope
         .ServiceProvider
         .GetRequiredService<POneNotifierDbContext>();
-
 
     await context.Database.MigrateAsync();
 }
