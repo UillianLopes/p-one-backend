@@ -1,0 +1,102 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP .NET Core service.
+
+version: "3.4"
+
+services:
+  poneidentityapi:
+    image: uillian/pone.com:poneidentityapi
+    build:
+      context: .
+      dockerfile: POne.Identity.Dockerfile
+    ports:
+      - 5001:443
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=98690659
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/ssl/certificate.pfx
+    networks:
+      poneapi:
+        ipv4_address: "192.168.0.51"
+    extra_hosts:
+      - "pone.financialapi.com:192.168.0.52"
+      - "pone.notifierapi.com:192.168.0.53"
+      - "pone.sqlserver:192.168.0.54"
+    volumes:
+      - ./ssl:/app/ssl
+    depends_on:
+      - ponesqlserver
+
+  ponefinancialapi:
+    image: uillian/pone.com:ponefinancialapi
+    build:
+      context: .
+      dockerfile: "POne.Financial.Dockerfile"
+    ports:
+      - 6001:443
+    networks:
+      poneapi:
+        ipv4_address: "192.168.0.52"
+    extra_hosts:
+      - "pone.identityapi.com:192.168.0.51"
+      - "pone.notifierapi.com:192.168.0.53"
+      - "pone.sqlserver:192.168.0.54"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=98690659
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/ssl/certificate.pfx
+    volumes:
+      - ./ssl:/app/ssl
+    depends_on:
+      - ponesqlserver
+      - ponenotifierapi
+      - poneidentityapi
+
+  ponenotifierapi:
+    image: uillian/pone.com:ponenotifierapi
+    build:
+      context: .
+      dockerfile: "POne.Notifier.Dockerfile"
+    ports:
+      - 7001:443
+    networks:
+      poneapi:
+        ipv4_address: "192.168.0.53"
+    extra_hosts:
+      - "pone.identityapi.com:192.168.0.51"
+      - "pone.financialapi.com:192.168.0.52"
+      - "pone.sqlserver:192.168.0.54"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=98690659
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/ssl/certificate.pfx
+
+    volumes:
+      - ./ssl:/app/ssl
+    depends_on:
+      - ponesqlserver
+      - poneidentityapi
+
+  ponesqlserver:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=999888777
+    ports:
+      - 14433:1433
+    networks:
+      poneapi:
+        ipv4_address: "192.168.0.54"
+    volumes:
+      - ~/docker/mssql:/var/opt/mssql
+
+networks:
+  poneapi:
+    attachable: true
+    driver: overlay
+    external: false
+    ipam:
+      config:
+        - subnet: "192.168.0.0/24"

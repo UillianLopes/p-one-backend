@@ -17,11 +17,24 @@ using POne.Notifier.Infra.Connections;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var configuration = builder.Configuration;
+
+var configuration = builder
+    .Configuration
+    .AddEnvironmentVariables()
+    .AddJsonFile($"appsettings.Docker.json")
+    .Build();
+
+
 
 var services = builder.Services;
 
-var connectionString = configuration.GetConnectionString("POneNotifier");
+var connectionString = configuration
+    .GetConnectionString("POneNotifier");
+
+Console.ForegroundColor = ConsoleColor.Yellow;
+Console.WriteLine($"CONNECTION STRING -> {connectionString}");
+Console.ForegroundColor = ConsoleColor.White;
+
 services.AddDbContext<POneNotifierDbContext>(opts => opts
     .UseSqlServer(connectionString)
         .UseLazyLoadingProxies(),
@@ -105,17 +118,17 @@ services.AddSignalR();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.OAuthClientId("POne.Notifier.Api.Swagger");
-        c.OAuthScopes("ponenotifierapi");
-    });
-}
+var env = app.Environment;
 
+if (env.IsDevelopment())
+    app.UseDeveloperExceptionPage();
+
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.OAuthClientId("POne.Notifier.Api.Swagger");
+    c.OAuthScopes("ponenotifierapi");
+});
 
 app.UseCors("DefaultCors");
 app.UseStaticFiles();
@@ -131,5 +144,19 @@ app.UseEndpoints(endpoints =>
     endpoints.MapDefaultControllerRoute();
 });
 
+if (Environment.GetEnvironmentVariables().Contains("MIGRATE"))
+{
+    using var scope = app.Services.CreateScope();
+
+    using var context = scope
+        .ServiceProvider
+        .GetRequiredService<POneNotifierDbContext>();
+
+
+    await context.Database.MigrateAsync();
+}
+
 
 app.Run();
+
+

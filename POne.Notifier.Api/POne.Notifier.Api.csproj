@@ -4,6 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <Configurations>Debug;Release;Docker</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,6 +21,12 @@
     <ProjectReference Include="..\POne.Api\POne.Api.csproj" />
     <ProjectReference Include="..\POne.Notifier.Business\POne.Notifier.Business.csproj" />
     <ProjectReference Include="..\POne.Notifier.Infra\POne.Notifier.Infra.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings.Development.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

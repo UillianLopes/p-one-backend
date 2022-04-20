@@ -24,9 +24,9 @@ namespace POne.Notifier.Api.Facades
         public async Task NotificateAsync(object notification, CancellationToken cancellationToken)
         {
             await _notificationsHub
-            .Clients
-            .All
-            .SendAsync("NOTIFICATE", notification, cancellationToken);
+                .Clients
+                .All
+                .SendAsync("NOTIFICATE", notification, cancellationToken);
         }
     }
 }
