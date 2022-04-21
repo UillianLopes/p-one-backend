@@ -139,10 +139,9 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
 });
 
-if (Environment.GetEnvironmentVariables().Contains("MIGRATE"))
-{
-    using var scope = app.Services.CreateScope();
 
+using (var scope = app.Services.CreateScope())
+{
     using var context = scope
         .ServiceProvider
         .GetRequiredService<POneNotifierDbContext>();
