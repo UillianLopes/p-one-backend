@@ -19,22 +19,12 @@ using POne.Notifier.Infra.Connections;
 var builder = WebApplication.CreateBuilder(args);
 
 
-var configuration = builder
-    .Configuration
-    .AddEnvironmentVariables()
-    .AddJsonFile($"appsettings.Docker.json")
-    .Build();
-
-
+var configuration = builder.Configuration;
 
 var services = builder.Services;
 
 var connectionString = configuration
     .GetConnectionString("POneNotifier");
-
-Console.ForegroundColor = ConsoleColor.Yellow;
-Console.WriteLine($"CONNECTION STRING -> {connectionString}");
-Console.ForegroundColor = ConsoleColor.White;
 
 services.AddDbContext<POneNotifierDbContext>(opts => opts
     .UseSqlServer(connectionString)
@@ -94,8 +84,8 @@ services.AddSwaggerGen(c =>
         {
             Implicit = new OpenApiOAuthFlow
             {
-                AuthorizationUrl = new Uri("https://localhost:5001/connect/authorize"),
-                TokenUrl = new Uri("https://localhost:5001/connect/token"),
+                AuthorizationUrl = new Uri($"{identityServerProtectedApiConfig.Issuer}/connect/authorize"),
+                TokenUrl = new Uri($"{identityServerProtectedApiConfig.Issuer}/connect/token"),
                 Scopes = new Dictionary<string, string>
                 {
                     { "ponenotifierapi", "POne Notifier Api Full Access" }

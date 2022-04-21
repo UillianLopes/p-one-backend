@@ -28,10 +28,6 @@ var services = builder.Services;
 var connectionString = configuration
     .GetConnectionString("POneIdentity");
 
-Console.ForegroundColor = ConsoleColor.Yellow;
-Console.WriteLine($"CONNECTION STRING -> {connectionString}");
-Console.ForegroundColor = ConsoleColor.White;
-
 services.AddDbContext<POneIdentityDbContext>(opts => opts
     .UseSqlServer(connectionString)
         .UseLazyLoadingProxies(),
@@ -47,8 +43,6 @@ services.AddPOneApi(builder => builder
 var allowedCorsOrigns = configuration
      .GetSection("AllowedCorsOrigins")
      .Get<string[]>();
-
-Console.WriteLine($"ALLOWED CORS ORIGINS -> {allowedCorsOrigns?.Aggregate((a, b) => $"{a}|{b}")}");
 
 services.AddCors(cors => cors.AddPolicy("DefaultCors", config => config
     .AllowAnyHeader()
