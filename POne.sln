@@ -43,9 +43,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "POne.Notifier.Api", "POne.N
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "POne.Notifier.Business", "POne.Notifier.Business\POne.Notifier.Business.csproj", "{40D0763D-7585-4B28-A745-C15239F19B83}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{39D82153-A067-4353-B613-09BF569F8884}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "99 - Environment", "99 - Environment", "{39D82153-A067-4353-B613-09BF569F8884}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "98 - Azure", "98 - Azure", "{9506844F-CA8C-4106-B7DF-36C086515D5F}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\master_poneidentityapi.yml = .github\workflows\master_poneidentityapi.yml
 	EndProjectSection
 EndProject
 Global
