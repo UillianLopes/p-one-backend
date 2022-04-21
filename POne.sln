@@ -50,7 +50,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "99 - Environment", "99 - En
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "98 - Azure", "98 - Azure", "{9506844F-CA8C-4106-B7DF-36C086515D5F}"
 	ProjectSection(SolutionItems) = preProject
+		.github\workflows\master_ponefinancialapi.yml = .github\workflows\master_ponefinancialapi.yml
 		.github\workflows\master_poneidentityapi.yml = .github\workflows\master_poneidentityapi.yml
+		.github\workflows\master_ponenotifierapi.yml = .github\workflows\master_ponenotifierapi.yml
 	EndProjectSection
 EndProject
 Global
