@@ -40,6 +40,8 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    env:
+      MIGRATE: true
 
     steps:
       - name: Download artifact from build job
