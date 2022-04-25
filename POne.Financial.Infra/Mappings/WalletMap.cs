@@ -44,7 +44,7 @@ namespace POne.Financial.Infra.Mappings
             builder.HasIndex(e => e.UserId);
 
             builder.HasMany(e => e.Payments)
-                .WithOne(e => e.Balance);
+                .WithOne(e => e.Wallet);
         }
     }
 }

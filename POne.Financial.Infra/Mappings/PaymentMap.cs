@@ -28,7 +28,7 @@ namespace POne.Financial.Infra.Mappings
                  .WithMany(e => e.Payments)
                  .IsRequired();
 
-            builder.HasOne(e => e.Balance)
+            builder.HasOne(e => e.Wallet)
                  .WithMany(e => e.Payments);
         }
     }
