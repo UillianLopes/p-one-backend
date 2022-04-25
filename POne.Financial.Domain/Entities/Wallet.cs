@@ -2,7 +2,6 @@
 using POne.Core.Enums;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace POne.Financial.Domain.Entities
 {
@@ -63,10 +62,7 @@ namespace POne.Financial.Domain.Entities
 
         protected virtual void UpdateBalance()
         {
-            if (Balances.FirstOrDefault((balance) => balance.Creation.Date == DateTime.Now.Date) is Balance balance)
-                balance.Update(Value);
-            else
-                Balances.Add(new Balance(Value, this));
+            Balances.Add(new Balance(Value, this));
         }
     }
 }

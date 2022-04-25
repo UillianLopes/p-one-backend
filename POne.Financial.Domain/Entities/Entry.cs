@@ -56,16 +56,16 @@ namespace POne.Financial.Domain.Entities
         public virtual SubCategory SubCategory { get; private set; }
         public virtual ISet<Payment> Payments { get; private set; }
 
-        public void Pay(Wallet balance, decimal value, decimal fees = 0.00m, decimal fine = 0.00m)
+        public void Pay(Wallet wallet, decimal value, decimal fees = 0.00m, decimal fine = 0.00m)
         {
-            var payment = new Payment(value, fees, fine, this, balance);
+            var payment = new Payment(value, fees, fine, this, wallet);
 
             Payments.Add(payment);
 
             if (Type == EntryType.Credit)
-                balance.Add(value);
+                wallet.Add(value);
             else
-                balance.Subtract(value);
+                wallet.Subtract(value);
         }
     }
 }
