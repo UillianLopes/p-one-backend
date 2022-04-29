@@ -1,23 +1,21 @@
-﻿using IdentityModel;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
 namespace POne.Notifier.Api.Hubs
 {
-    public class UserIdProvider : IUserIdProvider
-    {
-        public string GetUserId(HubConnectionContext connection)
-        {
-            return connection.User?.FindFirst(JwtClaimTypes.Id)?.Value;
-        }
-    }
-
     [Authorize]
     public class NotificationsHub : Hub
     {
-        public override Task OnConnectedAsync()
-        {
-            return base.OnConnectedAsync();
-        }
+        public Task SendToUserAsync(string userId, string method, object data, CancellationToken cancellationToken) => Clients
+            .User(userId.ToString())
+            .SendAsync(method, data, cancellationToken);
+
+        public Task SendToAllAsync(string method, object data, CancellationToken cancellationToken) => Clients
+            .All
+            .SendAsync(method, data, cancellationToken);
+
+        public void SendToGroupAsync(string group, string method, object data, CancellationToken cancellationToken) => Clients
+            .User(group)
+            .SendAsync(method, data, cancellationToken);
     }
 }
