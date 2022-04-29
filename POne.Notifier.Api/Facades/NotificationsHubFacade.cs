@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using POne.Notifier.Api.Hubs;
+﻿using POne.Notifier.Api.Hubs;
 using POne.Notifier.Domain.Contracts.Facades;
 
 namespace POne.Notifier.Api.Facades
@@ -15,18 +14,12 @@ namespace POne.Notifier.Api.Facades
 
         public async Task NotificateAsync(string userId, object notification, CancellationToken cancellationToken)
         {
-            await _notificationsHub
-                .Clients
-                .User(userId)
-                .SendAsync("NOTIFICATE", notification, cancellationToken);
+            await _notificationsHub.SendToUserAsync(userId, "NOTIFICATE", notification, cancellationToken);
         }
 
         public async Task NotificateAsync(object notification, CancellationToken cancellationToken)
         {
-            await _notificationsHub
-                .Clients
-                .All
-                .SendAsync("NOTIFICATE", notification, cancellationToken);
+            await _notificationsHub.SendToAllAsync("NOTIFICATE", notification, cancellationToken);
         }
     }
 }

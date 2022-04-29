@@ -139,7 +139,6 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
 });
 
-
 using (var scope = app.Services.CreateScope())
 {
     using var context = scope

@@ -94,7 +94,7 @@ namespace POne.Identity.Infra.Mappings
                 {
                     new
                     {
-                        Value = "Uil98690659-".Hash(),
+                        Value = "$2a$11$uxW.fi50RNvTC.GOq20dXu0mZzJ.wIAbjd2V5hEhm.YB62v1V1yIG",
                         UserId = Guid.Parse("3DE581C4-3F1A-4AC3-A395-24A697EDA880")
                     }
                 });
