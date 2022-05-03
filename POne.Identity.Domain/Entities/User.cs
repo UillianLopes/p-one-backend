@@ -3,7 +3,7 @@ using POne.Core.ValueObjects;
 using System;
 using System.Collections.Generic;
 
-namespace POne.Domain.Entities
+namespace POne.Identity.Domain.Entities
 {
     public class User : Entity
     {
@@ -27,6 +27,7 @@ namespace POne.Domain.Entities
         public virtual PhoneNumber MobilePhone { get; private set; }
         public virtual Password Password { get; private set; }
         public virtual ISet<Role> Roles { get; private set; }
+        public virtual UserSettings Settings { get; private set; }
 
         public void Update(string name, string email, DateTime birthDate)
         {

@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using POne.Core.Extensions;
-using POne.Domain.Entities;
+using POne.Identity.Domain.Entities;
 using POne.Infra.Mappings;
 using System;
 
@@ -65,6 +64,20 @@ namespace POne.Identity.Infra.Mappings
                 });
             });
 
+            builder.OwnsOne(user => user.Settings, (phone) =>
+            {
+                phone.Property(p => p.Configuration);
+
+                phone.HasData(new object[]
+                {
+                    new
+                    {
+                        Value = @"{ ""Language"": ""pt-BR"" }",
+                        UserId = Guid.Parse("3DE581C4-3F1A-4AC3-A395-24A697EDA880")
+                    }
+                });
+            });
+
             builder.OwnsOne(user => user.MobilePhone, (phone) =>
             {
                 phone.Property(p => p.CountryCode)
@@ -76,7 +89,7 @@ namespace POne.Identity.Infra.Mappings
 
                 phone.HasData(new object[]
                 {
-                    new 
+                    new
                     {
                         CountryCode = 55,
                         Number = "27998321849",

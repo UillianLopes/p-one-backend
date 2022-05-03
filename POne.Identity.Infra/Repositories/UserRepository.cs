@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using POne.Domain.Entities;
 using POne.Identity.Domain.Contracts.Repositories;
+using POne.Identity.Domain.Entities;
 using POne.Identity.Infra.Connections;
 using POne.Infra.Repositories;
 using System.Threading;

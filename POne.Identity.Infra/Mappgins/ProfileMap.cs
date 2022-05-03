@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using POne.Domain.Entities;
+using POne.Identity.Domain.Entities;
 using POne.Infra.Mappings;
 
 namespace POne.Identity.Infra.Mappings

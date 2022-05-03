@@ -1,8 +1,8 @@
 ﻿using IdentityModel;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
-using POne.Domain.Entities;
 using POne.Identity.Domain.Contracts.Repositories;
+using POne.Identity.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

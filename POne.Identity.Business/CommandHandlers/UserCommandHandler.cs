@@ -1,9 +1,8 @@
 ﻿using POne.Core.CQRS;
 using POne.Core.ValueObjects;
-using POne.Domain.Entities;
 using POne.Identity.Business.Commands.Inputs.Users;
 using POne.Identity.Domain.Contracts.Repositories;
-using System;
+using POne.Identity.Domain.Entities;
 using System.Threading;
 using System.Threading.Tasks;
 

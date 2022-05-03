@@ -1,7 +1,7 @@
 ﻿using IdentityModel;
 using IdentityServer4.Validation;
-using POne.Domain.Entities;
 using POne.Identity.Domain.Contracts.Repositories;
+using POne.Identity.Domain.Entities;
 using System.Threading;
 using System.Threading.Tasks;
 

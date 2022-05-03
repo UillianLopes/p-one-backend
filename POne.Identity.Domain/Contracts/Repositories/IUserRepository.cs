@@ -1,5 +1,5 @@
 ﻿using POne.Core.Contracts;
-using POne.Domain.Entities;
+using POne.Identity.Domain.Entities;
 using System.Threading;
 using System.Threading.Tasks;
 
