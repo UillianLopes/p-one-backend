@@ -13,7 +13,12 @@ namespace POne.Financial.Domain.Entities
             Balances = new HashSet<Balance>();
         }
 
-        public Wallet(Guid userId, decimal value, string name, Bank bank, string number, string agency, BalanceType type, string color) : this()
+        public Wallet(
+            Guid userId, decimal value,
+            string name, Bank bank,
+            string number, string agency,
+            BalanceType type, string color,
+            string currency) : this()
         {
             UserId = userId;
             Value = value;
@@ -23,15 +28,17 @@ namespace POne.Financial.Domain.Entities
             Agency = agency;
             Type = type;
             Color = color;
+            Currency = currency;
         }
 
-        public void Update(string name, Bank bank, string number, string agency, string color)
+        public void Update(string name, Bank bank, string number, string agency, string color, string currency)
         {
             Name = name;
             Bank = bank;
             Number = number;
             Agency = agency;
             Color = color;
+            Currency = currency;
         }
 
         public Guid UserId { get; private set; }
@@ -41,6 +48,7 @@ namespace POne.Financial.Domain.Entities
         public string Agency { get; private set; }
         public BalanceType Type { get; private set; }
         public string Color { get; private set; }
+        public string Currency { get; private set; }
         public virtual Bank Bank { get; private set; }
         public virtual ISet<Payment> Payments { get; }
         public virtual ISet<Balance> Balances { get; }

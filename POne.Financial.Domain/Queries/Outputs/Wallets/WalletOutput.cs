@@ -14,5 +14,6 @@ namespace POne.Financial.Domain.Queries.Outputs.Wallets
         public BankOutput Bank { get; set; }
         public BalanceType Type { get; set; }
         public string Color { get; set; }
+        public string Currency { get; set; }
     }
 }

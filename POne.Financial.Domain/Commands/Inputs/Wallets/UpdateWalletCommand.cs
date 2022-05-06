@@ -12,5 +12,6 @@ namespace POne.Financial.Domain.Commands.Inputs.Wallets
         public string Number { get; set; }
         public string Agency { get; set; }
         public string Color { get; set; }
+        public string Currency { get; set; }
     }
 }
