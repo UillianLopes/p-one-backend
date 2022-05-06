@@ -30,11 +30,12 @@ namespace POne.Financial.Infra.Repositories
                 Value = c.Value,
                 Agency = c.Agency,
                 Color = c.Color,
-                Bank = c.Bank != null ? new BankOutput 
-                { 
-                    Id = c.Bank.Id, 
-                    Name = c.Bank.Name, 
-                    Code = c.Bank.Code 
+                Currency = c.Currency,
+                Bank = c.Bank != null ? new BankOutput
+                {
+                    Id = c.Bank.Id,
+                    Name = c.Bank.Name,
+                    Code = c.Bank.Code
                 } : null,
                 Number = c.Number,
                 Type = c.Type,

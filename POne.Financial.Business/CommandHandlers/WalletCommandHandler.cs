@@ -11,7 +11,8 @@ using System.Threading.Tasks;
 
 namespace POne.Financial.Business.CommandHandlers
 {
-    public class WalletCommandHandler : ICommandHandler<CreateWalletCommand>,
+    public class WalletCommandHandler : 
+        ICommandHandler<CreateWalletCommand>,
         ICommandHandler<UpdateWalletCommand>,
         ICommandHandler<DeleteWalletCommand>,
         ICommandHandler<DeleteWalletsCommand>,
@@ -50,7 +51,8 @@ namespace POne.Financial.Business.CommandHandlers
                 request.Number,
                 request.Agency,
                 request.Type,
-                request.Color
+                request.Color,
+                request.Currency
             );
 
             await _walletRespository.CreateAync(balance, cancellationToken);
@@ -81,7 +83,8 @@ namespace POne.Financial.Business.CommandHandlers
                 bank,
                 request.Number,
                 request.Agency,
-                request.Color
+                request.Color,
+                request.Currency
             );
 
             return CommandOutput.Ok(new

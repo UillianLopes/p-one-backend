@@ -31,6 +31,10 @@ namespace POne.Financial.Infra.Mappings
             builder.Property(e => e.Number)
                 .HasMaxLength(50);
 
+            builder.Property(e => e.Currency)
+                .HasMaxLength(10)
+                .IsRequired();
+
             builder.Property(e => e.Color)
                 .HasMaxLength(7);
 
