@@ -55,6 +55,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "98 - Azure", "98 - Azure", 
 		.github\workflows\master_ponenotifierapi.yml = .github\workflows\master_ponenotifierapi.yml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "POne.Admin.Api", "POne.Admin.Api\POne.Admin.Api.csproj", "{E023CA12-3445-43AF-9045-1D1432C5B444}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -125,6 +127,10 @@ Global
 		{40D0763D-7585-4B28-A745-C15239F19B83}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40D0763D-7585-4B28-A745-C15239F19B83}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40D0763D-7585-4B28-A745-C15239F19B83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E023CA12-3445-43AF-9045-1D1432C5B444}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E023CA12-3445-43AF-9045-1D1432C5B444}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E023CA12-3445-43AF-9045-1D1432C5B444}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E023CA12-3445-43AF-9045-1D1432C5B444}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -146,6 +152,7 @@ Global
 		{824DC0F7-865D-48D8-8EAE-A79CA0709C0C} = {70A74F67-1902-4F94-A4D5-B36A8E33F23C}
 		{88BF301F-585B-4893-8040-C239B7BD6CC2} = {70A74F67-1902-4F94-A4D5-B36A8E33F23C}
 		{40D0763D-7585-4B28-A745-C15239F19B83} = {70A74F67-1902-4F94-A4D5-B36A8E33F23C}
+		{E023CA12-3445-43AF-9045-1D1432C5B444} = {A4E229BD-6C2F-47E7-9F0A-879332215A1A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB173A27-51F9-4EC1-BA21-21270EBBE7E6}

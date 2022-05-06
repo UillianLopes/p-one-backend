@@ -2,7 +2,6 @@
 using POne.Core.Enums;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace POne.Financial.Domain.Entities
 {

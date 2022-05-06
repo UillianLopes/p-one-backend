@@ -127,10 +127,10 @@ namespace POne.Identity.Infra.Migrations
                         {
                             Id = new Guid("3de581c4-3f1a-4ac3-a395-24a697eda880"),
                             BirthDate = new DateTime(1996, 3, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Creation = new DateTime(2022, 5, 2, 23, 25, 16, 713, DateTimeKind.Local).AddTicks(6229),
+                            Creation = new DateTime(2022, 5, 4, 15, 7, 18, 561, DateTimeKind.Local).AddTicks(3287),
                             Email = "uilliansl@outlook.com",
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2022, 5, 2, 23, 25, 16, 713, DateTimeKind.Local).AddTicks(6236),
+                            LastUpdate = new DateTime(2022, 5, 4, 15, 7, 18, 561, DateTimeKind.Local).AddTicks(3293),
                             Name = "Uillian de Souza Lopes"
                         });
                 });
@@ -279,7 +279,7 @@ namespace POne.Identity.Infra.Migrations
                             b1.Property<Guid>("UserId")
                                 .HasColumnType("uniqueidentifier");
 
-                            b1.Property<string>("Configuration")
+                            b1.Property<string>("Value")
                                 .HasColumnType("nvarchar(max)");
 
                             b1.HasKey("UserId");
@@ -292,7 +292,8 @@ namespace POne.Identity.Infra.Migrations
                             b1.HasData(
                                 new
                                 {
-                                    UserId = new Guid("3de581c4-3f1a-4ac3-a395-24a697eda880")
+                                    UserId = new Guid("3de581c4-3f1a-4ac3-a395-24a697eda880"),
+                                    Value = "eyAiTGFuZ3VhZ2UiOiAicHQtQlIiIH0="
                                 });
                         });
 

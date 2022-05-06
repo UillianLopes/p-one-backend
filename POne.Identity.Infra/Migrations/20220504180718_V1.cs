@@ -68,6 +68,7 @@ namespace POne.Identity.Infra.Migrations
                     MobilePhone_CountryCode = table.Column<int>(type: "int", nullable: true),
                     MobilePhone_Number = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     Password_Value = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Settings_Value = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Creation = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastUpdate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
@@ -134,8 +135,8 @@ namespace POne.Identity.Infra.Migrations
             migrationBuilder.InsertData(
                 schema: "auth",
                 table: "Users",
-                columns: new[] { "Id", "BirthDate", "Creation", "Email", "IsDeleted", "LastUpdate", "Name", "Address_City", "Address_Country", "Address_District", "Address_Number", "Address_State", "Address_Street", "Address_ZipCode", "Password_Value", "MobilePhone_CountryCode", "MobilePhone_Number" },
-                values: new object[] { new Guid("3de581c4-3f1a-4ac3-a395-24a697eda880"), new DateTime(1996, 3, 27, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2022, 3, 21, 2, 36, 0, 437, DateTimeKind.Local).AddTicks(1670), "uilliansl@outlook.com", false, new DateTime(2022, 3, 21, 2, 36, 0, 437, DateTimeKind.Local).AddTicks(1681), "Uillian de Souza Lopes", "Serra", "Brazil", "Praia de capuba", "20", "ES", "Rua Dolores Araujo de Oliveira", "29173660", "$2a$11$uxW.fi50RNvTC.GOq20dXu0mZzJ.wIAbjd2V5hEhm.YB62v1V1yIG", 55, "27998321849" });
+                columns: new[] { "Id", "BirthDate", "Creation", "Email", "IsDeleted", "LastUpdate", "Name", "Address_City", "Address_Country", "Address_District", "Address_Number", "Address_State", "Address_Street", "Address_ZipCode", "Password_Value", "MobilePhone_CountryCode", "MobilePhone_Number", "Settings_Value" },
+                values: new object[] { new Guid("3de581c4-3f1a-4ac3-a395-24a697eda880"), new DateTime(1996, 3, 27, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2022, 5, 4, 15, 7, 18, 561, DateTimeKind.Local).AddTicks(3287), "uilliansl@outlook.com", false, new DateTime(2022, 5, 4, 15, 7, 18, 561, DateTimeKind.Local).AddTicks(3293), "Uillian de Souza Lopes", "Serra", "Brazil", "Praia de capuba", "20", "ES", "Rua Dolores Araujo de Oliveira", "29173660", "$2a$11$uxW.fi50RNvTC.GOq20dXu0mZzJ.wIAbjd2V5hEhm.YB62v1V1yIG", 55, "27998321849", "eyAiTGFuZ3VhZ2UiOiAicHQtQlIiIH0=" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProfilesRoles_RolesId",
