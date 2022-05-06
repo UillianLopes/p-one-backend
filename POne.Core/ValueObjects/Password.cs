@@ -35,7 +35,7 @@ namespace POne.Core.ValueObjects
 
         private static string Encrypt(string password)
         {
-            return password.Hash();
+            return password.HashPassword();
         }
 
     }

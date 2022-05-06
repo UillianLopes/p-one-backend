@@ -1,24 +1,35 @@
 ﻿using POne.Core.Entities;
 using POne.Core.ValueObjects;
+using POne.Identity.Domain.Settings;
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace POne.Domain.Entities
+namespace POne.Identity.Domain.Entities
 {
     public class User : Entity
     {
-        public User(string name, string email, DateTime birthDate, Address address, PhoneNumber mobilePhone, Password password) : this()
+        protected User(string name, string email, Password password) : this()
         {
             Name = name;
             Email = email;
+            Password = password;
+
+        }
+
+        public User(string name, string email, DateTime birthDate, Address address, PhoneNumber mobilePhone, Password password) : this(name, email, password)
+        {
             BirthDate = birthDate;
             Address = address;
             MobilePhone = mobilePhone;
-            Password = password;
             Roles = new HashSet<Role>();
         }
 
-        protected User() : base() { }
+        protected User() : base()
+        {
+
+        }
 
         public string Name { get; private set; }
         public string Email { get; private set; }
@@ -27,6 +38,9 @@ namespace POne.Domain.Entities
         public virtual PhoneNumber MobilePhone { get; private set; }
         public virtual Password Password { get; private set; }
         public virtual ISet<Role> Roles { get; private set; }
+        public virtual UserSettings Settings { get; private set; }
+
+        public static User Simplified(string name, string email, Password password) => new User(name, email, password);
 
         public void Update(string name, string email, DateTime birthDate)
         {
@@ -35,6 +49,14 @@ namespace POne.Domain.Entities
             BirthDate = birthDate;
         }
 
+
+        public async Task UpdateUserSettingsAsync(GeneralSettings settings, CancellationToken cancellationToken)
+        {
+            if (Settings == null)
+                Settings = new UserSettings();
+
+            await Settings.UpdateAsync(settings, cancellationToken);
+        }
         public void UpdatePassowrd(string password)
         {
             Password = new Password(password);

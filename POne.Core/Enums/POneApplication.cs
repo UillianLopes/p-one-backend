@@ -2,6 +2,7 @@
 {
     public enum POneApplication
     {
+        All,
         Financial
     }
 }

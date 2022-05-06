@@ -1,7 +1,7 @@
 ﻿using POne.Core.Entities;
 using POne.Core.ValueObjects;
 
-namespace POne.Domain.Entities
+namespace POne.Identity.Domain.Entities
 {
     public class Contact : Entity
     {

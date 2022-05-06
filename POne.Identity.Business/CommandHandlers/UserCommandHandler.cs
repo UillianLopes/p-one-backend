@@ -1,67 +1,40 @@
-﻿using POne.Core.CQRS;
+﻿using POne.Core.Contracts;
+using POne.Core.CQRS;
 using POne.Core.ValueObjects;
-using POne.Domain.Entities;
 using POne.Identity.Business.Commands.Inputs.Users;
 using POne.Identity.Domain.Contracts.Repositories;
-using System;
+using POne.Identity.Domain.Entities;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace POne.Identity.Business.CommandHandlers
 {
-    public class UserCommandHandler : ICommandHandler<CreateUserCommand>, ICommandHandler<UpdateUserCommand>, ICommandHandler<AuthenticateUserCommand>
+    public class UserCommandHandler : ICommandHandler<CreateUserCommand>, ICommandHandler<UpdateUserCommand>, ICommandHandler<AuthenticateUserCommand>, ICommandHandler<UpdateUserSettingsCommand>
     {
         private readonly IUserRepository _userRepository;
 
-        public UserCommandHandler(IUserRepository userRepository)
+        private readonly IAuthenticatedUser _authenticatedUser;
+
+        public UserCommandHandler(IUserRepository userRepository, IAuthenticatedUser authenticatedUser)
         {
             _userRepository = userRepository;
+            _authenticatedUser = authenticatedUser;
         }
 
         public async Task<ICommandOuput> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            var user = new User(
-                          request.Name,
-                          request.Email,
-                          request.BirthDate,
-                          new Address(
-                              request.Street,
-                              request.District,
-                              request.Number,
-                              request.City,
-                              request.State,
-                              request.Complement,
-                              request.ZipCode
-                          ),
-                          new PhoneNumber(55, request.MobilePhone),
-                          new Password(request.Password)
-                      );
+
+            if (await _userRepository.FindByEmail(request.Email, cancellationToken) is not null)
+                return CommandOutput.BadRequest("@PONE.MESSAGES.EMAIL_ALREADY_EXISTS");
+
+            var user = User.Simplified(request.Name, request.Email, new Password(request.Password));
 
             await _userRepository.CreateAync(user, cancellationToken);
 
             return CommandOutput.Created($"User/{user.Id}", new
             {
                 user.Id,
-                user.Creation,
-                user.LastUpdate,
-                user.Name,
-                user.Email,
-                user.BirthDate,
-                Address = new
-                {
-                    user.Address.Street,
-                    user.Address.District,
-                    user.Address.Number,
-                    user.Address.City,
-                    user.Address.State,
-                    user.Address.Country,
-                    user.Address.ZipCode
-                },
-                MobilePhone = new
-                {
-                    user.MobilePhone.Number,
-                    user.MobilePhone.CountryCode
-                },
+                user.Name
             }, "@PONE.MESSAGES.USER_CREATED");
         }
 
@@ -109,6 +82,16 @@ namespace POne.Identity.Business.CommandHandlers
                 return CommandOutput.Unauthorized("@PONE.MESSAGES.INVALID_EMAIL_OR_PASSWORD");
 
             return CommandOutput.Ok("@PONE.MESSAGES.AUTHENTICATED_WITH_SUCCESS");
+        }
+
+        public async Task<ICommandOuput> Handle(UpdateUserSettingsCommand request, CancellationToken cancellationToken)
+        {
+            if (await _userRepository.FindByIdAync(_authenticatedUser.Id, cancellationToken) is not User user)
+                return CommandOutput.NotFound("@PONE.MESSAGES.USER_NOT_FOUND");
+
+            await user.UpdateUserSettingsAsync(request, cancellationToken);
+
+            return CommandOutput.Ok("@PONE.MESSAGES.USER_SETTINGS_UPDATED_WITH_SUCCESS");
         }
     }
 }

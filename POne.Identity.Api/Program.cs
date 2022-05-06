@@ -70,15 +70,6 @@ services.AddIdentityServer(ops =>
 
 services.AddControllersWithViews();
 
-services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Title = "POne.Identity.Api",
-        Version = "v1"
-    });
-});
-
 services.AddScoped<IUserRepository, UserRepository>();
 
 var app = builder.Build();
@@ -87,8 +78,6 @@ var env = app.Environment;
 if (env.IsDevelopment())
     app.UseDeveloperExceptionPage();
 
-app.UseSwagger();
-app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "POne.Identity.Api v1"));
 app.UseCors("DefaultCors");
 app.UseStaticFiles();
 if (!env.IsDocker())
@@ -96,7 +85,6 @@ if (!env.IsDocker())
 
 app.UseRouting();
 app.UseIdentityServer();
-app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
 {

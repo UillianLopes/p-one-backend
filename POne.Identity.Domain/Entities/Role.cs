@@ -1,24 +1,30 @@
 ﻿using POne.Core.Entities;
 using System.Collections.Generic;
 
-namespace POne.Domain.Entities
+namespace POne.Identity.Domain.Entities
 {
-    public class Profile : Entity
+    public class Role : Entity
     {
-        protected Profile() : base() { }
+        protected Role() : base() { }
 
-        public Profile(string name, string description) : this()
+        public Role(string name, string description, string key) : this()
         {
             Name = name;
             Description = description;
             IsActive = true;
-            Roles = new HashSet<Role>();
+            Key = key;
+
+            Users = new HashSet<User>();
+            Profiles = new HashSet<Profile>();
         }
 
+        public string Key { get; private set; }
         public string Name { get; private set; }
         public string Description { get; private set; }
         public bool IsActive { get; private set; }
-        public virtual ISet<Role> Roles { get; private set; }
+
+        public virtual ISet<User> Users { get; private set; }
+        public virtual ISet<Profile> Profiles { get; private set; }
 
         public void Activate()
         {
@@ -29,6 +35,5 @@ namespace POne.Domain.Entities
         {
             IsActive = false;
         }
-
     }
 }

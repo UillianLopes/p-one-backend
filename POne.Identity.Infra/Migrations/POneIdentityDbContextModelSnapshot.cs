@@ -17,12 +17,12 @@ namespace POne.Identity.Infra.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.0")
+                .HasAnnotation("ProductVersion", "6.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("POne.Domain.Entities.Profile", b =>
+            modelBuilder.Entity("POne.Identity.Domain.Entities.Profile", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
@@ -54,7 +54,7 @@ namespace POne.Identity.Infra.Migrations
                     b.ToTable("Profiles", "auth");
                 });
 
-            modelBuilder.Entity("POne.Domain.Entities.Role", b =>
+            modelBuilder.Entity("POne.Identity.Domain.Entities.Role", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
@@ -91,7 +91,7 @@ namespace POne.Identity.Infra.Migrations
                     b.ToTable("Roles", "auth");
                 });
 
-            modelBuilder.Entity("POne.Domain.Entities.User", b =>
+            modelBuilder.Entity("POne.Identity.Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
@@ -127,10 +127,10 @@ namespace POne.Identity.Infra.Migrations
                         {
                             Id = new Guid("3de581c4-3f1a-4ac3-a395-24a697eda880"),
                             BirthDate = new DateTime(1996, 3, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Creation = new DateTime(2022, 3, 21, 2, 36, 0, 437, DateTimeKind.Local).AddTicks(1670),
+                            Creation = new DateTime(2022, 5, 4, 15, 7, 18, 561, DateTimeKind.Local).AddTicks(3287),
                             Email = "uilliansl@outlook.com",
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2022, 3, 21, 2, 36, 0, 437, DateTimeKind.Local).AddTicks(1681),
+                            LastUpdate = new DateTime(2022, 5, 4, 15, 7, 18, 561, DateTimeKind.Local).AddTicks(3293),
                             Name = "Uillian de Souza Lopes"
                         });
                 });
@@ -165,7 +165,7 @@ namespace POne.Identity.Infra.Migrations
                     b.ToTable("UsersRoles", "auth");
                 });
 
-            modelBuilder.Entity("POne.Domain.Entities.User", b =>
+            modelBuilder.Entity("POne.Identity.Domain.Entities.User", b =>
                 {
                     b.OwnsOne("POne.Core.ValueObjects.Address", "Address", b1 =>
                         {
@@ -173,17 +173,14 @@ namespace POne.Identity.Infra.Migrations
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<string>("City")
-                                .IsRequired()
                                 .HasMaxLength(150)
                                 .HasColumnType("nvarchar(150)");
 
                             b1.Property<string>("Country")
-                                .IsRequired()
                                 .HasMaxLength(150)
                                 .HasColumnType("nvarchar(150)");
 
                             b1.Property<string>("District")
-                                .IsRequired()
                                 .HasMaxLength(150)
                                 .HasColumnType("nvarchar(150)");
 
@@ -192,17 +189,14 @@ namespace POne.Identity.Infra.Migrations
                                 .HasColumnType("nvarchar(10)");
 
                             b1.Property<string>("State")
-                                .IsRequired()
                                 .HasMaxLength(150)
                                 .HasColumnType("nvarchar(150)");
 
                             b1.Property<string>("Street")
-                                .IsRequired()
                                 .HasMaxLength(254)
                                 .HasColumnType("nvarchar(254)");
 
                             b1.Property<string>("ZipCode")
-                                .IsRequired()
                                 .HasMaxLength(20)
                                 .HasColumnType("nvarchar(20)");
 
@@ -280,22 +274,47 @@ namespace POne.Identity.Infra.Migrations
                                 });
                         });
 
+                    b.OwnsOne("POne.Identity.Domain.Entities.UserSettings", "Settings", b1 =>
+                        {
+                            b1.Property<Guid>("UserId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("UserId");
+
+                            b1.ToTable("Users", "auth");
+
+                            b1.WithOwner()
+                                .HasForeignKey("UserId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    UserId = new Guid("3de581c4-3f1a-4ac3-a395-24a697eda880"),
+                                    Value = "eyAiTGFuZ3VhZ2UiOiAicHQtQlIiIH0="
+                                });
+                        });
+
                     b.Navigation("Address");
 
                     b.Navigation("MobilePhone");
 
                     b.Navigation("Password");
+
+                    b.Navigation("Settings");
                 });
 
             modelBuilder.Entity("ProfileRole", b =>
                 {
-                    b.HasOne("POne.Domain.Entities.Profile", null)
+                    b.HasOne("POne.Identity.Domain.Entities.Profile", null)
                         .WithMany()
                         .HasForeignKey("ProfilesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("POne.Domain.Entities.Role", null)
+                    b.HasOne("POne.Identity.Domain.Entities.Role", null)
                         .WithMany()
                         .HasForeignKey("RolesId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -304,13 +323,13 @@ namespace POne.Identity.Infra.Migrations
 
             modelBuilder.Entity("RoleUser", b =>
                 {
-                    b.HasOne("POne.Domain.Entities.Role", null)
+                    b.HasOne("POne.Identity.Domain.Entities.Role", null)
                         .WithMany()
                         .HasForeignKey("RolesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("POne.Domain.Entities.User", null)
+                    b.HasOne("POne.Identity.Domain.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)

@@ -2,11 +2,13 @@
 
 using POne.Core.CQRS;
 using System;
+using System.Text.Json.Serialization;
 
 namespace POne.Identity.Business.Commands.Inputs.Users
 {
     public class UpdateUserCommand : ICommand
     {
+        [JsonIgnore]
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
