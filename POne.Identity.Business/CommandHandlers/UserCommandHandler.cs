@@ -4,6 +4,7 @@ using POne.Core.ValueObjects;
 using POne.Identity.Business.Commands.Inputs.Users;
 using POne.Identity.Domain.Contracts.Repositories;
 using POne.Identity.Domain.Entities;
+using POne.Identity.Domain.Settings;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -28,6 +29,8 @@ namespace POne.Identity.Business.CommandHandlers
                 return CommandOutput.BadRequest("@PONE.MESSAGES.EMAIL_ALREADY_EXISTS");
 
             var user = User.Simplified(request.Name, request.Email, new Password(request.Password));
+
+            await user.UpdateUserSettingsAsync(new GeneralSettings { Language = request.Language }, cancellationToken);
 
             await _userRepository.CreateAync(user, cancellationToken);
 

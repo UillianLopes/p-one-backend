@@ -40,7 +40,7 @@ namespace POne.Identity.Domain.Entities
         public virtual ISet<Role> Roles { get; private set; }
         public virtual UserSettings Settings { get; private set; }
 
-        public static User Simplified(string name, string email, Password password) => new User(name, email, password);
+        public static User Simplified(string name, string email, Password password) => new (name, email, password);
 
         public void Update(string name, string email, DateTime birthDate)
         {
