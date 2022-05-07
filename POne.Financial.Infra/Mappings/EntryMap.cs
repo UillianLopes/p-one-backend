@@ -55,6 +55,9 @@ namespace POne.Financial.Infra.Mappings
             builder.HasOne(e => e.SubCategory)
                 .WithMany(e => e.Entries);
 
+            builder.Property(e => e.Currency)
+                .HasMaxLength(10);
+
             builder.HasMany(e => e.Payments)
                 .WithOne(e => e.Entry)
                 .IsRequired();

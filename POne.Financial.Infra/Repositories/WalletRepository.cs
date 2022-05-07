@@ -2,8 +2,9 @@
 using POne.Core.Contracts;
 using POne.Financial.Domain.Contracts;
 using POne.Financial.Domain.Entities;
-using POne.Financial.Domain.Queries.Outputs.Wallets;
+using POne.Financial.Domain.Queries.Inputs.Wallets;
 using POne.Financial.Domain.Queries.Outputs.Banks;
+using POne.Financial.Domain.Queries.Outputs.Wallets;
 using POne.Financial.Infra.Connections;
 using POne.Infra.Repositories;
 using System.Collections.Generic;
@@ -19,9 +20,16 @@ namespace POne.Financial.Infra.Repositories
 
         public WalletRepository(IAuthenticatedUser authenticatedUser, POneFinancialDbContext dbContext) : base(dbContext) => _authenticatedUser = authenticatedUser;
 
-        public Task<List<WalletOutput>> GetAllAsync(CancellationToken cancellationToken) => _dbContext
-            .Wallets
-            .Where(c => c.UserId == _authenticatedUser.Id)
+        public Task<List<WalletOutput>> GetAllAsync(GetAllWallets filter, CancellationToken cancellationToken)
+        {
+            var query = _dbContext
+                .Wallets
+                .Where(c => c.UserId == _authenticatedUser.Id);
+
+            if (filter.Currency is not null)
+                query = query.Where(c => c.Currency == filter.Currency);
+
+            return query
             .OrderBy(c => c.Name)
             .Select(c => new WalletOutput
             {
@@ -42,5 +50,6 @@ namespace POne.Financial.Infra.Repositories
             })
             .AsNoTracking()
             .ToListAsync(cancellationToken);
+        }
     }
 }

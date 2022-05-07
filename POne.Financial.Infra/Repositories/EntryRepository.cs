@@ -79,7 +79,8 @@ namespace POne.Financial.Infra.Repositories
                         Id = e.SubCategory.Id,
                         Title = e.SubCategory.Name,
                         Color = e.SubCategory.Color
-                    } : null
+                    } : null,
+                    Currency = e.Currency
                 })
                 .AsNoTracking()
                 .ToListAsync(cancellationToken);

@@ -141,7 +141,8 @@ namespace POne.Financial.Business.CommandHandlers
                 request.Title,
                 null, null,
                 category,
-                subCategory
+                subCategory,
+                wallet.Currency
             );
 
             await _entryRepository.CreateAync(entry, cancellationToken);
@@ -173,7 +174,8 @@ namespace POne.Financial.Business.CommandHandlers
                 request.Title,
                 null, null,
                 category,
-                subCategory
+                subCategory,
+                wallet.Currency
             );
 
             await _entryRepository.CreateAync(entry, cancellationToken);

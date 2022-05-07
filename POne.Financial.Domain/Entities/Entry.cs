@@ -19,7 +19,8 @@ namespace POne.Financial.Domain.Entities
             string barCode,
             string description,
             Category category,
-            SubCategory subCategory
+            SubCategory subCategory,
+            string currency
         ) : this()
         {
             UserId = userId;
@@ -34,6 +35,7 @@ namespace POne.Financial.Domain.Entities
             Category = category;
             SubCategory = subCategory;
             Index = index;
+            Currency = currency;
         }
 
         protected Entry() : base()
@@ -54,6 +56,7 @@ namespace POne.Financial.Domain.Entities
         public virtual Category Category { get; private set; }
         public virtual SubCategory SubCategory { get; private set; }
         public virtual ISet<Payment> Payments { get; private set; }
+        public string Currency { get; private set; }
 
         public void Pay(Wallet wallet, decimal value, decimal fees = 0.00m, decimal fine = 0.00m)
         {
