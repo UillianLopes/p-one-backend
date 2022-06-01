@@ -17,5 +17,6 @@ namespace POne.Notifier.Api.Hubs
         public void SendToGroupAsync(string group, string method, object data, CancellationToken cancellationToken) => Clients
             .Group(group)
             .SendAsync(method, data, cancellationToken);
+
     }
 }

@@ -15,9 +15,10 @@ namespace POne.Financial.Business.QueryHandlers
             _balanceRepository = categoryRepository;
         }
 
-        public async Task<IQueryOutput> Handle(GetAllWallets _, CancellationToken cancellationToken)
+        public async Task<IQueryOutput> Handle(GetAllWallets query, CancellationToken cancellationToken)
         {
-            var balances = await _balanceRepository.GetAllAsync(cancellationToken);
+            var balances = await _balanceRepository
+                .GetAllAsync(query, cancellationToken);
 
             return QueryOutput.Ok(balances);
         }

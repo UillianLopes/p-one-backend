@@ -25,6 +25,6 @@ namespace POne.Financial.Domain.Commands.Inputs.Entries
         public decimal Value { get; set; }
         public DateTime DueDate { get; set; }
         public string BarCode { get; set; }
-
+        public string Currency { get; set; }
     }
 }

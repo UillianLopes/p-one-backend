@@ -53,6 +53,7 @@ namespace POne.Financial.Api.Controllers
         public Task<IActionResult> TransferAsync([FromBody] TransferCommand command, CancellationToken cancellationToken) => SendAsync(command, cancellationToken);
 
         [HttpGet]
-        public Task<IActionResult> GetAllAsync(CancellationToken cancellationToken) => QueryAsync(new GetAllWallets(), cancellationToken);
+        public Task<IActionResult> GetAllAsync([FromQuery] GetAllWallets query, CancellationToken cancellationToken) => 
+            QueryAsync(query, cancellationToken);
     }
 }

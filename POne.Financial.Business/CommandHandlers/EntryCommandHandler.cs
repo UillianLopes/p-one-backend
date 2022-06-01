@@ -99,7 +99,8 @@ namespace POne.Financial.Business.CommandHandlers
                     request.BarCode,
                     request.Description,
                     category,
-                    subCategory
+                    subCategory,
+                    request.Currency
                 );
 
                 await _entryRepository.CreateAync(entry, cancellationToken);
@@ -123,7 +124,8 @@ namespace POne.Financial.Business.CommandHandlers
                     item.BarCode,
                     request.Description,
                     category,
-                    subCategory
+                    subCategory,
+                    request.Currency
                 );
 
                 await _entryRepository.CreateAync(entry, cancellationToken);

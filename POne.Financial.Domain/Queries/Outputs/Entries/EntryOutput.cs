@@ -19,6 +19,7 @@ namespace POne.Financial.Domain.Queries.Outputs.Entries
         public Guid Id { get; set; }
         public string BarCode { get; set; }
         public decimal PaidValue { get; set; }
+        public string Currency { get; set; }
         public EntryPaymentStatus PaymentStatus
         {
             get
