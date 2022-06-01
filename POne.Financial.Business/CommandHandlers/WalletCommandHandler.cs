@@ -11,13 +11,14 @@ using System.Threading.Tasks;
 
 namespace POne.Financial.Business.CommandHandlers
 {
-    public class WalletCommandHandler : 
+    public class WalletCommandHandler :
         ICommandHandler<CreateWalletCommand>,
         ICommandHandler<UpdateWalletCommand>,
         ICommandHandler<DeleteWalletCommand>,
         ICommandHandler<DeleteWalletsCommand>,
         ICommandHandler<DepositCommand>,
-        ICommandHandler<WithdrawCommand>
+        ICommandHandler<WithdrawCommand>,
+        ICommandHandler<TransferCommand>
     {
         private readonly IWalletRepository _walletRespository;
         private readonly IAuthenticatedUser _authenticatedUser;
@@ -158,7 +159,7 @@ namespace POne.Financial.Business.CommandHandlers
                 return CommandOutput.NotFound("@PONE.MESSAGES.WALLET_NOT_FOUND");
 
             if (await _categoryRepository.FindByIdAync(request.CategoryId, cancellationToken) is not Category category)
-                return CommandOutput.NotFound("PONE.MESSAGES.CATEGORY_NOT_FOUND");
+                return CommandOutput.NotFound("@PONE.MESSAGES.CATEGORY_NOT_FOUND");
 
             SubCategory subCategory = null;
 
@@ -183,6 +184,70 @@ namespace POne.Financial.Business.CommandHandlers
             entry.Pay(wallet, request.Withdraw);
 
             return CommandOutput.Ok("@PONE.MESSAGES.WITHDRAW_DONE");
+        }
+
+        public async Task<ICommandOuput> Handle(TransferCommand request, CancellationToken cancellationToken)
+        {
+
+            if (request.Origin is TransferSubject origin)
+            {
+                if (await _walletRespository.FindByIdAync(origin.WalletId, cancellationToken) is not Wallet wallet)
+                    return CommandOutput.NotFound("@PONE.MESSAGES.WALLET_NOT_FOUND");
+
+                if (await _categoryRepository.FindByIdAync(origin.CategoryId, cancellationToken) is not Category category)
+                    return CommandOutput.NotFound("@PONE.MESSAGES.CATEGORY_NOT_FOUND");
+
+                SubCategory subCategory = null;
+                if (origin.SubCategoryId is Guid subCategoryId)
+                    subCategory = await _subCategoryRepository.FindByIdAync(subCategoryId, cancellationToken);
+
+                var entry = new Entry(
+                  _authenticatedUser.Id,
+                  null, 0, 0,
+                  EntryType.Debit,
+                  request.Value,
+                  DateTime.Now,
+                  request.Title,
+                  null, null,
+                  category,
+                  subCategory
+              );
+
+                await _entryRepository.CreateAync(entry, cancellationToken);
+
+                entry.Pay(wallet, request.Value);
+            }
+
+            if (request.Destination is TransferSubject destination)
+            {
+                if (await _walletRespository.FindByIdAync(destination.WalletId, cancellationToken) is not Wallet wallet)
+                    return CommandOutput.NotFound("@PONE.MESSAGES.WALLET_NOT_FOUND");
+
+                if (await _categoryRepository.FindByIdAync(destination.CategoryId, cancellationToken) is not Category category)
+                    return CommandOutput.NotFound("@PONE.MESSAGES.CATEGORY_NOT_FOUND");
+
+                SubCategory subCategory = null;
+                if (destination.SubCategoryId is Guid subCategoryId)
+                    subCategory = await _subCategoryRepository.FindByIdAync(subCategoryId, cancellationToken);
+
+                var entry = new Entry(
+                  _authenticatedUser.Id,
+                  null, 0, 0,
+                  EntryType.Credit,
+                  request.Value,
+                  DateTime.Now,
+                  request.Title,
+                  null, null,
+                  category,
+                  subCategory
+              );
+
+                await _entryRepository.CreateAync(entry, cancellationToken);
+
+                entry.Pay(wallet, request.Value);
+            }
+
+            return CommandOutput.Ok("@PONE.MESSAGES.TRANSFER_COMPLETED");
         }
     }
 }
