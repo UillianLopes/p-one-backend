@@ -42,7 +42,6 @@ namespace POne.Financial.Api.Controllers
             return SendAsync(command, cancellationToken);
         }
 
-
         [HttpPut("{walletId}/[action]")]
         public Task<IActionResult> WithdrawAsync([FromRoute] Guid walletId, [FromBody] WithdrawCommand command, CancellationToken cancellationToken)
         {
@@ -50,6 +49,8 @@ namespace POne.Financial.Api.Controllers
             return SendAsync(command, cancellationToken);
         }
 
+        [HttpPut("[action]")]
+        public Task<IActionResult> TransferAsync([FromBody] TransferCommand command, CancellationToken cancellationToken) => SendAsync(command, cancellationToken);
 
         [HttpGet]
         public Task<IActionResult> GetAllAsync(CancellationToken cancellationToken) => QueryAsync(new GetAllWallets(), cancellationToken);
