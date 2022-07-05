@@ -15,7 +15,6 @@ namespace POne.Identity.Domain.Entities
             Name = name;
             Email = email;
             Password = password;
-
         }
 
         public User(string name, string email, DateTime birthDate, Address address, PhoneNumber mobilePhone, Password password) : this(name, email, password)

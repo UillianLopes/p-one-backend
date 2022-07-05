@@ -33,6 +33,16 @@ namespace POne.Financial.Infra.Repositories
             if (filter.Text is string text)
                 entries = entries.Where(entry => EF.Functions.Like(entry.Title.ToLower(), $"{text.ToLower()}%"));
 
+            entries = filter.PaymentStatus switch
+            {
+                EntryPaymentStatus.Paid => entries.Where(entry => entry.Payments.Sum(p => p.Value) >= entry.Value),
+                EntryPaymentStatus.Opened => entries.Where(entry => entry.Payments.Sum(p => p.Value) < entry.Value),
+                EntryPaymentStatus.ToPayToday => entries.Where(entry => entry.DueDate.Date == DateTime.Now.Date),
+                EntryPaymentStatus.Overdue => entries.Where(entry => entry.Payments.Sum(p => p.Value) < entry.Value && entry.DueDate.Date < DateTime.Now.Date),
+                _ => entries
+            };
+
+
             if (filter.Type is EntryType type)
                 entries = entries.Where(entry => entry.Type == type);
 
