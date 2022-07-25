@@ -18,10 +18,6 @@ namespace POne.Admin.Api.Controllers
         [Authorize(Roles = Roles.Admin.User.Read)]
         public Task<IActionResult> GetAllAsync([FromQuery] GetAllUsers query, CancellationToken cancellationToken) => QueryAsync(query, cancellationToken);
 
-        [HttpGet]
-        [Authorize(Roles = Roles.Admin.User.Read)]
-        public Task<IActionResult> GetAllUsersAmmountAsync([FromQuery] GetAllUsersAmmount query, CancellationToken cancellationToken) => QueryAsync(query, cancellationToken);
-
         [HttpPost]
         [Authorize(Roles = Roles.Admin.User.Create)]
         public Task<IActionResult> CreateAsync([FromBody] CreateUserCommand command, CancellationToken cancellationToken) => SendAsync(command, cancellationToken);
