@@ -15,7 +15,7 @@ namespace POne.Api.Implementations
 
         public Guid Id => Guid.TryParse(_principal.Claims.FirstOrDefault(e => e.Type == JwtClaimTypes.Id)?.Value, out Guid id) ? id : Guid.Empty;
 
-        public Guid AccountId => Guid.TryParse(_principal.Claims.FirstOrDefault(e => e.Type == "account")?.Value, out Guid id) ? id : Guid.Empty;
+        public Guid AccountId => Guid.TryParse(_principal.Claims.FirstOrDefault(e => e.Type == "AccountId")?.Value, out Guid id) ? id : Guid.Empty;
 
         public string Email => _principal.Claims.FirstOrDefault(e => e.Type == JwtClaimTypes.Email).Value;
     }

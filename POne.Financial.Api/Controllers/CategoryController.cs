@@ -13,7 +13,6 @@ namespace POne.Financial.Api.Controllers
 {
 
     [Route("[controller]")]
-    [Authorize]
     public class CategoryController : BaseController
     {
         public CategoryController(IMediator mediator, IUow uow) : base(mediator, uow)
@@ -21,9 +20,11 @@ namespace POne.Financial.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize("category_create")]
         public Task<IActionResult> CreateAsync([FromBody] CreateCategoryCommand command, CancellationToken cancellationToken) => SendAsync(command, cancellationToken);
 
         [HttpPut("{Id}")]
+        [Authorize("category_update")]
         public Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateCategoryCommand command, CancellationToken cancellationToken)
         {
             command.Id = id;
@@ -31,12 +32,15 @@ namespace POne.Financial.Api.Controllers
         }
 
         [HttpDelete("{Id}")]
+        [Authorize("category_delete")]
         public Task<IActionResult> DeleteAsync([FromRoute] DeleteCategoryCommand command, CancellationToken cancellationToken) => SendAsync(command, cancellationToken);
 
+        [Authorize("category_delete")]
         [HttpDelete]
         public Task<IActionResult> DeleteAsync([FromQuery] DeleteCategoriesCommand command, CancellationToken cancellationToken) => SendAsync(command, cancellationToken);
 
         [HttpGet]
+        [Authorize("category_read")]
         public Task<IActionResult> GetAllAsync([FromQuery] GetAllCategories query, CancellationToken cancellationToken) => QueryAsync(query, cancellationToken);
 
     }

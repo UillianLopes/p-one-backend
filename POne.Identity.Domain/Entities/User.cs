@@ -1,8 +1,10 @@
-﻿using POne.Core.Entities;
+﻿using IdentityModel;
+using POne.Core.Entities;
 using POne.Core.ValueObjects;
 using POne.Identity.Domain.Settings;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,6 +12,11 @@ namespace POne.Identity.Domain.Entities
 {
     public class User : Entity
     {
+        protected User() : base() 
+        {
+            Contacts = new HashSet<Contact>();
+        }
+
         protected User(string name, string email, Password password) : this()
         {
             Name = name;
@@ -17,29 +24,29 @@ namespace POne.Identity.Domain.Entities
             Password = password;
         }
 
-        public User(string name, string email, DateTime birthDate, Address address, PhoneNumber mobilePhone, Password password) : this(name, email, password)
+        public User(
+            string name,
+            string email,
+            DateTime birthDate,
+            Address address,
+            Password password,
+            Profile profile
+        ) : this(name, email, password)
         {
             BirthDate = birthDate;
             Address = address;
-            MobilePhone = mobilePhone;
-            Roles = new HashSet<Role>();
-        }
-
-        protected User() : base()
-        {
-
+            Profile = profile;
         }
 
         public string Name { get; private set; }
         public string Email { get; private set; }
         public DateTime BirthDate { get; private set; }
         public virtual Address Address { get; private set; }
-        public virtual PhoneNumber MobilePhone { get; private set; }
         public virtual Password Password { get; private set; }
-        public virtual ISet<Role> Roles { get; private set; }
+        public virtual Profile Profile { get; private set; }
         public virtual UserSettings Settings { get; private set; }
-
-        public static User Simplified(string name, string email, Password password) => new (name, email, password);
+        public virtual Account Account { get; private set; }
+        public virtual ISet<Contact> Contacts { get; private set; }
 
         public void Update(string name, string email, DateTime birthDate)
         {
@@ -48,7 +55,6 @@ namespace POne.Identity.Domain.Entities
             BirthDate = birthDate;
         }
 
-
         public async Task UpdateUserSettingsAsync(GeneralSettings settings, CancellationToken cancellationToken)
         {
             if (Settings == null)
@@ -56,30 +62,29 @@ namespace POne.Identity.Domain.Entities
 
             await Settings.UpdateAsync(settings, cancellationToken);
         }
-        public void UpdatePassowrd(string password)
-        {
-            Password = new Password(password);
-        }
+
+        public void UpdatePassowrd(string password) => Password = new Password(password);
 
         public void UpdateAddress(string street, string district, string number, string city, string state, string country, string zipCode)
         {
             Address = new Address(street, district, number, city, state, country, zipCode);
         }
 
-        public void AddRole(Role role)
+        public IEnumerable<Claim> ReadRoles()
         {
-            if (Roles.Contains(role))
-                return;
+            yield return new Claim(JwtClaimTypes.Name, Name);
+            yield return new Claim(JwtClaimTypes.Email,Email);
+            yield return new Claim(JwtClaimTypes.Id, Id.ToString());
+            if (Account is Account account)
+                yield return new Claim("AccountId", account.Id.ToString());
 
-            Roles.Add(role);
+            if (Profile is null)
+                yield break;
+
+            foreach (var role in Profile.Roles)
+                yield return new Claim(JwtClaimTypes.Role, role.Key);
         }
 
-        public void RemoveRole(Role role)
-        {
-            if (!Roles.Contains(role))
-                return;
 
-            Roles.Remove(role);
-        }
     }
 }

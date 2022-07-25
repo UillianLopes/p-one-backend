@@ -5,6 +5,7 @@ using POne.Identity.Business.Commands.Inputs.Users;
 using POne.Identity.Domain.Contracts.Repositories;
 using POne.Identity.Domain.Entities;
 using POne.Identity.Domain.Settings;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -24,11 +25,10 @@ namespace POne.Identity.Business.CommandHandlers
 
         public async Task<ICommandOuput> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-
             if (await _userRepository.FindByEmail(request.Email, cancellationToken) is not null)
                 return CommandOutput.BadRequest("@PONE.MESSAGES.EMAIL_ALREADY_EXISTS");
 
-            var user = User.Simplified(request.Name, request.Email, new Password(request.Password));
+            var user = new User(request.Name, request.Email, request.DateOfBirth, null, new Password(request.Password), null);
 
             await user.UpdateUserSettingsAsync(new GeneralSettings { Language = request.Language }, cancellationToken);
 
@@ -67,11 +67,11 @@ namespace POne.Identity.Business.CommandHandlers
                     user.Address.Country,
                     user.Address.ZipCode
                 },
-                MobilePhone = new
+                Contacts = user.Contacts.Select(c => new
                 {
-                    user.MobilePhone.Number,
-                    user.MobilePhone.CountryCode
-                }
+                   c.Id, 
+                   c.Number,
+                })
             }, "@PONE.MESSAGES.USER_UPDATED");
 
         }

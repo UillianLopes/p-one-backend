@@ -17,6 +17,7 @@ using POne.Identity.Infra.Repositories;
 using POne.Infra.UnityOfWork;
 using System;
 using System.Linq;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +40,7 @@ services.AddPOneApi(builder => builder
     .WithValidatorsFromAssemblyOf<CreateUserCommandValidator>()
     .WithCQRSFromAssemblyOf<UserCommandHandler>()
 );
+
 
 var allowedCorsOrigns = configuration
      .GetSection("AllowedCorsOrigins")
@@ -68,9 +70,12 @@ services.AddIdentityServer(ops =>
 .AddProfileService<ProfileService>()
 .AddRedirectUriValidator<CustomRedirectUriValidator>();
 
-services.AddControllersWithViews();
+services.AddControllersWithViews()
+    .AddJsonOptions((options) => options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull); ;
 
 services.AddScoped<IUserRepository, UserRepository>();
+services.AddScoped<IProfileRepository, ProfileRepository>();
+services.AddScoped<IRoleRepository, RoleRepository>();
 
 var app = builder.Build();
 var env = app.Environment;

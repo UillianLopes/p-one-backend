@@ -79,26 +79,6 @@ namespace POne.Identity.Infra.Mappings
                 });
             });
 
-            builder.OwnsOne(user => user.MobilePhone, (phone) =>
-            {
-                phone.Property(p => p.CountryCode)
-                    .IsRequired();
-
-                phone.Property(p => p.Number)
-                    .HasMaxLength(20)
-                    .IsRequired();
-
-                phone.HasData(new object[]
-                {
-                    new
-                    {
-                        CountryCode = 55,
-                        Number = "27998321849",
-                        UserId = Guid.Parse("3DE581C4-3F1A-4AC3-A395-24A697EDA880")
-                    }
-                });
-            });
-
             builder.OwnsOne(user => user.Password, (password) =>
             {
                 password.Property(p => p.Value)
@@ -118,17 +98,30 @@ namespace POne.Identity.Infra.Mappings
                 new
                 {
                     Id = Guid.Parse("3DE581C4-3F1A-4AC3-A395-24A697EDA880"),
-                    AccountId = Guid.Parse("CE4B628F-3561-49E8-9560-6E16EF46DFE6"),
-                    Creation = DateTime.Now,
-                    LastUpdate = DateTime.Now,
+                    AccountId = Guid.Parse("CE4B628F-3561-49E8-9560-5E16EF46DFE9"),
+                    Creation = new DateTime(2022, 7, 12),
+                    LastUpdate = new DateTime(2022, 7, 12),
                     IsDeleted = false,
                     Name = "Uillian de Souza Lopes",
                     Email = "uilliansl@outlook.com",
                     BirthDate = new DateTime(1996, 3, 27),
-                    CurrentAccountId = Guid.Parse("CE4B628F-3561-49E8-9560-6E16EF46DFE6")
+                    CurrentAccountId = Guid.Parse("CE4B628F-3561-49E8-9560-6E16EF46DFE6"),
+                    ProfileId = Guid.Parse("CE3B628F-3561-49E8-9560-6E24EF46DFE8")
                 }
             });
 
+            builder.HasOne(p => p.Profile)
+                .WithMany(u => u.Users)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            builder.HasMany(u => u.Contacts)
+                .WithOne(c => c.User)
+                .OnDelete(DeleteBehavior.Cascade)
+                .IsRequired();
+
+            builder.HasOne(u => u.Account)
+                .WithMany(a => a.Users)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

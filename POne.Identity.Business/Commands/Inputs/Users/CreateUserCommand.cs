@@ -1,4 +1,5 @@
 ﻿using POne.Core.CQRS;
+using System;
 
 namespace POne.Identity.Business.Commands.Inputs.Users
 {
@@ -9,5 +10,7 @@ namespace POne.Identity.Business.Commands.Inputs.Users
         public string Password { get; set; }
         public string PasswordConfirmation { get; set; }
         public string Language { get; set; }
+        public Guid ProfileId { get; set; }
+        public DateTime DateOfBirth { get; set; }
     }
 }

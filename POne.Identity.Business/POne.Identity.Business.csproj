@@ -6,16 +6,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Commands\Outputs\**" />
     <Compile Remove="EventHandlers\**" />
     <Compile Remove="Events\**" />
+    <EmbeddedResource Remove="Commands\Outputs\**" />
     <EmbeddedResource Remove="EventHandlers\**" />
     <EmbeddedResource Remove="Events\**" />
+    <None Remove="Commands\Outputs\**" />
     <None Remove="EventHandlers\**" />
     <None Remove="Events\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Commands\Outputs\" />
   </ItemGroup>
 
   <ItemGroup>

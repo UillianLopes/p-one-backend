@@ -3,6 +3,7 @@
     public enum POneApplication
     {
         All,
-        Financial
+        Financial,
+        Admin
     }
 }

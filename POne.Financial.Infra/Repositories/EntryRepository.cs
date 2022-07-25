@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using POne.Core.Contracts;
 using POne.Core.Enums;
-using POne.Core.Extensions.Models;
+using POne.Core.Models;
 using POne.Financial.Domain.Contracts;
 using POne.Financial.Domain.Entities;
 using POne.Financial.Domain.Queries.Inputs.Entries;
@@ -78,13 +78,13 @@ namespace POne.Financial.Infra.Repositories
                     Description = e.Description,
                     BarCode = e.BarCode,
                     PaidValue = e.Payments.Sum((payment) => payment.Value),
-                    Category = e.Category != null ? new AutoCompleteModel
+                    Category = e.Category != null ? new OptionModel
                     {
                         Id = e.Category.Id,
                         Title = e.Category.Name,
                         Color = e.Category.Color
                     } : null,
-                    SubCategory = e.SubCategory != null ? new AutoCompleteModel
+                    SubCategory = e.SubCategory != null ? new OptionModel
                     {
                         Id = e.SubCategory.Id,
                         Title = e.SubCategory.Name,
