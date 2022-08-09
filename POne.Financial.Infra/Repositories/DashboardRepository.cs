@@ -38,7 +38,10 @@ namespace POne.Financial.Infra.Repositories
 
 
             var wallets = await _financialDbContext.Wallets
-                .Where(wallet => (_authenticatedUser.IsStandalone && wallet.UserId != null && wallet.UserId == _authenticatedUser.Id || !_authenticatedUser.IsStandalone && _authenticatedUser.AccountId == _authenticatedUser.AccountId))
+                .Where(wallet => (
+                        (_authenticatedUser.IsStandalone && wallet.UserId != null &&
+                        wallet.UserId == _authenticatedUser.Id) ||
+                        !_authenticatedUser.IsStandalone && wallet.AccountId == _authenticatedUser.AccountId))
                 .ToListAsync(cancellationToken);
 
             var groups = new List<LineChartDataGroup>();
