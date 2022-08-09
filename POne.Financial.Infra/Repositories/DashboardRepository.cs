@@ -36,8 +36,9 @@ namespace POne.Financial.Infra.Repositories
                 currentDate = currentDate.AddDays(1);
             }
 
+
             var wallets = await _financialDbContext.Wallets
-                .Where(wallet => wallet.UserId == _authenticatedUser.Id)
+                .Where(wallet => (_authenticatedUser.IsStandalone && wallet.UserId != null && wallet.UserId == _authenticatedUser.Id || !_authenticatedUser.IsStandalone && _authenticatedUser.AccountId == _authenticatedUser.AccountId))
                 .ToListAsync(cancellationToken);
 
             var groups = new List<LineChartDataGroup>();

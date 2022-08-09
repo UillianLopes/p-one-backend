@@ -5,8 +5,17 @@ namespace POne.Identity.Domain.Entities
 {
     public class Contact : Entity
     {
-        public User User { get; private set; }
+        protected Contact() : base() { }
+
+        public Contact(User user, PhoneNumber number, string name) : this()
+        {
+            User = user;
+            Number = number;
+            Name = name;
+        }
+
+        public virtual User User { get; private set; }
         public virtual PhoneNumber Number { get; private set; }
-        public virtual string Name { get; private set; }
+        public string Name { get; private set; }
     }
 }

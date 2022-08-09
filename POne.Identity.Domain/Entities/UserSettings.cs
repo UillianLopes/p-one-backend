@@ -46,8 +46,10 @@ namespace POne.Identity.Domain.Entities
 
             using var stream = new MemoryStream(Convert.FromBase64String(Value));
 
-            return await JsonSerializer
+            var generalSettings = await JsonSerializer
                 .DeserializeAsync<GeneralSettings>(stream, cancellationToken: cancellationToken);
+
+            return generalSettings;
         }
 
         protected override IEnumerable<object> GetEqualityComponents()

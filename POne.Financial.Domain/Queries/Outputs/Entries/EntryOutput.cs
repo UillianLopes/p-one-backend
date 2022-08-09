@@ -1,6 +1,7 @@
 ﻿using POne.Core.Enums;
-using POne.Core.Extensions.Models;
+using POne.Core.Models;
 using System;
+using System.Collections.Generic;
 
 namespace POne.Financial.Domain.Queries.Outputs.Entries
 {
@@ -13,13 +14,15 @@ namespace POne.Financial.Domain.Queries.Outputs.Entries
         public DateTime DueDate { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public AutoCompleteModel Category { get; set; }
-        public AutoCompleteModel SubCategory { get; set; }
+        public OptionModel Category { get; set; }
+        public OptionModel SubCategory { get; set; }
         public int Recurrences { get; set; }
         public Guid Id { get; set; }
         public string BarCode { get; set; }
         public decimal PaidValue { get; set; }
         public string Currency { get; set; }
+        public PaymentOutput[] Payments { get; set; }
+
         public EntryPaymentStatus PaymentStatus
         {
             get

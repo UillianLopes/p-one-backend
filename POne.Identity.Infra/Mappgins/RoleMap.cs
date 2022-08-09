@@ -1,40 +1,32 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using POne.Core.Auth;
 using POne.Identity.Domain.Entities;
-using POne.Infra.Mappings;
+using System.Linq;
 
 namespace POne.Identity.Infra.Mappings
 {
-    public class RoleMap : EntityMap<Role>
+    public class RoleMap : IEntityTypeConfiguration<Role>
     {
-        public override void Configure(EntityTypeBuilder<Role> builder)
+        public void Configure(EntityTypeBuilder<Role> builder)
         {
             builder.ToTable("Roles", "auth");
 
-            base.Configure(builder);
-
-            builder.Property(p => p.Description)
-                .IsRequired()
-                .HasMaxLength(254);
-
-            builder.Property(p => p.Name)
-                .IsRequired()
-                .HasMaxLength(100);
-
             builder.Property(p => p.Key)
                  .IsRequired()
-                 .HasMaxLength(100);
+                 .HasMaxLength(100)
+                 .ValueGeneratedNever();
 
-            builder.Property(p => p.IsActive)
-                .IsRequired();
+            builder.HasKey(p => p.Key);
 
             builder.HasMany(p => p.Profiles)
                 .WithMany(p => p.Roles)
-                .UsingEntity(builder => builder.ToTable("ProfilesRoles"));
+                .UsingEntity(builder => builder.ToTable("ProfileRoles"));
 
-            builder.HasMany(p => p.Users)
-                .WithMany(p => p.Roles)
-                .UsingEntity(builder => builder.ToTable("UsersRoles"));
+            builder.HasData(RolesUtils.GetAllRoleKeys()
+                .Select(key => new { Key = key })
+                .ToArray());
+
         }
     }
 }

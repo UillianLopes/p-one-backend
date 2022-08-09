@@ -35,7 +35,9 @@ namespace POne.Api.Extensions
                 .GetRequiredService<IHttpContextAccessor>()
                 .HttpContext
                 .User);
+
             services.AddScoped<IAuthenticatedUser, AuthenticatedUser>();
+
         }
     }
 

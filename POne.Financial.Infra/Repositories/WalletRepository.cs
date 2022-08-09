@@ -24,32 +24,36 @@ namespace POne.Financial.Infra.Repositories
         {
             var query = _dbContext
                 .Wallets
-                .Where(c => c.UserId == _authenticatedUser.Id);
+                .Where(wallet => (
+                    (!_authenticatedUser.IsStandalone && wallet.AccountId != null && wallet.AccountId == _authenticatedUser.AccountId) ||
+                    (_authenticatedUser.IsStandalone && wallet.UserId != null && wallet.UserId == _authenticatedUser.Id)
+                ));
 
-            if (filter.Currency is not null)
-                query = query.Where(c => c.Currency == filter.Currency);
+            if (filter.Currency is string curreny)
+                query = query
+                    .Where(c => c.Currency == curreny);
 
             return query
-            .OrderBy(c => c.Name)
-            .Select(c => new WalletOutput
-            {
-                Id = c.Id,
-                Name = c.Name,
-                Value = c.Value,
-                Agency = c.Agency,
-                Color = c.Color,
-                Currency = c.Currency,
-                Bank = c.Bank != null ? new BankOutput
+                .OrderBy(c => c.Name)
+                .Select(c => new WalletOutput
                 {
-                    Id = c.Bank.Id,
-                    Name = c.Bank.Name,
-                    Code = c.Bank.Code
-                } : null,
-                Number = c.Number,
-                Type = c.Type,
-            })
-            .AsNoTracking()
-            .ToListAsync(cancellationToken);
+                    Id = c.Id,
+                    Name = c.Name,
+                    Value = c.Value,
+                    Agency = c.Agency,
+                    Color = c.Color,
+                    Currency = c.Currency,
+                    Bank = c.Bank != null ? new BankOutput
+                    {
+                        Id = c.Bank.Id,
+                        Name = c.Bank.Name,
+                        Code = c.Bank.Code
+                    } : null,
+                    Number = c.Number,
+                    Type = c.Type,
+                })
+                .AsNoTracking()
+                .ToListAsync(cancellationToken);
         }
     }
 }

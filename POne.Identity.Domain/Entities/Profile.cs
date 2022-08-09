@@ -1,4 +1,5 @@
 ﻿using POne.Core.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace POne.Identity.Domain.Entities
@@ -11,24 +12,23 @@ namespace POne.Identity.Domain.Entities
         {
             Name = name;
             Description = description;
-            IsActive = true;
             Roles = new HashSet<Role>();
+            Users = new HashSet<User>();
         }
 
         public string Name { get; private set; }
         public string Description { get; private set; }
-        public bool IsActive { get; private set; }
+        public bool IsDefault { get; private set; }
+        public virtual Account Account { get; private set; }
         public virtual ISet<Role> Roles { get; private set; }
+        public virtual ISet<User> Users { get; private set; }
 
-        public void Activate()
+        public void Toggle(Role role)
         {
-            IsActive = true;
+            if (!Roles.Contains(role))
+                Roles.Add(role);
+            else
+                Roles.Remove(role);
         }
-
-        public void Deactivate()
-        {
-            IsActive = false;
-        }
-
     }
 }

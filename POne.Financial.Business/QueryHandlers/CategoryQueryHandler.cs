@@ -1,12 +1,13 @@
 ﻿using POne.Core.CQRS;
 using POne.Financial.Domain.Contracts;
 using POne.Financial.Domain.Queries.Inputs.Categories;
+using POne.Financial.Domain.Queries.Inputs.SubCategories;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace POne.Financial.Business.QueryHandlers
 {
-    public class CategoryQueryHandler : IQueryHandler<GetAllCategories>
+    public class CategoryQueryHandler : IQueryHandler<GetAllCategories>, IQueryHandler<GetAllCategoriesAsOptions>
     {
         private readonly ICategoryRepository _categoryRepository;
 
@@ -21,5 +22,13 @@ namespace POne.Financial.Business.QueryHandlers
 
             return QueryOutput.Ok(categories);
         }
+
+        public async Task<IQueryOutput> Handle(GetAllCategoriesAsOptions query, CancellationToken cancellationToken)
+        {
+            var categories = await _categoryRepository.GetAllAsOptionsAsync(query, cancellationToken);
+
+            return QueryOutput.Ok(categories);
+        }
+
     }
 }

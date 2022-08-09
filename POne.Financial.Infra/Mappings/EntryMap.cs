@@ -16,11 +16,14 @@ namespace POne.Financial.Infra.Mappings
             builder.ToTable("Entries", "fin");
 
             base.Configure(builder);
-
-            builder.Property(e => e.UserId)
-                .IsRequired();
+            
+            builder.Property(e => e.UserId);
 
             builder.HasIndex(e => e.UserId);
+
+            builder.Property(e => e.AccountId);
+
+            builder.HasIndex(e => e.AccountId);
 
             builder.Property(e => e.RecurrenceId);
 

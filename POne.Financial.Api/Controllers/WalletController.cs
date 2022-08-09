@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using POne.Api.Auth;
+using POne.Core.Auth;
 using POne.Core.Contracts;
 using POne.Core.Mvc;
 using POne.Financial.Domain.Commands.Inputs.Wallets;
@@ -20,9 +22,11 @@ namespace POne.Financial.Api.Controllers
         }
 
         [HttpPost]
+        [POneAuthorize(Roles.Financial.Wallet.Read)]
         public Task<IActionResult> CreateAsync([FromBody] CreateWalletCommand command, CancellationToken cancellationToken) => SendAsync(command, cancellationToken);
 
         [HttpPut("{Id}")]
+        [POneAuthorize(Roles.Financial.Wallet.Update)]
         public Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] UpdateWalletCommand command, CancellationToken cancellationToken)
         {
             command.Id = id;
@@ -30,12 +34,15 @@ namespace POne.Financial.Api.Controllers
         }
 
         [HttpDelete("{Id}")]
+        [POneAuthorize(Roles.Financial.Wallet.Delete)]
         public Task<IActionResult> DeleteAsync([FromRoute] DeleteWalletCommand command, CancellationToken cancellationToken) => SendAsync(command, cancellationToken);
 
         [HttpDelete]
+        [POneAuthorize(Roles.Financial.Wallet.Delete)]
         public Task<IActionResult> DeleteAsync([FromQuery] DeleteWalletsCommand command, CancellationToken cancellationToken) => SendAsync(command, cancellationToken);
 
         [HttpPut("{walletId}/[action]")]
+        [POneAuthorize(Roles.Financial.Wallet.Update)]
         public Task<IActionResult> DepositAsync([FromRoute] Guid walletId, [FromBody] DepositCommand command, CancellationToken cancellationToken)
         {
             command.WalletId = walletId;
@@ -43,6 +50,7 @@ namespace POne.Financial.Api.Controllers
         }
 
         [HttpPut("{walletId}/[action]")]
+        [POneAuthorize(Roles.Financial.Wallet.Update)]
         public Task<IActionResult> WithdrawAsync([FromRoute] Guid walletId, [FromBody] WithdrawCommand command, CancellationToken cancellationToken)
         {
             command.WalletId = walletId;
@@ -50,10 +58,12 @@ namespace POne.Financial.Api.Controllers
         }
 
         [HttpPut("[action]")]
+        [POneAuthorize(Roles.Financial.Wallet.Update)]
         public Task<IActionResult> TransferAsync([FromBody] TransferCommand command, CancellationToken cancellationToken) => SendAsync(command, cancellationToken);
 
         [HttpGet]
-        public Task<IActionResult> GetAllAsync([FromQuery] GetAllWallets query, CancellationToken cancellationToken) => 
+        [POneAuthorize(Roles.Financial.Wallet.Read)]
+        public Task<IActionResult> GetAllAsync([FromQuery] GetAllWallets query, CancellationToken cancellationToken) =>
             QueryAsync(query, cancellationToken);
     }
 }

@@ -14,15 +14,16 @@ namespace POne.Financial.Domain.Entities
             SubCategories = new HashSet<SubCategory>();
         }
 
-        public Category(string name, string description, string color, EntryType type, Guid userId) : base(name, description, color)
+        public Category(Guid? userId, Guid? accountId, string name, string description, string color, EntryType type) : base(name, description, color)
         {
             UserId = userId;
+            AccountId = accountId;
             Type = type;
-
-            AddEvent(NotifyEvent.Success("Category created", $"The category {name} was created with success"));
+            AddEvent(NotifyEvent.Success("Category created", $"The category {name} was created with success"));            
         }
 
-        public Guid UserId { get; private set; }
+        public Guid? UserId { get; private set; }
+        public Guid? AccountId { get; private set; }
         public EntryType Type { get; private set; }
         public virtual ISet<Entry> Entries { get; }
         public virtual ISet<SubCategory> SubCategories { get; }

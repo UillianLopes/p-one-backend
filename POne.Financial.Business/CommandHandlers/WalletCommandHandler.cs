@@ -46,6 +46,7 @@ namespace POne.Financial.Business.CommandHandlers
 
             var balance = new Wallet(
                 _authenticatedUser.Id,
+                _authenticatedUser.AccountId,
                 request.Value,
                 request.Name,
                 bank,
@@ -135,6 +136,7 @@ namespace POne.Financial.Business.CommandHandlers
 
             var entry = new Entry(
                 _authenticatedUser.Id,
+                _authenticatedUser.AccountId,
                 null, 0, 0,
                 EntryType.Credit,
                 request.Deposit,
@@ -168,6 +170,7 @@ namespace POne.Financial.Business.CommandHandlers
 
             var entry = new Entry(
                 _authenticatedUser.Id,
+                _authenticatedUser.AccountId,
                 null, 0, 0,
                 EntryType.Debit,
                 request.Withdraw,
@@ -203,6 +206,7 @@ namespace POne.Financial.Business.CommandHandlers
 
                 var entry = new Entry(
                   _authenticatedUser.Id,
+                  _authenticatedUser.AccountId,
                   null, 0, 0,
                   EntryType.Debit,
                   request.Value,
@@ -233,6 +237,7 @@ namespace POne.Financial.Business.CommandHandlers
 
                 var entry = new Entry(
                   _authenticatedUser.Id,
+                  _authenticatedUser.AccountId,
                   null, 0, 0,
                   EntryType.Credit,
                   request.Value,

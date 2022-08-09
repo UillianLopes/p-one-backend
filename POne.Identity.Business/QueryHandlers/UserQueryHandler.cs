@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace POne.Identity.Business.QueryHandlers
 {
-    public class UserQueryHandler : IQueryHandler<GetUserSettings>, IQueryHandler<GetAuthenticatedUserSettings>
+    public class UserQueryHandler : IQueryHandler<GetAllUsers>, IQueryHandler<GetUserSettings>, IQueryHandler<GetAuthenticatedUserSettings>
     {
         private readonly IUserRepository _userRepository;
         private readonly IAuthenticatedUser _authenticatedUser;
@@ -29,12 +29,21 @@ namespace POne.Identity.Business.QueryHandlers
             return QueryOutput.Ok(await userSettings.ReadAsync(cancellationToken));
         }
 
-        public async Task<IQueryOutput> Handle(GetUserSettings request, CancellationToken cancellationToken)
+        public async Task<IQueryOutput> Handle(GetUserSettings query, CancellationToken cancellationToken)
         {
             var userSettings = await _userRepository
-                .GetUserSettingsAsync(request.Id, cancellationToken);
+                .GetUserSettingsAsync(query.Id, cancellationToken);
 
             return QueryOutput.Ok(await userSettings.ReadAsync(cancellationToken));
+        }
+
+        public async Task<IQueryOutput> Handle(GetAllUsers query, CancellationToken cancellationToken)
+        {
+            var users = await _userRepository
+                .GetAllUsersAsync(query, cancellationToken);
+
+            return QueryOutput.Ok(users);
+
         }
     }
 }

@@ -15,6 +15,7 @@ using POne.Notifier.Business.CommandValidators.Notification;
 using POne.Notifier.Domain.Contracts.Facades;
 using POne.Notifier.Domain.Contracts.Repositories;
 using POne.Notifier.Infra.Connections;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,7 +54,8 @@ var identityServerProtectedApiConfig = configuration
     .GetSection("IdentityServer")
     .Get<IdentityServerProtectedApiConfig>();
 
-services.AddControllersWithViews();
+services.AddControllersWithViews()
+    .AddJsonOptions((options) => options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull);
 services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
