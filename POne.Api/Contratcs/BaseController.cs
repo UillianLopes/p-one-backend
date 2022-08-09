@@ -47,6 +47,8 @@ namespace POne.Core.Mvc
                 HttpStatusCode.OK => Ok(output),
                 HttpStatusCode.BadRequest => BadRequest(output),
                 HttpStatusCode.NotFound => NotFound(output),
+                HttpStatusCode.Unauthorized => Unauthorized(output),
+                HttpStatusCode.Forbidden => Forbid(),
                 _ => Ok(output),
             };
         }

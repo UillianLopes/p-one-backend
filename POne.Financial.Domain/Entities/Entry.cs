@@ -8,7 +8,8 @@ namespace POne.Financial.Domain.Entities
     public class Entry : Entity
     {
         public Entry(
-            Guid userId,
+            Guid? userId,
+            Guid? accountId,
             Guid? recurrenceId,
             int index,
             int recurrences,
@@ -24,6 +25,7 @@ namespace POne.Financial.Domain.Entities
         ) : this()
         {
             UserId = userId;
+            AccountId = accountId;
             RecurrenceId = recurrenceId;
             Recurrences = recurrences;
             Type = type;
@@ -43,7 +45,8 @@ namespace POne.Financial.Domain.Entities
             Payments = new HashSet<Payment>();
         }
 
-        public Guid UserId { get; private set; }
+        public Guid? UserId { get; private set; }
+        public Guid? AccountId { get; private set; }
         public Guid? RecurrenceId { get; private set; }
         public int Recurrences { get; private set; }
         public int Index { get; private set; }
@@ -58,6 +61,27 @@ namespace POne.Financial.Domain.Entities
         public virtual ISet<Payment> Payments { get; private set; }
         public string Currency { get; private set; }
 
+        public void Update(
+            string title,
+            string description,
+            string barCode,
+            string currency,
+            decimal value,
+            DateTime dueDate,
+            Category category,
+            SubCategory subCategory
+        )
+        {
+            DueDate = dueDate;
+            Title = title;
+            Description = description;
+            BarCode = barCode;
+            Currency = currency;
+            Value = value;
+            Category = category;
+            SubCategory = subCategory;
+        }
+
         public void Pay(Wallet wallet, decimal value, decimal fees = 0.00m, decimal fine = 0.00m)
         {
             var payment = new Payment(value, fees, fine, this, wallet);
@@ -68,6 +92,12 @@ namespace POne.Financial.Domain.Entities
                 wallet.Add(value);
             else
                 wallet.Subtract(value);
+        }
+
+        public void RevertPayments()
+        {
+            foreach (var payment in Payments)
+                payment.Revert();
         }
     }
 }

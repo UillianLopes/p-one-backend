@@ -19,6 +19,7 @@ namespace POne.Identity.Infra.Repositories
     {
 
         private readonly IAuthenticatedUser _authenticatedUser;
+
         public UserRepository(IAuthenticatedUser authenticatedUser, POneIdentityDbContext dbContext) : base(dbContext)
         {
             _authenticatedUser = authenticatedUser;
@@ -34,14 +35,13 @@ namespace POne.Identity.Infra.Repositories
                 .Users
                 .Where((user) => !user.IsDeleted && _authenticatedUser.AccountId == user.Account.Id);
 
-
             if (filter.Text is string text && !string.IsNullOrEmpty(text))
                 query = query.Where(user => EF.Functions.Like(user.Name, $"{text}%") || EF.Functions.Like(user.Email, $"{text}%") || EF.Functions.Like(user.Profile.Name, $"{text}%"));
 
             return query;
         }
 
-        public Task<int> GetAllUsersAmmountAsync(GetAllUsers query, CancellationToken cancellationToken) => GetAllUsersQuery(query).CountAsync(cancellationToken);
+        public Task<int> GetAllUsersAmmountAsync(GetAllUsersAmmount query, CancellationToken cancellationToken) => GetAllUsersQuery(query).CountAsync(cancellationToken);
 
         public Task<List<UserOutput>> GetAllUsersAsync(GetAllUsers query, CancellationToken cancellationToken)
         {

@@ -14,13 +14,20 @@ namespace POne.Financial.Domain.Entities
         }
 
         public Wallet(
-            Guid userId, decimal value,
-            string name, Bank bank,
-            string number, string agency,
-            BalanceType type, string color,
-            string currency) : this()
+            Guid? userId, 
+            Guid? accountId,
+            decimal value,
+            string name, 
+            Bank bank,
+            string number, 
+            string agency,
+            BalanceType type, 
+            string color,
+            string currency
+        ) : this()
         {
             UserId = userId;
+            AccountId = accountId;
             Value = value;
             Name = name;
             Bank = bank;
@@ -41,7 +48,8 @@ namespace POne.Financial.Domain.Entities
             Currency = currency;
         }
 
-        public Guid UserId { get; private set; }
+        public Guid? UserId { get; private set; }
+        public Guid? AccountId { get; private set; }
         public decimal Value { get; private set; }
         public string Name { get; private set; }
         public string Number { get; private set; }
@@ -52,7 +60,6 @@ namespace POne.Financial.Domain.Entities
         public virtual Bank Bank { get; private set; }
         public virtual ISet<Payment> Payments { get; }
         public virtual ISet<Balance> Balances { get; }
-
 
         public virtual void Add(decimal value)
         {

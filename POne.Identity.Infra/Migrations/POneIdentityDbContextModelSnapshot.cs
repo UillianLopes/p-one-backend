@@ -194,6 +194,102 @@ namespace POne.Identity.Infra.Migrations
                         new
                         {
                             Key = "ADMIN_USER_UPDATE"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_BANK_CREATE"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_BANK_DELETE"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_BANK_READ"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_BANK_UPDATE"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_CATEGORY_CREATE"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_CATEGORY_DELETE"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_CATEGORY_READ"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_CATEGORY_UPDATE"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_DASHBOARD_CREATE"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_DASHBOARD_DELETE"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_DASHBOARD_READ"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_DASHBOARD_UPDATE"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_ENTRY_CREATE"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_ENTRY_DELETE"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_ENTRY_READ"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_ENTRY_UPDATE"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_SUB_CATEGORY_CREATE"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_SUB_CATEGORY_DELETE"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_SUB_CATEGORY_READ"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_SUB_CATEGORY_UPDATE"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_WALLET_CREATE"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_WALLET_DELETE"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_WALLET_READ"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_WALLET_UPDATE"
                         });
                 });
 
@@ -217,6 +313,9 @@ namespace POne.Identity.Infra.Migrations
                         .HasColumnType("nvarchar(254)");
 
                     b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsStandalone")
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastUpdate")
@@ -247,6 +346,7 @@ namespace POne.Identity.Infra.Migrations
                             Creation = new DateTime(2022, 7, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "uilliansl@outlook.com",
                             IsDeleted = false,
+                            IsStandalone = false,
                             LastUpdate = new DateTime(2022, 7, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Uillian de Souza Lopes",
                             ProfileId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8")
@@ -307,6 +407,126 @@ namespace POne.Identity.Infra.Migrations
                         {
                             ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
                             RolesKey = "ADMIN_USER_UPDATE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_BANK_CREATE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_BANK_DELETE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_BANK_READ"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_BANK_UPDATE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_CATEGORY_CREATE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_CATEGORY_DELETE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_CATEGORY_READ"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_CATEGORY_UPDATE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_DASHBOARD_CREATE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_DASHBOARD_DELETE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_DASHBOARD_READ"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_DASHBOARD_UPDATE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_ENTRY_CREATE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_ENTRY_DELETE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_ENTRY_READ"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_ENTRY_UPDATE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_SUB_CATEGORY_CREATE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_SUB_CATEGORY_DELETE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_SUB_CATEGORY_READ"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_SUB_CATEGORY_UPDATE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_WALLET_CREATE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_WALLET_DELETE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_WALLET_READ"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_WALLET_UPDATE"
                         });
                 });
 

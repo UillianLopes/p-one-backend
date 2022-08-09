@@ -10,11 +10,16 @@ using POne.Identity.Domain.Queries.Inputs.Profiles;
 namespace POne.Admin.Api.Controllers
 {
     [Route("[controller]")]
+    [Authorize]
     public class ProfileController : BaseController
     {
         public ProfileController(IMediator mediator, IUow uow) : base(mediator, uow)
         {
         }
+
+        [HttpGet("[action]")]
+        [Authorize(Roles = Roles.Admin.Profile.Read)]
+        public Task<IActionResult> GetAllAsOptionsAsync([FromQuery] GetAllProfilesAsOptions query, CancellationToken cancellationToken) => QueryAsync(query, cancellationToken);
 
         [HttpPost]
         [Authorize(Roles = Roles.Admin.Profile.Create)]

@@ -3,7 +3,7 @@ using POne.Identity.Business.Commands.Inputs.Users;
 
 namespace POne.Identity.Business.Commands.Validators.Users
 {
-    public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
+    public class CreateUserCommandValidator : AbstractValidator<CreateStandaloneUserCommand>
     {
         public CreateUserCommandValidator()
         {

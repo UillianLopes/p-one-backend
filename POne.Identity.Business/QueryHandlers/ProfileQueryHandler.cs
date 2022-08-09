@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace POne.Identity.Business.QueryHandlers
 {
-    public class ProfileQueryHandler : IQueryHandler<GetAllProfiles>, IQueryHandler<GetAllRoles>
+    public class ProfileQueryHandler : IQueryHandler<GetAllProfiles>, IQueryHandler<GetAllRoles>, IQueryHandler<GetAllProfilesAsOptions>
     {
         private readonly IProfileRepository _profileRepository;
 
@@ -25,7 +25,6 @@ namespace POne.Identity.Business.QueryHandlers
                 .GetAllAsync(request, cancellationToken);
 
             return QueryOutput.Ok(profiles);
-
         }
 
         public async Task<IQueryOutput> Handle(GetAllRoles request, CancellationToken cancellationToken)
@@ -60,6 +59,14 @@ namespace POne.Identity.Business.QueryHandlers
                 }).ToList();
 
             return QueryOutput.Ok(appsModulesAndRoles);
+        }
+
+        public async Task<IQueryOutput> Handle(GetAllProfilesAsOptions request, CancellationToken cancellationToken)
+        {
+            var profilesAsOptions = await _profileRepository
+                .GetAllAsOptionsAsync(request, cancellationToken);
+
+            return QueryOutput.Ok(profilesAsOptions);
         }
     }
 }

@@ -101,6 +101,7 @@ services.AddSwaggerGen(c =>
 services.AddScoped<IUserRepository, UserRepository>();
 services.AddScoped<IProfileRepository, ProfileRepository>();
 services.AddScoped<IRoleRepository, RoleRepository>();
+services.AddScoped<IAccountRepository, AccountRepository>();
 services.AddControllers();
 
 services.AddEndpointsApiExplorer();

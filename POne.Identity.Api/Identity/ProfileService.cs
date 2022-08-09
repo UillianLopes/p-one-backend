@@ -39,7 +39,10 @@ namespace POne.Identity.Api.Identity
             if (context.Subject is not ClaimsPrincipal principal)
                 throw new ArgumentException(nameof(principal));
 
-            var subjectId = principal.Claims?.FirstOrDefault(c => c.Type == JwtClaimTypes.Subject)?.Value;
+            var subjectId = principal
+                .Claims?
+                .FirstOrDefault(c => c.Type == JwtClaimTypes.Subject)?
+                .Value;
 
             var cancellationTokenSource = new CancellationTokenSource();
 

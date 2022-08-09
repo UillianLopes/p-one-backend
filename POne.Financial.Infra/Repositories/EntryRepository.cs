@@ -26,8 +26,10 @@ namespace POne.Financial.Infra.Repositories
         {
             var entries = _dbContext
                 .Entries
-                .Where(entry => entry.UserId == _authenticatedUser.Id &&
-                    entry.DueDate.Year == filter.Year && entry.DueDate.Month == filter.Month
+                .Where(entry => (
+                    (!_authenticatedUser.IsStandalone && entry.AccountId != null && entry.AccountId == _authenticatedUser.AccountId) ||
+                    (_authenticatedUser.IsStandalone && entry.UserId != null && entry.UserId == _authenticatedUser.Id)
+                 ) && entry.DueDate.Year == filter.Year && entry.DueDate.Month == filter.Month
                 );
 
             if (filter.Text is string text)
@@ -90,7 +92,19 @@ namespace POne.Financial.Infra.Repositories
                         Title = e.SubCategory.Name,
                         Color = e.SubCategory.Color
                     } : null,
-                    Currency = e.Currency
+                    Currency = e.Currency,
+                    Payments = e.Payments.Select((payment) => new PaymentOutput
+                    {
+                        Value = payment.Value,
+                        Fees = payment.Fees,
+                        Fine = payment.Fine,
+                        Wallet = new OptionModel
+                        {
+                            Title = payment.Wallet.Name,
+                            Color = payment.Wallet.Color,
+                            Id = payment.Wallet.Id
+                        }
+                    }).ToArray()
                 })
                 .AsNoTracking()
                 .ToListAsync(cancellationToken);

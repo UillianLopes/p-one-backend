@@ -25,7 +25,14 @@ namespace POne.Financial.Business.CommandHandlers
 
         public async Task<ICommandOuput> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
         {
-            var category = new Category(request.Name, request.Description, request.Color, request.Type, _authenticatedUser.Id);
+            var category = new Category(
+                _authenticatedUser.Id,
+                _authenticatedUser.AccountId,
+                request.Name,
+                request.Description,
+                request.Color,
+                request.Type
+             );
 
             await _categoryRepsitory.CreateAync(category, cancellationToken);
 

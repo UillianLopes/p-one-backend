@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using POne.Core.Contracts;
+using POne.Core.Models;
 using POne.Identity.Domain.Contracts.Repositories;
 using POne.Identity.Domain.Entities;
 using POne.Identity.Domain.Queries.Inputs.Profiles;
@@ -20,6 +21,12 @@ namespace POne.Identity.Infra.Repositories
         {
             _authenticatedUser = authenticatedUser;
         }
+
+        public Task<List<OptionModel>> GetAllAsOptionsAsync(GetAllProfilesAsOptions query, CancellationToken cancellationToken) => _dbContext
+            .Profiles
+            .Where((profile) => profile.IsDefault || (profile.Account != null && profile.Account.Id == _authenticatedUser.Id))
+            .Select((profile) => new OptionModel { Id = profile.Id, Title = profile.Name })
+            .ToListAsync(cancellationToken);
 
         public Task<List<ProfileOutput>> GetAllAsync(GetAllProfiles query, CancellationToken cancellationToken)
         {

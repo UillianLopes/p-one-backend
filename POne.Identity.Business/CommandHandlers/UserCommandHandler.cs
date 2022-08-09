@@ -5,30 +5,48 @@ using POne.Identity.Business.Commands.Inputs.Users;
 using POne.Identity.Domain.Contracts.Repositories;
 using POne.Identity.Domain.Entities;
 using POne.Identity.Domain.Settings;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace POne.Identity.Business.CommandHandlers
 {
-    public class UserCommandHandler : ICommandHandler<CreateUserCommand>, ICommandHandler<UpdateUserCommand>, ICommandHandler<AuthenticateUserCommand>, ICommandHandler<UpdateUserSettingsCommand>
+    public class UserCommandHandler : 
+        ICommandHandler<CreateStandaloneUserCommand>, 
+        ICommandHandler<UpdateUserCommand>, 
+        ICommandHandler<AuthenticateUserCommand>, 
+        ICommandHandler<UpdateUserSettingsCommand>,
+        ICommandHandler<CreateUserCommand>
     {
         private readonly IUserRepository _userRepository;
-
+        private readonly IAccountRepository _accountRepository;
         private readonly IAuthenticatedUser _authenticatedUser;
+        private readonly IProfileRepository _profileRepository;
 
-        public UserCommandHandler(IUserRepository userRepository, IAuthenticatedUser authenticatedUser)
+        public UserCommandHandler(IUserRepository userRepository, IAccountRepository accountRepository, IAuthenticatedUser authenticatedUser, IProfileRepository profileRepository)
         {
             _userRepository = userRepository;
+            _accountRepository = accountRepository;
             _authenticatedUser = authenticatedUser;
+            _profileRepository = profileRepository;
         }
 
-        public async Task<ICommandOuput> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+        public async Task<ICommandOuput> Handle(CreateStandaloneUserCommand request, CancellationToken cancellationToken)
         {
             if (await _userRepository.FindByEmail(request.Email, cancellationToken) is not null)
                 return CommandOutput.BadRequest("@PONE.MESSAGES.EMAIL_ALREADY_EXISTS");
 
-            var user = new User(request.Name, request.Email, request.DateOfBirth, null, new Password(request.Password), null);
+            if (request.Password != request.PasswordConfirmation)
+                return CommandOutput.BadRequest("@PONE.MESSAGES.PASSWORD_DOES_NOT_MATCH");
+
+            var user = User.Standalone(
+                request.Name,
+                request.Email,
+                new Password(request.Password),
+                request.BirthDate,
+                request.Address?.BuildAddress()
+            ); ;
 
             await user.UpdateUserSettingsAsync(new GeneralSettings { Language = request.Language }, cancellationToken);
 
@@ -47,7 +65,17 @@ namespace POne.Identity.Business.CommandHandlers
                 return CommandOutput.NotFound("@PONE.MESSAGES.USER_NOT_FOUND");
 
             user.Update(request.Name, request.Email, request.BirthDate);
-            user.UpdateAddress(request.Street, request.District, request.Number, request.City, request.State, request.Country, request.ZipCode);
+
+            if (request.Address is AddressCommand address)
+                user.UpdateAddress(
+                    address.Street,
+                    address.District,
+                    address.Number,
+                    address.City,
+                    address.State,
+                    address.Country,
+                    address.ZipCode
+                 );
 
             return CommandOutput.Ok(new
             {
@@ -69,8 +97,8 @@ namespace POne.Identity.Business.CommandHandlers
                 },
                 Contacts = user.Contacts.Select(c => new
                 {
-                   c.Id, 
-                   c.Number,
+                    c.Id,
+                    c.Number,
                 })
             }, "@PONE.MESSAGES.USER_UPDATED");
 
@@ -95,6 +123,41 @@ namespace POne.Identity.Business.CommandHandlers
             await user.UpdateUserSettingsAsync(request, cancellationToken);
 
             return CommandOutput.Ok("@PONE.MESSAGES.USER_SETTINGS_UPDATED_WITH_SUCCESS");
+        }
+
+        public async Task<ICommandOuput> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+        {
+            if (await _userRepository.FindByEmail(request.Email, cancellationToken) is not null)
+                return CommandOutput.BadRequest("@PONE.MESSAGES.EMAIL_ALREADY_EXISTS");
+
+            if (request.Password != request.PasswordConfirmation)
+                return CommandOutput.BadRequest("@PONE.MESSAGES.PASSWORD_DOES_NOT_MATCH");
+
+            if (!(_authenticatedUser.AccountId is Guid accountId && accountId != Guid.Empty && await _accountRepository.FindByIdAync(accountId, cancellationToken) is Account account))
+                return CommandOutput.BadRequest("");
+
+            if (await _profileRepository.FindByIdAync(accountId, cancellationToken) is not Profile profile)
+                return CommandOutput.BadRequest("@PONE.MESSAGES.PROFILE_NOT_FOUND");
+
+            var user = User.WithAccount(
+                request.Name,
+                request.Email,
+                new Password(request.Password),
+                request.BirthDate,
+                request.Address?.BuildAddress(),                
+                profile,
+                account
+            ); ;
+
+            await user.UpdateUserSettingsAsync(new GeneralSettings { Language = request.Language }, cancellationToken);
+
+            await _userRepository.CreateAync(user, cancellationToken);
+
+            return CommandOutput.Created($"User/{user.Id}", new
+            {
+                user.Id,
+                user.Name
+            }, "@PONE.MESSAGES.USER_CREATED");
         }
     }
 }

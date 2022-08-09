@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using POne.Api.Auth;
 using POne.Core.Auth;
 using POne.Core.Contracts;
 using POne.Core.Mvc;
@@ -18,6 +19,9 @@ namespace POne.Admin.Api.Controllers
         [Authorize(Roles = Roles.Admin.User.Read)]
         public Task<IActionResult> GetAllAsync([FromQuery] GetAllUsers query, CancellationToken cancellationToken) => QueryAsync(query, cancellationToken);
 
+        [HttpPost("[action]")]
+        public Task<IActionResult> CreateStandaloneAsync([FromBody] CreateStandaloneUserCommand command, CancellationToken cancellationToken) => SendAsync(command, cancellationToken);
+
         [HttpPost]
         [Authorize(Roles = Roles.Admin.User.Create)]
         public Task<IActionResult> CreateAsync([FromBody] CreateUserCommand command, CancellationToken cancellationToken) => SendAsync(command, cancellationToken);
@@ -31,15 +35,15 @@ namespace POne.Admin.Api.Controllers
         }
 
         [HttpPut("[action]")]
-        [Authorize(Roles = Roles.Admin.User.Update)]
+        [POneAuthorize(Roles.Admin.User.Update)]
         public Task<IActionResult> SettingsAsync([FromBody] UpdateUserSettingsCommand command, CancellationToken cancellationToken) => SendAsync(command, cancellationToken);
 
         [HttpGet("[action]/{id}")]
-        [Authorize(Roles = Roles.Admin.User.Read)]
+        [POneAuthorize(Roles.Admin.User.Read)]
         public Task<IActionResult> SettingsAsync([FromRoute] GetUserSettings query, CancellationToken cancellationToken) => QueryAsync(query, cancellationToken);
 
         [HttpGet("[action]")]
-        [Authorize]
+        [POneAuthorize(Roles.Admin.User.Read)]
         public Task<IActionResult> SettingsAsync(CancellationToken cancellationToken) => QueryAsync(new GetAuthenticatedUserSettings(), cancellationToken);
     }
 }

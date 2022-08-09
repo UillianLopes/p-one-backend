@@ -249,5 +249,106 @@ namespace POne.Core.Auth
                 public const string Read = "ADMIN_PROFILE_READ";
             }
         }
+
+        [RoleApp]
+        public sealed class Financial
+        {
+            [RoleModule]
+            public sealed class Bank
+            {
+                [RoleAction]
+                public const string Create = "FINANCIAL_BANK_CREATE";
+
+                [RoleAction]
+                public const string Update = "FINANCIAL_BANK_UPDATE";
+
+                [RoleAction]
+                public const string Delete = "FINANCIAL_BANK_DELETE";
+
+                [RoleAction]
+                public const string Read = "FINANCIAL_BANK_READ";
+            }
+
+            [RoleModule]
+            public sealed class Category
+            {
+                [RoleAction]
+                public const string Create = "FINANCIAL_CATEGORY_CREATE";
+
+                [RoleAction]
+                public const string Update = "FINANCIAL_CATEGORY_UPDATE";
+
+                [RoleAction]
+                public const string Delete = "FINANCIAL_CATEGORY_DELETE";
+
+                [RoleAction]
+                public const string Read = "FINANCIAL_CATEGORY_READ";
+            }
+
+            [RoleModule]
+            public sealed class Dashboard
+            {
+                [RoleAction]
+                public const string Create = "FINANCIAL_DASHBOARD_CREATE";
+
+                [RoleAction]
+                public const string Update = "FINANCIAL_DASHBOARD_UPDATE";
+
+                [RoleAction]
+                public const string Delete = "FINANCIAL_DASHBOARD_DELETE";
+
+                [RoleAction]
+                public const string Read = "FINANCIAL_DASHBOARD_READ";
+            }
+
+            [RoleModule]
+            public sealed class Entry
+            {
+                [RoleAction]
+                public const string Create = "FINANCIAL_ENTRY_CREATE";
+
+                [RoleAction]
+                public const string Update = "FINANCIAL_ENTRY_UPDATE";
+
+                [RoleAction]
+                public const string Delete = "FINANCIAL_ENTRY_DELETE";
+
+                [RoleAction]
+                public const string Read = "FINANCIAL_ENTRY_READ";
+            }
+
+            [RoleModule]
+            public sealed class SubCategory
+            {
+                [RoleAction]
+                public const string Create = "FINANCIAL_SUB_CATEGORY_CREATE";
+
+                [RoleAction]
+                public const string Update = "FINANCIAL_SUB_CATEGORY_UPDATE";
+
+                [RoleAction]
+                public const string Delete = "FINANCIAL_SUB_CATEGORY_DELETE";
+
+                [RoleAction]
+                public const string Read = "FINANCIAL_SUB_CATEGORY_READ";
+            }
+
+            [RoleModule]
+            public sealed class Wallet
+            {
+                [RoleAction]
+                public const string Create = "FINANCIAL_WALLET_CREATE";
+
+                [RoleAction]
+                public const string Update = "FINANCIAL_WALLET_UPDATE";
+
+                [RoleAction]
+                public const string Delete = "FINANCIAL_WALLET_DELETE";
+
+                [RoleAction]
+                public const string Read = "FINANCIAL_WALLET_READ";
+            }
+        }
+
     }
 }

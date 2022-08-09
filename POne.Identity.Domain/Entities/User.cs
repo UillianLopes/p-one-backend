@@ -12,35 +12,39 @@ namespace POne.Identity.Domain.Entities
 {
     public class User : Entity
     {
-        protected User() : base() 
+        protected User() : base()
         {
             Contacts = new HashSet<Contact>();
         }
 
-        protected User(string name, string email, Password password) : this()
+        protected User(
+            string name,
+            string email,
+            Password password,
+            DateTime birthDate,
+            Address address,
+            Profile profile,
+            Account account,
+            bool isStandalone
+        ) : this()
         {
             Name = name;
             Email = email;
             Password = password;
-        }
-
-        public User(
-            string name,
-            string email,
-            DateTime birthDate,
-            Address address,
-            Password password,
-            Profile profile
-        ) : this(name, email, password)
-        {
             BirthDate = birthDate;
             Address = address;
             Profile = profile;
+            Account = account;
+            IsStandalone = isStandalone;
         }
+
+        public static User WithAccount(string name, string email, Password password, DateTime birthDate, Address address, Profile profile, Account account) => new User(name, email, password, birthDate, address, profile, account, false);
+        public static User Standalone(string name, string email, Password password, DateTime birthDate, Address address) => new User(name, email, password, birthDate, address, null, null, true);
 
         public string Name { get; private set; }
         public string Email { get; private set; }
         public DateTime BirthDate { get; private set; }
+        public bool IsStandalone { get; private set; }
         public virtual Address Address { get; private set; }
         public virtual Password Password { get; private set; }
         public virtual Profile Profile { get; private set; }
@@ -73,8 +77,12 @@ namespace POne.Identity.Domain.Entities
         public IEnumerable<Claim> ReadRoles()
         {
             yield return new Claim(JwtClaimTypes.Name, Name);
-            yield return new Claim(JwtClaimTypes.Email,Email);
+            yield return new Claim(JwtClaimTypes.Email, Email);
             yield return new Claim(JwtClaimTypes.Id, Id.ToString());
+
+            if (IsStandalone)
+                yield return new Claim(JwtClaimTypes.Role, "STANDALONE");
+
             if (Account is Account account)
                 yield return new Claim("AccountId", account.Id.ToString());
 

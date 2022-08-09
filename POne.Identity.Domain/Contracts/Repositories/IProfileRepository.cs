@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 
 namespace POne.Identity.Domain.Contracts.Repositories
 {
-    public interface IProfileRepository : IRepository<Profile>
+    public interface IProfileRepository : IRepository<Profile>, IAsOptionsRepository<GetAllProfilesAsOptions>
     {
         Task<List<ProfileOutput>> GetAllAsync(GetAllProfiles query, CancellationToken cancellationToken);
+
     }
 }

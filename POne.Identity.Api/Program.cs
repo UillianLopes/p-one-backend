@@ -76,6 +76,7 @@ services.AddControllersWithViews()
 services.AddScoped<IUserRepository, UserRepository>();
 services.AddScoped<IProfileRepository, ProfileRepository>();
 services.AddScoped<IRoleRepository, RoleRepository>();
+services.AddScoped<IAccountRepository, AccountRepository>();
 
 var app = builder.Build();
 var env = app.Environment;

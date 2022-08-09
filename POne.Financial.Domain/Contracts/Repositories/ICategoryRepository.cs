@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace POne.Financial.Domain.Contracts
 {
-    public interface ICategoryRepository : IRepository<Category>
+    public interface ICategoryRepository : IRepository<Category>, IAsOptionsRepository<GetAllCategoriesAsOptions>
     {
         Task<List<CategoryOuput>> GetAllAsync(GetAllCategories query, CancellationToken cancellationToken);
     }

@@ -26,6 +26,8 @@ namespace POne.Identity.Infra.Mappings
             builder.Property(user => user.BirthDate)
                 .IsRequired();
 
+            builder.Property(user => user.IsStandalone);
+
             builder.OwnsOne(user => user.Address, (address) =>
             {
                 address.Property(a => a.City)
@@ -106,7 +108,8 @@ namespace POne.Identity.Infra.Mappings
                     Email = "uilliansl@outlook.com",
                     BirthDate = new DateTime(1996, 3, 27),
                     CurrentAccountId = Guid.Parse("CE4B628F-3561-49E8-9560-6E16EF46DFE6"),
-                    ProfileId = Guid.Parse("CE3B628F-3561-49E8-9560-6E24EF46DFE8")
+                    ProfileId = Guid.Parse("CE3B628F-3561-49E8-9560-6E24EF46DFE8"),
+                    IsStandalone = false
                 }
             });
 

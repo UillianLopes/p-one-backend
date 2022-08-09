@@ -1,6 +1,7 @@
 ﻿using POne.Core.Enums;
 using POne.Core.Models;
 using System;
+using System.Collections.Generic;
 
 namespace POne.Financial.Domain.Queries.Outputs.Entries
 {
@@ -20,6 +21,8 @@ namespace POne.Financial.Domain.Queries.Outputs.Entries
         public string BarCode { get; set; }
         public decimal PaidValue { get; set; }
         public string Currency { get; set; }
+        public PaymentOutput[] Payments { get; set; }
+
         public EntryPaymentStatus PaymentStatus
         {
             get

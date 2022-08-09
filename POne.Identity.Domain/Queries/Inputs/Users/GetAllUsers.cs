@@ -9,6 +9,7 @@ namespace POne.Identity.Domain.Queries.Inputs.Users
         public int PageSize { get; set; } = 50;
         public string Text { get; set; }
         public Guid[] ProfileIds { get; set; }
-        public bool WithAmmount { get; set; } = false;
     }
+
+    public class GetAllUsersAmmount : GetAllUsers { }
 }

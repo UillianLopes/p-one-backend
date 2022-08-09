@@ -17,6 +17,6 @@ namespace POne.Identity.Domain.Contracts.Repositories
 
         Task<List<UserOutput>> GetAllUsersAsync(GetAllUsers filter, CancellationToken cancellationToken);
 
-        Task<int> GetAllUsersAmmountAsync(GetAllUsers filter, CancellationToken cancellationToken);
+        Task<int> GetAllUsersAmmountAsync(GetAllUsersAmmount filter, CancellationToken cancellationToken);
     }
 }

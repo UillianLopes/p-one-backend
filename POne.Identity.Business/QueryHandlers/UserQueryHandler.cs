@@ -42,15 +42,6 @@ namespace POne.Identity.Business.QueryHandlers
             var users = await _userRepository
                 .GetAllUsersAsync(query, cancellationToken);
 
-
-            if (query.WithAmmount)
-            {
-                var ammount = await _userRepository
-                    .GetAllUsersAmmountAsync(query, cancellationToken);
-
-                return QueryOutput.Ok(users, ammount);
-            }
-
             return QueryOutput.Ok(users);
 
         }
