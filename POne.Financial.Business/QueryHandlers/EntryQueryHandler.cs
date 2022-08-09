@@ -18,7 +18,8 @@ namespace POne.Financial.Business.QueryHandlers
 
         public async Task<IQueryOutput> Handle(GetFiltredEntries request, CancellationToken cancellationToken)
         {
-            var result = await _entryRepository.GetAllAsync(request, cancellationToken);
+            var result = await _entryRepository
+                .GetAllAsync(request, cancellationToken);
 
             return QueryOutput.Ok(result);
         }

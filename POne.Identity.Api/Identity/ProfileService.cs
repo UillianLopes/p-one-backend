@@ -4,7 +4,6 @@ using IdentityServer4.Services;
 using POne.Identity.Domain.Contracts.Repositories;
 using POne.Identity.Domain.Entities;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading;
@@ -30,9 +29,9 @@ namespace POne.Identity.Api.Identity
             if (await _userRepository.FindByIdAync(new Guid(subjectId), cancellationTokenSource.Token) is not User user || user.IsDeleted)
                 throw new ArgumentException("Invalid user");
 
-            var claims = ReadClaimsFromUser(user);
-
-            context.IssuedClaims = claims.ToList();
+            context.IssuedClaims = user
+                .ReadRoles()
+                .ToList();
         }
 
         public async Task IsActiveAsync(IsActiveContext context)
@@ -40,19 +39,14 @@ namespace POne.Identity.Api.Identity
             if (context.Subject is not ClaimsPrincipal principal)
                 throw new ArgumentException(nameof(principal));
 
-            var subjectId = principal.Claims?.FirstOrDefault(c => c.Type == JwtClaimTypes.Subject)?.Value;
+            var subjectId = principal
+                .Claims?
+                .FirstOrDefault(c => c.Type == JwtClaimTypes.Subject)?
+                .Value;
 
             var cancellationTokenSource = new CancellationTokenSource();
 
             context.IsActive = !(await _userRepository.FindByIdAync(new Guid(subjectId), cancellationTokenSource.Token) is not User user || user.IsDeleted);
-        }
-
-        private static IEnumerable<Claim> ReadClaimsFromUser(User user)
-        {
-
-            yield return new Claim(JwtClaimTypes.Name, user.Name);
-            yield return new Claim(JwtClaimTypes.Email, user.Email);
-            yield return new Claim(JwtClaimTypes.Id, user.Id.ToString());
         }
     }
 }

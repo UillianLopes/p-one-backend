@@ -18,7 +18,8 @@ namespace POne.Financial.Business.CommandHandlers
         ICommandHandler<CreateEntryCommand>,
         ICommandHandler<DeleteEntryCommand>,
         ICommandHandler<DeleteEntriesCommand>,
-        ICommandHandler<PayEntryCommand>
+        ICommandHandler<PayEntryCommand>,
+        ICommandHandler<UpdateEntryCommand>
     {
         private readonly IAuthenticatedUser _authenticatedUser;
         private readonly IEntryRepository _entryRepository;
@@ -91,6 +92,7 @@ namespace POne.Financial.Business.CommandHandlers
             {
                 var entry = new Entry(
                     _authenticatedUser.Id,
+                    _authenticatedUser.AccountId,
                     null, 1, 1,
                     request.Type,
                     request.Value,
@@ -114,6 +116,7 @@ namespace POne.Financial.Business.CommandHandlers
             {
                 var entry = new Entry(
                     _authenticatedUser.Id,
+                    _authenticatedUser.AccountId,
                     recurrenceId,
                     item.Index,
                     request.Recurrences.Count,
@@ -137,10 +140,12 @@ namespace POne.Financial.Business.CommandHandlers
 
         public async Task<ICommandOuput> Handle(DeleteEntryCommand request, CancellationToken cancellationToken)
         {
-            if (await _entryRepository.FindByIdAync(request.Id, cancellationToken) is not Entry category)
+            if (await _entryRepository.FindByIdAync(request.Id, cancellationToken) is not Entry entry)
                 return CommandOutput.NotFound("@PONE.MESSAGES.ENTRY_NOT_FOUND");
 
-            _entryRepository.Delete(category);
+            entry.RevertPayments();
+
+            _entryRepository.Delete(entry);
 
             return CommandOutput.Ok("@PONE.MESSAGES.ENTRY_DELETED");
         }
@@ -166,6 +171,33 @@ namespace POne.Financial.Business.CommandHandlers
             entry.Pay(balance, request.Value, request.Fees, request.Fine);
 
             return CommandOutput.Ok("@PONE.MESSAGES.ENTRY_PAID");
+        }
+
+        public async Task<ICommandOuput> Handle(UpdateEntryCommand request, CancellationToken cancellationToken)
+        {
+            if (await _entryRepository.FindByIdAync(request.Id, cancellationToken) is not Entry entry)
+                return CommandOutput.NotFound("@PONE.MESSAGES.ENTRY_NOT_FOUND");
+
+            if (await _categoryRepository.FindByIdAync(request.CategoryId, cancellationToken) is not Category category)
+                return CommandOutput.NotFound("PONE.MESSAGES.CATEGORY_NOT_FOUND");
+
+            SubCategory subCategory = null;
+
+            if (request.SubCategoryId is Guid subCategoryId)
+                subCategory = await _subCategoryRepository.FindByIdAync(subCategoryId, cancellationToken);
+
+            entry.Update(
+                request.Title,
+                request.Description,
+                request.BarCode,
+                request.Currency,
+                request.Value,
+                request.DueDate,
+                category,
+                subCategory
+            );
+
+            return CommandOutput.Ok("@PONE.MESSAGES.ENTRY_UPDATED_WITH_SUCESSS");
         }
     }
 }

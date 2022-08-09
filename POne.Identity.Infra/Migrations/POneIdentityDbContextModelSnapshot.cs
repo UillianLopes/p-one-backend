@@ -22,41 +22,92 @@ namespace POne.Identity.Infra.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("POne.Identity.Domain.Entities.Account", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Creation")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastUpdate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Account");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("ce4b628f-3561-49e8-9560-5e16ef46dfe9"),
+                            Creation = new DateTime(2022, 7, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "POne Main Account",
+                            IsDeleted = false,
+                            LastUpdate = new DateTime(2022, 7, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "POne"
+                        });
+                });
+
+            modelBuilder.Entity("POne.Identity.Domain.Entities.Contact", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Creation")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastUpdate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Contacts", "auth");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("6459b59a-ef4b-4d0c-bc63-4657e262701c"),
+                            Creation = new DateTime(2022, 7, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsDeleted = false,
+                            LastUpdate = new DateTime(2022, 7, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Test contact",
+                            UserId = new Guid("3de581c4-3f1a-4ac3-a395-24a697eda880")
+                        });
+                });
+
             modelBuilder.Entity("POne.Identity.Domain.Entities.Profile", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("Creation")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(254)
-                        .HasColumnType("nvarchar(254)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastUpdate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Profiles", "auth");
-                });
-
-            modelBuilder.Entity("POne.Identity.Domain.Entities.Role", b =>
-                {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("AccountId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Creation")
@@ -67,16 +118,11 @@ namespace POne.Identity.Infra.Migrations
                         .HasMaxLength(254)
                         .HasColumnType("nvarchar(254)");
 
-                    b.Property<bool>("IsActive")
+                    b.Property<bool>("IsDefault")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
-
-                    b.Property<string>("Key")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime?>("LastUpdate")
                         .HasColumnType("datetime2");
@@ -88,12 +134,171 @@ namespace POne.Identity.Infra.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AccountId");
+
+                    b.ToTable("Profiles", "auth");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            AccountId = new Guid("ce4b628f-3561-49e8-9560-5e16ef46dfe9"),
+                            Creation = new DateTime(2022, 7, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "POne Admin profile",
+                            IsDefault = true,
+                            IsDeleted = false,
+                            LastUpdate = new DateTime(2022, 7, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "POne Admin"
+                        });
+                });
+
+            modelBuilder.Entity("POne.Identity.Domain.Entities.Role", b =>
+                {
+                    b.Property<string>("Key")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Key");
+
                     b.ToTable("Roles", "auth");
+
+                    b.HasData(
+                        new
+                        {
+                            Key = "ADMIN_PROFILE_CREATE"
+                        },
+                        new
+                        {
+                            Key = "ADMIN_PROFILE_DELETE"
+                        },
+                        new
+                        {
+                            Key = "ADMIN_PROFILE_READ"
+                        },
+                        new
+                        {
+                            Key = "ADMIN_PROFILE_UPDATE"
+                        },
+                        new
+                        {
+                            Key = "ADMIN_USER_CREATE"
+                        },
+                        new
+                        {
+                            Key = "ADMIN_USER_DELETE"
+                        },
+                        new
+                        {
+                            Key = "ADMIN_USER_READ"
+                        },
+                        new
+                        {
+                            Key = "ADMIN_USER_UPDATE"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_BANK_CREATE"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_BANK_DELETE"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_BANK_READ"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_BANK_UPDATE"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_CATEGORY_CREATE"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_CATEGORY_DELETE"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_CATEGORY_READ"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_CATEGORY_UPDATE"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_DASHBOARD_CREATE"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_DASHBOARD_DELETE"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_DASHBOARD_READ"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_DASHBOARD_UPDATE"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_ENTRY_CREATE"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_ENTRY_DELETE"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_ENTRY_READ"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_ENTRY_UPDATE"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_SUB_CATEGORY_CREATE"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_SUB_CATEGORY_DELETE"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_SUB_CATEGORY_READ"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_SUB_CATEGORY_UPDATE"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_WALLET_CREATE"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_WALLET_DELETE"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_WALLET_READ"
+                        },
+                        new
+                        {
+                            Key = "FINANCIAL_WALLET_UPDATE"
+                        });
                 });
 
             modelBuilder.Entity("POne.Identity.Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("AccountId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("BirthDate")
@@ -110,6 +315,9 @@ namespace POne.Identity.Infra.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsStandalone")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime?>("LastUpdate")
                         .HasColumnType("datetime2");
 
@@ -118,7 +326,14 @@ namespace POne.Identity.Infra.Migrations
                         .HasMaxLength(254)
                         .HasColumnType("nvarchar(254)");
 
+                    b.Property<Guid?>("ProfileId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("ProfileId");
 
                     b.ToTable("Users", "auth");
 
@@ -126,12 +341,15 @@ namespace POne.Identity.Infra.Migrations
                         new
                         {
                             Id = new Guid("3de581c4-3f1a-4ac3-a395-24a697eda880"),
+                            AccountId = new Guid("ce4b628f-3561-49e8-9560-5e16ef46dfe9"),
                             BirthDate = new DateTime(1996, 3, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Creation = new DateTime(2022, 5, 4, 15, 7, 18, 561, DateTimeKind.Local).AddTicks(3287),
+                            Creation = new DateTime(2022, 7, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "uilliansl@outlook.com",
                             IsDeleted = false,
-                            LastUpdate = new DateTime(2022, 5, 4, 15, 7, 18, 561, DateTimeKind.Local).AddTicks(3293),
-                            Name = "Uillian de Souza Lopes"
+                            IsStandalone = false,
+                            LastUpdate = new DateTime(2022, 7, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Uillian de Souza Lopes",
+                            ProfileId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8")
                         });
                 });
 
@@ -140,33 +358,243 @@ namespace POne.Identity.Infra.Migrations
                     b.Property<Guid>("ProfilesId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("RolesId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("RolesKey")
+                        .HasColumnType("nvarchar(100)");
 
-                    b.HasKey("ProfilesId", "RolesId");
+                    b.HasKey("ProfilesId", "RolesKey");
 
-                    b.HasIndex("RolesId");
+                    b.HasIndex("RolesKey");
 
-                    b.ToTable("ProfilesRoles", "auth");
+                    b.ToTable("ProfileRoles", "auth");
+
+                    b.HasData(
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "ADMIN_PROFILE_CREATE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "ADMIN_PROFILE_DELETE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "ADMIN_PROFILE_READ"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "ADMIN_PROFILE_UPDATE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "ADMIN_USER_CREATE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "ADMIN_USER_DELETE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "ADMIN_USER_READ"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "ADMIN_USER_UPDATE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_BANK_CREATE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_BANK_DELETE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_BANK_READ"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_BANK_UPDATE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_CATEGORY_CREATE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_CATEGORY_DELETE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_CATEGORY_READ"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_CATEGORY_UPDATE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_DASHBOARD_CREATE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_DASHBOARD_DELETE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_DASHBOARD_READ"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_DASHBOARD_UPDATE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_ENTRY_CREATE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_ENTRY_DELETE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_ENTRY_READ"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_ENTRY_UPDATE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_SUB_CATEGORY_CREATE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_SUB_CATEGORY_DELETE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_SUB_CATEGORY_READ"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_SUB_CATEGORY_UPDATE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_WALLET_CREATE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_WALLET_DELETE"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_WALLET_READ"
+                        },
+                        new
+                        {
+                            ProfilesId = new Guid("ce3b628f-3561-49e8-9560-6e24ef46dfe8"),
+                            RolesKey = "FINANCIAL_WALLET_UPDATE"
+                        });
                 });
 
-            modelBuilder.Entity("RoleUser", b =>
+            modelBuilder.Entity("POne.Identity.Domain.Entities.Contact", b =>
                 {
-                    b.Property<Guid>("RolesId")
-                        .HasColumnType("uniqueidentifier");
+                    b.HasOne("POne.Identity.Domain.Entities.User", "User")
+                        .WithMany("Contacts")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<Guid>("UsersId")
-                        .HasColumnType("uniqueidentifier");
+                    b.OwnsOne("POne.Core.ValueObjects.PhoneNumber", "Number", b1 =>
+                        {
+                            b1.Property<Guid>("ContactId")
+                                .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("RolesId", "UsersId");
+                            b1.Property<int>("CountryCode")
+                                .HasColumnType("int");
 
-                    b.HasIndex("UsersId");
+                            b1.Property<string>("Number")
+                                .IsRequired()
+                                .HasMaxLength(30)
+                                .HasColumnType("nvarchar(30)");
 
-                    b.ToTable("UsersRoles", "auth");
+                            b1.HasKey("ContactId");
+
+                            b1.ToTable("Contacts", "auth");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ContactId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    ContactId = new Guid("6459b59a-ef4b-4d0c-bc63-4657e262701c"),
+                                    CountryCode = 55,
+                                    Number = "999998888"
+                                });
+                        });
+
+                    b.Navigation("Number");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("POne.Identity.Domain.Entities.Profile", b =>
+                {
+                    b.HasOne("POne.Identity.Domain.Entities.Account", "Account")
+                        .WithMany("Profiles")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
                 });
 
             modelBuilder.Entity("POne.Identity.Domain.Entities.User", b =>
                 {
+                    b.HasOne("POne.Identity.Domain.Entities.Account", "Account")
+                        .WithMany("Users")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("POne.Identity.Domain.Entities.Profile", "Profile")
+                        .WithMany("Users")
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
                     b.OwnsOne("POne.Core.ValueObjects.Address", "Address", b1 =>
                         {
                             b1.Property<Guid>("UserId")
@@ -245,35 +673,6 @@ namespace POne.Identity.Infra.Migrations
                                 });
                         });
 
-                    b.OwnsOne("POne.Core.ValueObjects.PhoneNumber", "MobilePhone", b1 =>
-                        {
-                            b1.Property<Guid>("UserId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<int>("CountryCode")
-                                .HasColumnType("int");
-
-                            b1.Property<string>("Number")
-                                .IsRequired()
-                                .HasMaxLength(20)
-                                .HasColumnType("nvarchar(20)");
-
-                            b1.HasKey("UserId");
-
-                            b1.ToTable("Users", "auth");
-
-                            b1.WithOwner()
-                                .HasForeignKey("UserId");
-
-                            b1.HasData(
-                                new
-                                {
-                                    UserId = new Guid("3de581c4-3f1a-4ac3-a395-24a697eda880"),
-                                    CountryCode = 55,
-                                    Number = "27998321849"
-                                });
-                        });
-
                     b.OwnsOne("POne.Identity.Domain.Entities.UserSettings", "Settings", b1 =>
                         {
                             b1.Property<Guid>("UserId")
@@ -297,11 +696,13 @@ namespace POne.Identity.Infra.Migrations
                                 });
                         });
 
+                    b.Navigation("Account");
+
                     b.Navigation("Address");
 
-                    b.Navigation("MobilePhone");
-
                     b.Navigation("Password");
+
+                    b.Navigation("Profile");
 
                     b.Navigation("Settings");
                 });
@@ -316,24 +717,26 @@ namespace POne.Identity.Infra.Migrations
 
                     b.HasOne("POne.Identity.Domain.Entities.Role", null)
                         .WithMany()
-                        .HasForeignKey("RolesId")
+                        .HasForeignKey("RolesKey")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RoleUser", b =>
+            modelBuilder.Entity("POne.Identity.Domain.Entities.Account", b =>
                 {
-                    b.HasOne("POne.Identity.Domain.Entities.Role", null)
-                        .WithMany()
-                        .HasForeignKey("RolesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Profiles");
 
-                    b.HasOne("POne.Identity.Domain.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("POne.Identity.Domain.Entities.Profile", b =>
+                {
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("POne.Identity.Domain.Entities.User", b =>
+                {
+                    b.Navigation("Contacts");
                 });
 #pragma warning restore 612, 618
         }

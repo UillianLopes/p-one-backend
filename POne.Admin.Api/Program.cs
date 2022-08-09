@@ -9,9 +9,11 @@ using POne.Core.Auth;
 using POne.Identity.Business.CommandHandlers;
 using POne.Identity.Business.Commands.Validators.Users;
 using POne.Identity.Domain.Contracts.Repositories;
+using POne.Identity.Domain.Entities;
 using POne.Identity.Infra.Connections;
 using POne.Identity.Infra.Repositories;
 using POne.Infra.UnityOfWork;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,7 +51,9 @@ var identityServerProtectedApiConfig = configuration
     .GetSection("IdentityServer")
     .Get<IdentityServerProtectedApiConfig>();
 
-services.AddControllersWithViews();
+services.AddControllersWithViews()
+    .AddJsonOptions((options) => options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull);
+
 services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -95,6 +99,9 @@ services.AddSwaggerGen(c =>
 
 
 services.AddScoped<IUserRepository, UserRepository>();
+services.AddScoped<IProfileRepository, ProfileRepository>();
+services.AddScoped<IRoleRepository, RoleRepository>();
+services.AddScoped<IAccountRepository, AccountRepository>();
 services.AddControllers();
 
 services.AddEndpointsApiExplorer();

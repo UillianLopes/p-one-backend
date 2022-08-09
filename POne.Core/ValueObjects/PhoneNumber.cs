@@ -15,7 +15,6 @@ namespace POne.Core.ValueObjects
             Number = number;
         }
 
-
         protected override IEnumerable<object> GetEqualityComponents()
         {
             yield return CountryCode;

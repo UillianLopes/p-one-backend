@@ -1,4 +1,5 @@
 ﻿using POne.Core.Entities;
+using POne.Core.Enums;
 
 namespace POne.Financial.Domain.Entities
 {
@@ -20,5 +21,18 @@ namespace POne.Financial.Domain.Entities
         public decimal Fine { get; private set; }
         public virtual Entry Entry { get; private set; }
         public virtual Wallet Wallet { get; private set; }
+
+        public void Revert()
+        {
+            switch(Entry.Type)
+            {
+                case EntryType.Debit:
+                    Wallet.Add(Value + Fine + Fees);
+                    break;
+                case EntryType.Credit:
+                    Wallet.Subtract(Value + Fine + Fees);
+                    break;
+            }
+        }
     }
 }

@@ -5,6 +5,7 @@
         Success,
         Information,
         Warning,
-        Error
+        Error,
+        Update
     }
 }

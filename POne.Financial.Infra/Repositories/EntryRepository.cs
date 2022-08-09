@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using POne.Core.Contracts;
 using POne.Core.Enums;
-using POne.Core.Extensions.Models;
+using POne.Core.Models;
 using POne.Financial.Domain.Contracts;
 using POne.Financial.Domain.Entities;
 using POne.Financial.Domain.Queries.Inputs.Entries;
@@ -26,12 +26,24 @@ namespace POne.Financial.Infra.Repositories
         {
             var entries = _dbContext
                 .Entries
-                .Where(entry => entry.UserId == _authenticatedUser.Id &&
-                    entry.DueDate.Year == filter.Year && entry.DueDate.Month == filter.Month
+                .Where(entry => (
+                    (!_authenticatedUser.IsStandalone && entry.AccountId != null && entry.AccountId == _authenticatedUser.AccountId) ||
+                    (_authenticatedUser.IsStandalone && entry.UserId != null && entry.UserId == _authenticatedUser.Id)
+                 ) && entry.DueDate.Year == filter.Year && entry.DueDate.Month == filter.Month
                 );
 
             if (filter.Text is string text)
                 entries = entries.Where(entry => EF.Functions.Like(entry.Title.ToLower(), $"{text.ToLower()}%"));
+
+            entries = filter.PaymentStatus switch
+            {
+                EntryPaymentStatus.Paid => entries.Where(entry => entry.Payments.Sum(p => p.Value) >= entry.Value),
+                EntryPaymentStatus.Opened => entries.Where(entry => entry.Payments.Sum(p => p.Value) < entry.Value),
+                EntryPaymentStatus.ToPayToday => entries.Where(entry => entry.DueDate.Date == DateTime.Now.Date),
+                EntryPaymentStatus.Overdue => entries.Where(entry => entry.Payments.Sum(p => p.Value) < entry.Value && entry.DueDate.Date < DateTime.Now.Date),
+                _ => entries
+            };
+
 
             if (filter.Type is EntryType type)
                 entries = entries.Where(entry => entry.Type == type);
@@ -68,19 +80,31 @@ namespace POne.Financial.Infra.Repositories
                     Description = e.Description,
                     BarCode = e.BarCode,
                     PaidValue = e.Payments.Sum((payment) => payment.Value),
-                    Category = e.Category != null ? new AutoCompleteModel
+                    Category = e.Category != null ? new OptionModel
                     {
                         Id = e.Category.Id,
                         Title = e.Category.Name,
                         Color = e.Category.Color
                     } : null,
-                    SubCategory = e.SubCategory != null ? new AutoCompleteModel
+                    SubCategory = e.SubCategory != null ? new OptionModel
                     {
                         Id = e.SubCategory.Id,
                         Title = e.SubCategory.Name,
                         Color = e.SubCategory.Color
                     } : null,
-                    Currency = e.Currency
+                    Currency = e.Currency,
+                    Payments = e.Payments.Select((payment) => new PaymentOutput
+                    {
+                        Value = payment.Value,
+                        Fees = payment.Fees,
+                        Fine = payment.Fine,
+                        Wallet = new OptionModel
+                        {
+                            Title = payment.Wallet.Name,
+                            Color = payment.Wallet.Color,
+                            Id = payment.Wallet.Id
+                        }
+                    }).ToArray()
                 })
                 .AsNoTracking()
                 .ToListAsync(cancellationToken);

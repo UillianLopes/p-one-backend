@@ -21,6 +21,7 @@ using POne.Financial.Infra.Repositories;
 using POne.Infra.UnityOfWork;
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication
     .CreateBuilder(args);
@@ -63,7 +64,8 @@ var identityServerProtectedApiConfig = configuration
     .GetSection("IdentityServer")
     .Get<IdentityServerProtectedApiConfig>();
 
-services.AddControllersWithViews();
+services.AddControllersWithViews()
+    .AddJsonOptions((options) => options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull);
 services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
