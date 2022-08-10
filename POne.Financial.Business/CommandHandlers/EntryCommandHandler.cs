@@ -155,6 +155,9 @@ namespace POne.Financial.Business.CommandHandlers
             if (await _entryRepository.FindByIdsAync(request.Ids, cancellationToken) is not List<Entry> entries || entries.Count == 0)
                 return CommandOutput.NotFound("@PONE.MESSAGES.ENTRIES_NOT_FOUND");
 
+            foreach(var entry in entries)
+                entry.RevertPayments();
+
             _entryRepository.DeleteRange(entries.ToArray());
 
             return CommandOutput.Ok("@PONE.MESSAGES.ENTRIES_DELETED");
