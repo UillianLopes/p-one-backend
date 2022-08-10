@@ -29,6 +29,7 @@ namespace POne.Financial.Domain.Entities
                 case EntryType.Debit:
                     Wallet.Add(Value + Fine + Fees);
                     break;
+
                 case EntryType.Credit:
                     Wallet.Subtract(Value + Fine + Fees);
                     break;
