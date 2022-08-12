@@ -2,6 +2,7 @@
 using POne.Core.Contracts;
 using POne.Core.Queries.Outputs;
 using POne.Financial.Domain.Contracts;
+using POne.Financial.Domain.Entities;
 using POne.Financial.Domain.Queries.Inputs.Dashboards;
 using POne.Financial.Infra.Connections;
 using System;
@@ -36,29 +37,32 @@ namespace POne.Financial.Infra.Repositories
                 currentDate = currentDate.AddDays(1);
             }
 
-
             var wallets = await _financialDbContext.Wallets
-                .Where(wallet => (
-                        (_authenticatedUser.IsStandalone && wallet.UserId != null &&
-                        wallet.UserId == _authenticatedUser.Id) ||
-                        !_authenticatedUser.IsStandalone && wallet.AccountId == _authenticatedUser.AccountId))
-                .ToListAsync(cancellationToken);
+                .Where(wallet =>
+                    (_authenticatedUser.IsStandalone && wallet.UserId != null && wallet.UserId == _authenticatedUser.Id) ||
+                    (!_authenticatedUser.IsStandalone && wallet.AccountId == _authenticatedUser.AccountId)
+                ).ToListAsync(cancellationToken);
 
             var groups = new List<LineChartDataGroup>();
             var ramdom = new Random();
 
             foreach (var wallet in wallets)
             {
-
                 var balances = wallet
                  .Balances
                  .Where(balance => balance.Creation >= begin && balance.Creation <= end)
                  .ToList();
 
                 var series = new List<LineChartDataSerie>();
-
                 var lastValue = 0.00m;
+                var userReferenceValue = false;
+                var referenceValue = 0.00m;
 
+                if (!balances.Any() && wallet.Balances.OrderBy((d) => d.Creation).LastOrDefault() is Balance lastBalance)
+                {
+                    userReferenceValue = true;
+                    referenceValue = lastBalance.Value;
+                }
 
                 foreach (var date in dates)
                 {
@@ -69,18 +73,13 @@ namespace POne.Financial.Infra.Repositories
 
                     var nextRamdom = (decimal)ramdom.Next(0, 100);
 
-                    var balanceValue = request.UseMock ? ((nextRamdom / 100.00m) * 100000.00m) : balance?.Value ?? lastValue;
+                    var balanceValue = balance?.Value ?? lastValue;
 
                     series.Add(new LineChartDataSerie
                     {
                         Name = date.ToString("dd/MM/yyyy"),
-                        Value = date.Date >= wallet.Creation.Date && date.Date <= DateTime.Now.Date ? balanceValue : null
+                        Value = (date.Date >= wallet.Creation.Date && date.Date <= DateTime.Now.Date ? (userReferenceValue ? referenceValue : balanceValue) : null)
                     });
-                    var teste = new LineChartDataSerie
-                    {
-                        Name = date.ToString("dd/MM/yyyy"),
-                        Value = date.Date >= wallet.Creation.Date && date.Date <= DateTime.Now.Date ? balanceValue : null
-                    };
 
                     lastValue = balanceValue;
                 }
