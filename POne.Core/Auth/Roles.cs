@@ -112,6 +112,22 @@ namespace POne.Core.Auth
         public sealed class Admin
         {
             [RoleModule]
+            public sealed class Profile
+            {
+                [CreateAction]
+                public const string Create = "ADMIN_PROFILE_CREATE";
+
+                [UpdateAction]
+                public const string Update = "ADMIN_PROFILE_UPDATE";
+
+                [DeleteAction]
+                public const string Delete = "ADMIN_PROFILE_DELETE";
+
+                [ReadAction]
+                public const string Read = "ADMIN_PROFILE_READ";
+            }
+
+            [RoleModule]
             public sealed class User
             {
                 [CreateAction]
@@ -127,21 +143,6 @@ namespace POne.Core.Auth
                 public const string Read = "ADMIN_USER_READ";
             }
 
-            [RoleModule]
-            public sealed class Profile
-            {
-                [CreateAction]
-                public const string Create = "ADMIN_PROFILE_CREATE";
-
-                [UpdateAction]
-                public const string Update = "ADMIN_PROFILE_UPDATE";
-
-                [DeleteAction]
-                public const string Delete = "ADMIN_PROFILE_DELETE";
-
-                [ReadAction]
-                public const string Read = "ADMIN_PROFILE_READ";
-            }
         }
 
         [RoleApp]

@@ -22,7 +22,7 @@ namespace POne.Financial.Api.Controllers
         }
 
         [HttpPost]
-        [POneAuthorize(Roles.Financial.Wallet.Read)]
+        [POneAuthorize(Roles.Financial.Wallet.Create)]
         public Task<IActionResult> CreateAsync([FromBody] CreateWalletCommand command, CancellationToken cancellationToken) => SendAsync(command, cancellationToken);
 
         [HttpPut("{Id}")]
