@@ -23,6 +23,18 @@ namespace POne.Identity.Domain.Entities
         public virtual ISet<Role> Roles { get; private set; }
         public virtual ISet<User> Users { get; private set; }
 
+        public void Add(Role role)
+        {
+            if (!Roles.Contains(role))
+                Roles.Add(role);
+        }
+
+        public void Remove(Role role)
+        {
+            if (Roles.Contains(role))
+                Roles.Remove(role);
+        }
+
         public void Toggle(Role role)
         {
             if (!Roles.Contains(role))

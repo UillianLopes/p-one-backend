@@ -3,6 +3,7 @@ using POne.Core.CQRS;
 using POne.Identity.Domain.Contracts.Repositories;
 using POne.Identity.Domain.Entities;
 using POne.Identity.Domain.Queries.Inputs.Profiles;
+using POne.Identity.Domain.Queries.Outputs.Profiles;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace POne.Identity.Business.QueryHandlers
 {
-    public class ProfileQueryHandler : IQueryHandler<GetAllProfiles>, IQueryHandler<GetAllRoles>, IQueryHandler<GetAllProfilesAsOptions>
+    public class ProfileQueryHandler : IQueryHandler<GetAllProfiles>, IQueryHandler<GetAllRoles>, IQueryHandler<GetAllProfilesAsOptions>, IQueryHandler<GetProfileById>
     {
         private readonly IProfileRepository _profileRepository;
 
@@ -32,18 +33,14 @@ namespace POne.Identity.Business.QueryHandlers
             if (await _profileRepository.FindByIdAync(request.ProfileId, cancellationToken) is not Profile profile)
                 return QueryOutput.NotFound("PROFILE_NOT_FOUND");
 
-            var profileRoles = profile
-                .Roles
-                .Select((role) => role.Key)
-                .ToArray();
-
             var appsModulesAndRoles = RolesUtils
                 .ReadAppsAndRoles()
                 .Select((role) => new
                 {
                     role.Title,
                     role.Description,
-                    Modules = role.Modules
+                    Modules = role
+                        .Modules
                         .Select((module) => new
                         {
                             module.Title,
@@ -53,7 +50,6 @@ namespace POne.Identity.Business.QueryHandlers
                                 role.Title,
                                 role.Description,
                                 role.Key,
-                                IsActive = profileRoles.Contains(role.Key)
                             })
                         })
                 }).ToList();
@@ -67,6 +63,20 @@ namespace POne.Identity.Business.QueryHandlers
                 .GetAllAsOptionsAsync(request, cancellationToken);
 
             return QueryOutput.Ok(profilesAsOptions);
+        }
+
+        public async Task<IQueryOutput> Handle(GetProfileById request, CancellationToken cancellationToken)
+        {
+            var profile = await _profileRepository.FindByIdAync(request.Id, cancellationToken);
+
+            return QueryOutput.Ok(new ProfileOutput
+            {
+                Id = profile.Id,
+                Description = profile.Description,
+                IsDefault = profile.IsDefault,
+                Name = profile.Name,
+                Roles = profile.Roles.Select(e => e.Key).ToArray()
+            });
         }
     }
 }

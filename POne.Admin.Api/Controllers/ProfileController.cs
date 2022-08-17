@@ -37,8 +37,29 @@ namespace POne.Admin.Api.Controllers
         [Authorize(Roles = Roles.Admin.Profile.Read)]
         public Task<IActionResult> GetAllAsync([FromQuery] GetAllProfiles query, CancellationToken cancellationToken) => QueryAsync(query, cancellationToken);
 
+        [HttpGet("{profileId}/[action]")]
+        [Authorize(Roles = Roles.Admin.Profile.Read)]
+        public Task<IActionResult> GetApplicationsAndRoles([FromRoute] Guid profileId, CancellationToken cancellationToken) => QueryAsync(new GetAllRoles(profileId), cancellationToken);
+
         [HttpGet("{profileId}")]
         [Authorize(Roles = Roles.Admin.Profile.Read)]
-        public Task<IActionResult> GetAllRoles([FromRoute] Guid profileId, CancellationToken cancellationToken) => QueryAsync(new GetAllRoles(profileId), cancellationToken);
+        public Task<IActionResult> GetByIdAsync([FromRoute] Guid profileId, CancellationToken cancellationToken) => QueryAsync(new GetProfileById(profileId), cancellationToken);
+
+        [HttpPut("{profileId}/[action]")]
+        [Authorize(Roles = Roles.Admin.Profile.Update)]
+        public Task<IActionResult> AddRoleAsync([FromRoute] Guid profileId, [FromBody] AddRoleCommand command, CancellationToken cancellationToken)
+        {
+            command.ProfileId = profileId;
+            return SendAsync(command, cancellationToken);
+        }
+
+        [HttpPut("{profileId}/[action]")]
+        [Authorize(Roles = Roles.Admin.Profile.Update)]
+        public Task<IActionResult> RemoveRoleAsync([FromRoute] Guid profileId, [FromBody] RemoveRoleCommand command, CancellationToken cancellationToken)
+        {
+            command.ProfileId = profileId;
+            return SendAsync(command, cancellationToken);
+        }
+
     }
 }
