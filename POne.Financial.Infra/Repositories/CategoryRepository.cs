@@ -31,7 +31,7 @@ namespace POne.Financial.Infra.Repositories
                     (_authenticatedUser.IsStandalone && category.UserId != null && category.UserId == _authenticatedUser.Id)
                 ));
 
-            if (filter.Type is EntryType type)
+            if (filter.Type is EntryOperation type)
                 query = _dbContext
                     .Categories
                     .Where(category => category.Type == type);
@@ -58,7 +58,7 @@ namespace POne.Financial.Infra.Repositories
                     (_authenticatedUser.IsStandalone && category.UserId != null && category.UserId == _authenticatedUser.Id)
                 ));
 
-            if (filter.Type is EntryType type)
+            if (filter.Type is EntryOperation type)
                 query = query.Where(category => category.Type == type);
 
             return query

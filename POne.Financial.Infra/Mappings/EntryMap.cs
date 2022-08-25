@@ -25,14 +25,14 @@ namespace POne.Financial.Infra.Mappings
 
             builder.HasIndex(e => e.AccountId);
 
-            builder.Property(e => e.RecurrenceId);
+            builder.Property(e => e.InstallmentId);
 
-            builder.HasIndex(e => e.RecurrenceId);
+            builder.HasIndex(e => e.InstallmentId);
 
             builder.Property(e => e.Index);
 
-            builder.Property(e => e.Type)
-                .HasConversion((e) => e.ToString(), (e) => Enum.IsDefined(typeof(EntryType), e) ? (EntryType)Enum.Parse(typeof(EntryType), e) : default)
+            builder.Property(e => e.Operation)
+                .HasConversion((e) => e.ToString(), (e) => Enum.IsDefined(typeof(EntryOperation), e) ? (EntryOperation)Enum.Parse(typeof(EntryOperation), e) : default)
                 .IsRequired();
 
             builder.Property(e => e.Value)

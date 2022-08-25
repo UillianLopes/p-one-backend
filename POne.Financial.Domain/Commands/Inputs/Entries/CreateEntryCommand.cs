@@ -16,7 +16,7 @@ namespace POne.Financial.Domain.Commands.Inputs.Entries
 
     public class CreateEntryCommand : ICommand
     {
-        public EntryType Type { get; set; }
+        public EntryOperation Type { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public Guid CategoryId { get; set; }

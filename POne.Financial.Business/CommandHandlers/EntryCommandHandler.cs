@@ -54,7 +54,7 @@ namespace POne.Financial.Business.CommandHandlers
                     EntryRecurrence.Every30Days => firstDueDate.AddDays(index * 30),
                     EntryRecurrence.EveryExactNumberOfDays => firstDueDate.AddDays(index * request.IntervalInDays),
                     EntryRecurrence.EveryLastMonthDay => firstDueDate.AddMonths(index).GoToLastDayOfMonth(),
-                    EntryRecurrence.EveveryDay => firstDueDate.AddMonths(index).GoToThatDay(request.Day),
+                    EntryRecurrence.EverySpecificDayOfMonth => firstDueDate.AddMonths(index).GoToThatDay(request.Day),
                     _ => firstDueDate
                 };
 

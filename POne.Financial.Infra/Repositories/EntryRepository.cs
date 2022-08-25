@@ -45,8 +45,8 @@ namespace POne.Financial.Infra.Repositories
             };
 
 
-            if (filter.Type is EntryType type)
-                entries = entries.Where(entry => entry.Type == type);
+            if (filter.Type is EntryOperation type)
+                entries = entries.Where(entry => entry.Operation == type);
 
             if (filter.SubCategories is Guid[] subCategories && subCategories.Any())
                 entries = entries.Where(entry => entry.SubCategory != null && subCategories.Contains(entry.SubCategory.Id));
@@ -71,8 +71,8 @@ namespace POne.Financial.Infra.Repositories
                 .Select(e => new EntryOutput
                 {
                     Id = e.Id,
-                    Type = e.Type,
-                    Recurrences = e.Recurrences,
+                    Type = e.Operation,
+                    Recurrences = e.Installments,
                     Value = e.Value,
                     Index = e.Index,
                     Title = e.Title,
