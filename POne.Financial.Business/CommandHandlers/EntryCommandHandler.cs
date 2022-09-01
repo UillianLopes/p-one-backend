@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace POne.Financial.Business.CommandHandlers
 {
-    public class EntryCommandHandler : ICommandHandler<BuildEntryRecurrenceCommand>,
+    public class EntryCommandHandler : ICommandHandler<CreatEntryInstallments>,
         ICommandHandler<CreateEntryCommand>,
         ICommandHandler<DeleteEntryCommand>,
         ICommandHandler<DeleteEntriesCommand>,
@@ -36,25 +36,24 @@ namespace POne.Financial.Business.CommandHandlers
             _balanceRepository = balanceRepository;
         }
 
-        private static IEnumerable<ProcessEntryRecurrencyItem> CreateEntries(BuildEntryRecurrenceCommand request)
+        private IEnumerable<ProcessEntryRecurrencyItem> _CreateEntryInstallments(CreatEntryInstallments request)
         {
             var firstDueDate = request.DueDate;
             var value = request.ValueDistribuition switch
             {
-                EntryValueDistribuition.Divide => request.Value / request.Times,
+                EntryValueDistribuition.Divide => request.Value / request.Installments,
                 _ => request.Value
             };
 
-            for (var index = 0; index < request.Times; index++)
+            for (var index = 0; index < request.Installments; index++)
             {
 
                 var dueDate = request.Recurrence switch
                 {
-                    EntryRecurrence.Every15Days => firstDueDate.AddDays(index * 15),
-                    EntryRecurrence.Every30Days => firstDueDate.AddDays(index * 30),
-                    EntryRecurrence.EveryExactNumberOfDays => firstDueDate.AddDays(index * request.IntervalInDays),
-                    EntryRecurrence.EveryLastMonthDay => firstDueDate.AddMonths(index).GoToLastDayOfMonth(),
+                    EntryRecurrence.EveryIntervalOfDays => firstDueDate.AddDays(index * request.IntervalInDays),
+                    EntryRecurrence.EveryLastDayOfMonth => firstDueDate.AddMonths(index).GoToLastDayOfMonth(),
                     EntryRecurrence.EverySpecificDayOfMonth => firstDueDate.AddMonths(index).GoToThatDay(request.Day),
+                    EntryRecurrence.EveryCurrentDayOfMonth => firstDueDate.AddMonths(index).GoToThatDay(firstDueDate.Day),
                     _ => firstDueDate
                 };
 
@@ -67,12 +66,11 @@ namespace POne.Financial.Business.CommandHandlers
             }
         }
 
-        public async Task<ICommandOuput> Handle(BuildEntryRecurrenceCommand request, CancellationToken cancellationToken)
+        public async Task<ICommandOuput> Handle(CreatEntryInstallments request, CancellationToken cancellationToken)
         {
             return await Task.Run(() =>
             {
-                var entries = CreateEntries(request)
-                    .ToList();
+                var entries = _CreateEntryInstallments(request).ToList();
 
                 return ProcessEntryRecurrencyOutput.Ok(entries, "");
             });
@@ -88,47 +86,51 @@ namespace POne.Financial.Business.CommandHandlers
             if (request.SubCategoryId is Guid subCategoryId)
                 subCategory = await _subCategoryRepository.FindByIdAync(subCategoryId, cancellationToken);
 
-            if (!request.Recurrences.Any())
+            if (!request.Installments.Any())
             {
-                var entry = new Entry(
-                    _authenticatedUser.Id,
-                    _authenticatedUser.AccountId,
-                    null, 1, 1,
-                    request.Type,
-                    request.Value,
-                    request.DueDate,
-                    request.Title,
-                    request.BarCode,
-                    request.Description,
-                    category,
-                    subCategory,
-                    request.Currency
+                var entry = Entry.Standard(
+                  _authenticatedUser.AccountId,
+                  _authenticatedUser.Id,
+                  request.DueDate,
+                  request.Value,
+                  request.Operation,
+                  request.BarCode, request.Currency,
+                  request.Description,
+                  request.Title,
+                  category,
+                  subCategory,
+                  null
                 );
 
-                await _entryRepository.CreateAync(entry, cancellationToken);
+                await _entryRepository
+                    .CreateAync(entry, cancellationToken);
+
                 return CommandOutput.Created("/entries", entry.Id, "PONE.MESSAGES.ENTRIES_CREATED");
             }
 
             var entryIds = new List<Guid>();
-            var recurrenceId = Guid.NewGuid();
-
-            foreach (var item in request.Recurrences)
+            var installmentId = Guid.NewGuid();
+            var installments = request.Installments.Count;
+            var installment = 0;
+            foreach (var item in request.Installments)
             {
-                var entry = new Entry(
-                    _authenticatedUser.Id,
+                installment += 1;
+                var entry = Entry.Installment(
                     _authenticatedUser.AccountId,
-                    recurrenceId,
-                    item.Index,
-                    request.Recurrences.Count,
-                    request.Type,
-                    item.Value,
+                    _authenticatedUser.Id,
                     item.DueDate,
-                    request.Title,
+                    item.Value,
+                    request.Operation,
                     item.BarCode,
+                    request.Currency,
                     request.Description,
+                    request.Title,
                     category,
                     subCategory,
-                    request.Currency
+                    null,
+                    installmentId,
+                    installments,
+                    installment
                 );
 
                 await _entryRepository.CreateAync(entry, cancellationToken);
@@ -155,7 +157,7 @@ namespace POne.Financial.Business.CommandHandlers
             if (await _entryRepository.FindByIdsAync(request.Ids, cancellationToken) is not List<Entry> entries || entries.Count == 0)
                 return CommandOutput.NotFound("@PONE.MESSAGES.ENTRIES_NOT_FOUND");
 
-            foreach(var entry in entries)
+            foreach (var entry in entries)
                 entry.RevertPayments();
 
             _entryRepository.DeleteRange(entries.ToArray());

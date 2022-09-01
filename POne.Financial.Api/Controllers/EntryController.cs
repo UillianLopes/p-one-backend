@@ -27,7 +27,7 @@ namespace POne.Financial.Api.Controllers
 
         [HttpPost("[action]")]
         [POneAuthorize(Roles.Financial.Entry.Create)]
-        public Task<IActionResult> BuildEntryRecurrenceAsync([FromBody] BuildEntryRecurrenceCommand command, CancellationToken cancellationToken) => SendAsync(command, cancellationToken);
+        public Task<IActionResult> BuildEntryRecurrenceAsync([FromBody] CreatEntryInstallments command, CancellationToken cancellationToken) => SendAsync(command, cancellationToken);
 
         [HttpPut("{Id}/[action]")]
         [POneAuthorize(Roles.Financial.Entry.Update)]

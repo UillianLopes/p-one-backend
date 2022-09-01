@@ -1,11 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using POne.Core.Enums;
 using POne.Financial.Domain.Entities;
 using POne.Infra.Mappings;
 using System;
-using System.Linq.Expressions;
 
 namespace POne.Financial.Infra.Mappings
 {
@@ -16,7 +14,7 @@ namespace POne.Financial.Infra.Mappings
             builder.ToTable("Entries", "fin");
 
             base.Configure(builder);
-            
+
             builder.Property(e => e.UserId);
 
             builder.HasIndex(e => e.UserId);
@@ -31,9 +29,25 @@ namespace POne.Financial.Infra.Mappings
 
             builder.Property(e => e.Index);
 
+            builder.Property(e => e.Installments);
+
             builder.Property(e => e.Operation)
                 .HasConversion((e) => e.ToString(), (e) => Enum.IsDefined(typeof(EntryOperation), e) ? (EntryOperation)Enum.Parse(typeof(EntryOperation), e) : default)
                 .IsRequired();
+
+            builder.Property(e => e.Recurrence)
+              .HasConversion((e) => e != null ? e.ToString() : null, (e) => !string.IsNullOrEmpty(e) && Enum.IsDefined(typeof(EntryRecurrence), e) ? (EntryRecurrence)Enum.Parse(typeof(EntryRecurrence), e) : null);
+
+            builder.Property(e => e.RecurrenceDayOfWeek)
+              .HasConversion((e) => e != null ? e.ToString() : null, (e) => !string.IsNullOrEmpty(e) && Enum.IsDefined(typeof(DayOfWeek), e) ? (DayOfWeek)Enum.Parse(typeof(DayOfWeek), e) : null);
+
+            builder.Property(e => e.RecurrenceDayOfMonth);
+
+            builder.OwnsOne(e => e.RecurrenceEnd, (config) =>
+            {
+                config.Property(c => c.Year);
+                config.Property(c => c.Month);
+            });
 
             builder.Property(e => e.Value)
                 .IsRequired()
