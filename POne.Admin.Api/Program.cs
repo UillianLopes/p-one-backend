@@ -9,7 +9,6 @@ using POne.Core.Auth;
 using POne.Identity.Business.CommandHandlers;
 using POne.Identity.Business.Commands.Validators.Users;
 using POne.Identity.Domain.Contracts.Repositories;
-using POne.Identity.Domain.Entities;
 using POne.Identity.Infra.Connections;
 using POne.Identity.Infra.Repositories;
 using POne.Infra.UnityOfWork;

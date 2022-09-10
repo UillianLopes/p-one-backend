@@ -24,13 +24,13 @@ namespace POne.Financial.Domain.Entities
 
         public void Revert()
         {
-            switch(Entry.Type)
+            switch(Entry.Operation)
             {
-                case EntryType.Debit:
+                case EntryOperation.Debit:
                     Wallet.Add(Value + Fine + Fees);
                     break;
 
-                case EntryType.Credit:
+                case EntryOperation.Credit:
                     Wallet.Subtract(Value + Fine + Fees);
                     break;
             }

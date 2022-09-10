@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using POne.Financial.Infra.Connections;
 
@@ -11,9 +12,10 @@ using POne.Financial.Infra.Connections;
 namespace POne.Financial.Infra.Migrations
 {
     [DbContext(typeof(POneFinancialDbContext))]
-    partial class POneFinancialDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220825011543_V6")]
+    partial class V6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1691,17 +1693,14 @@ namespace POne.Financial.Infra.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
-                    b.Property<DateTime?>("DueDate")
+                    b.Property<DateTime>("DueDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("Index")
+                    b.Property<int>("Index")
                         .HasColumnType("int");
 
                     b.Property<Guid?>("InstallmentId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<int?>("Installments")
-                        .HasColumnType("int");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -1713,23 +1712,8 @@ namespace POne.Financial.Infra.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("ParentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Recurrence")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("RecurrenceBegin")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("RecurrenceDayOfMonth")
+                    b.Property<int>("Recurrences")
                         .HasColumnType("int");
-
-                    b.Property<string>("RecurrenceDayOfWeek")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("RecurrenceEnd")
-                        .HasColumnType("datetime2");
 
                     b.Property<Guid?>("SubCategoryId")
                         .HasColumnType("uniqueidentifier");
@@ -1752,8 +1736,6 @@ namespace POne.Financial.Infra.Migrations
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("InstallmentId");
-
-                    b.HasIndex("ParentId");
 
                     b.HasIndex("SubCategoryId");
 
@@ -1916,17 +1898,11 @@ namespace POne.Financial.Infra.Migrations
                         .WithMany("Entries")
                         .HasForeignKey("CategoryId");
 
-                    b.HasOne("POne.Financial.Domain.Entities.Entry", "Parent")
-                        .WithMany("Children")
-                        .HasForeignKey("ParentId");
-
                     b.HasOne("POne.Financial.Domain.Entities.SubCategory", "SubCategory")
                         .WithMany("Entries")
                         .HasForeignKey("SubCategoryId");
 
                     b.Navigation("Category");
-
-                    b.Navigation("Parent");
 
                     b.Navigation("SubCategory");
                 });
@@ -1982,8 +1958,6 @@ namespace POne.Financial.Infra.Migrations
 
             modelBuilder.Entity("POne.Financial.Domain.Entities.Entry", b =>
                 {
-                    b.Navigation("Children");
-
                     b.Navigation("Payments");
                 });
 

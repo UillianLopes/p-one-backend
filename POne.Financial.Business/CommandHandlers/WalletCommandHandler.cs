@@ -134,18 +134,19 @@ namespace POne.Financial.Business.CommandHandlers
             if (request.SubCategoryId is Guid subCategoryId)
                 subCategory = await _subCategoryRepository.FindByIdAync(subCategoryId, cancellationToken);
 
-            var entry = new Entry(
-                _authenticatedUser.Id,
+            var entry = Entry.Standard(
                 _authenticatedUser.AccountId,
-                null, 0, 0,
-                EntryType.Credit,
-                request.Deposit,
+                _authenticatedUser.Id,
                 DateTime.Now,
+                request.Deposit,
+                EntryOperation.Credit,
+                null,
+                wallet.Currency,
+                request.Description,
                 request.Title,
-                null, null,
                 category,
                 subCategory,
-                wallet.Currency
+                null
             );
 
             await _entryRepository.CreateAync(entry, cancellationToken);
@@ -168,18 +169,19 @@ namespace POne.Financial.Business.CommandHandlers
             if (request.SubCategoryId is Guid subCategoryId)
                 subCategory = await _subCategoryRepository.FindByIdAync(subCategoryId, cancellationToken);
 
-            var entry = new Entry(
-                _authenticatedUser.Id,
+            var entry = Entry.Standard(
                 _authenticatedUser.AccountId,
-                null, 0, 0,
-                EntryType.Debit,
-                request.Withdraw,
+                _authenticatedUser.Id,
                 DateTime.Now,
+                request.Withdraw,
+                EntryOperation.Debit,
+                null,
+                wallet.Currency,
+                request.Description,
                 request.Title,
-                null, null,
                 category,
                 subCategory,
-                wallet.Currency
+                null
             );
 
             await _entryRepository.CreateAync(entry, cancellationToken);
@@ -204,19 +206,20 @@ namespace POne.Financial.Business.CommandHandlers
                 if (origin.SubCategoryId is Guid subCategoryId)
                     subCategory = await _subCategoryRepository.FindByIdAync(subCategoryId, cancellationToken);
 
-                var entry = new Entry(
-                  _authenticatedUser.Id,
-                  _authenticatedUser.AccountId,
-                  null, 0, 0,
-                  EntryType.Debit,
-                  request.Value,
-                  DateTime.Now,
-                  request.Title,
-                  null, null,
-                  category,
-                  subCategory,
-                  wallet.Currency
-              );
+                var entry = Entry.Standard(
+                    _authenticatedUser.AccountId,
+                    _authenticatedUser.Id,
+                    DateTime.Now,
+                    request.Value,
+                    EntryOperation.Debit,
+                    null,
+                    wallet.Currency,
+                    request.Description,
+                    request.Title,
+                    category,
+                    subCategory,
+                    null
+                );
 
                 await _entryRepository.CreateAync(entry, cancellationToken);
 
@@ -235,19 +238,20 @@ namespace POne.Financial.Business.CommandHandlers
                 if (destination.SubCategoryId is Guid subCategoryId)
                     subCategory = await _subCategoryRepository.FindByIdAync(subCategoryId, cancellationToken);
 
-                var entry = new Entry(
-                  _authenticatedUser.Id,
-                  _authenticatedUser.AccountId,
-                  null, 0, 0,
-                  EntryType.Credit,
-                  request.Value,
-                  DateTime.Now,
-                  request.Title,
-                  null, null,
-                  category,
-                  subCategory,
-                  wallet.Currency
-              );
+                var entry = Entry.Standard(
+                    _authenticatedUser.AccountId,
+                    _authenticatedUser.Id,
+                    DateTime.Now,
+                    request.Value,
+                    EntryOperation.Credit,
+                    null,
+                    wallet.Currency,
+                    request.Description,
+                    request.Title,
+                    category,
+                    subCategory,
+                    null
+                );
 
                 await _entryRepository.CreateAync(entry, cancellationToken);
 
