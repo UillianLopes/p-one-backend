@@ -28,8 +28,8 @@ namespace POne.Financial.Infra.Repositories
             if (filter.Text is string text)
                 entries = entries.Where(entry => EF.Functions.Like(entry.Title.ToLower(), $"{text.ToLower()}%"));
 
-            if (filter.Type is EntryOperation type)
-                entries = entries.Where(entry => entry.Operation == type);
+            if (filter.Operation is EntryOperation operation)
+                entries = entries.Where(entry => entry.Operation == operation);
 
             if (filter.SubCategories is Guid[] subCategories && subCategories.Any())
                 entries = entries.Where(entry => entry.SubCategory != null && subCategories.Contains(entry.SubCategory.Id));
@@ -49,10 +49,11 @@ namespace POne.Financial.Infra.Repositories
         private IQueryable<Entry> ApplyNormalEntriesFilter(IQueryable<Entry> entries, GetFiltredEntries filter)
         {
             entries = entries.Where((entry) =>
-                entry.Recurrence == null &&
-                entry.DueDate.Year == filter.Year &&
-                entry.DueDate.Month == filter.Month &&
-                entry.Parent == null
+                entry.Recurrence == null
+                && entry.DueDate != null
+                && entry.DueDate.Value.Year == filter.Year
+                && entry.DueDate.Value.Month == filter.Month
+                && entry.Parent == null
             );
 
             if (filter.IsPaid is bool isPaid)
@@ -65,8 +66,8 @@ namespace POne.Financial.Infra.Repositories
             {
                 EntryPaymentStatus.Paid => entries.Where(entry => entry.Payments.Sum(p => p.Value) >= entry.Value),
                 EntryPaymentStatus.Opened => entries.Where(entry => entry.Payments.Sum(p => p.Value) < entry.Value),
-                EntryPaymentStatus.ToPayToday => entries.Where(entry => entry.DueDate.Date == DateTime.Now.Date),
-                EntryPaymentStatus.Overdue => entries.Where(entry => entry.Payments.Sum(p => p.Value) < entry.Value && entry.DueDate.Date < DateTime.Now.Date),
+                EntryPaymentStatus.ToPayToday => entries.Where(entry => entry.DueDate.Value.Date == DateTime.Now.Date),
+                EntryPaymentStatus.Overdue => entries.Where(entry => entry.Payments.Sum(p => p.Value) < entry.Value && entry.DueDate.Value.Date < DateTime.Now.Date),
                 _ => entries
             };
 
@@ -79,14 +80,14 @@ namespace POne.Financial.Infra.Repositories
                 .Where(e =>
                     e.Recurrence != null &&
                     (
-                        e.DueDate.Year < filter.Year ||
-                        (e.DueDate.Year == filter.Year && e.DueDate.Month <= filter.Month)
+                        e.RecurrenceBegin.Value.Year < filter.Year ||
+                        (e.RecurrenceBegin.Value.Year == filter.Year && e.RecurrenceBegin.Value.Month <= filter.Month)
                     ) &&
                     (
                         e.RecurrenceEnd == null ||
                         (
-                            e.RecurrenceEnd.Year > filter.Year ||
-                            (e.RecurrenceEnd.Year == filter.Year && e.RecurrenceEnd.Month >= filter.Month)
+                            e.RecurrenceEnd.Value.Year > filter.Year ||
+                            (e.RecurrenceEnd.Value.Year == filter.Year && e.RecurrenceEnd.Value.Month >= filter.Month)
                         )
                     )
                 );
@@ -106,8 +107,8 @@ namespace POne.Financial.Infra.Repositories
             {
                 EntryPaymentStatus.Paid => entries.Where(entry => entry.Payments.Sum(p => p.Value) >= entry.Value),
                 EntryPaymentStatus.Opened => entries.Where(entry => entry.Payments.Sum(p => p.Value) < entry.Value),
-                EntryPaymentStatus.ToPayToday => entries.Where(entry => entry.DueDate.Date == DateTime.Now.Date),
-                EntryPaymentStatus.Overdue => entries.Where(entry => entry.Payments.Sum(p => p.Value) < entry.Value && entry.DueDate.Date < DateTime.Now.Date),
+                EntryPaymentStatus.ToPayToday => entries.Where(entry => entry.DueDate.Value.Date == DateTime.Now.Date),
+                EntryPaymentStatus.Overdue => entries.Where(entry => entry.Payments.Sum(p => p.Value) < entry.Value && entry.DueDate.Value.Date < DateTime.Now.Date),
                 _ => entries
             };
 
@@ -127,14 +128,16 @@ namespace POne.Financial.Infra.Repositories
                 );
 
             var normalEntriesQueryable = ApplyGeneralFilter(entries, filter);
-            normalEntriesQueryable = ApplyNormalEntriesFilter(entries, filter);
+            normalEntriesQueryable = ApplyNormalEntriesFilter(normalEntriesQueryable, filter);
 
             var recurrentEntiresQueryable = ApplyGeneralFilter(entries, filter);
-            recurrentEntiresQueryable = ApplyRecurrentEntriesFilter(entries, filter);
+            recurrentEntiresQueryable = ApplyRecurrentEntriesFilter(recurrentEntiresQueryable, filter);
 
             var recurrentEntries = new List<Entry>();
+            var recurrentEntriess = await recurrentEntiresQueryable
+                .ToListAsync(cancellationToken);
 
-            foreach (var entry in recurrentEntiresQueryable)
+            foreach (var entry in recurrentEntriess)
             {
                 var dueDates = new List<DateTime>();
                 var referenceDate = new DateTime(filter.Year, filter.Month, 1);
@@ -161,7 +164,9 @@ namespace POne.Financial.Infra.Repositories
                 }
 
                 var generatedEntries = dueDates
-                    .Select((dueDate) => entry.Children.FirstOrDefault(c => c.DueDate.Date == dueDate.Date) ?? entry.GenerateChildEntry(dueDate));
+                    .Select((dueDate) => entry
+                        .Children
+                        .FirstOrDefault(c => c.DueDate != null && c.DueDate.Value.Date == dueDate.Date) ?? entry.GenerateChildEntry(dueDate));
 
                 generatedEntries = ApplyRecurrentEntriesFilter(generatedEntries, filter);
 

@@ -5,7 +5,6 @@ using POne.Core.Models;
 using POne.Financial.Domain.Contracts;
 using POne.Financial.Domain.Entities;
 using POne.Financial.Domain.Queries.Inputs.Categories;
-using POne.Financial.Domain.Queries.Inputs.SubCategories;
 using POne.Financial.Domain.Queries.Outputs.Categories;
 using POne.Financial.Infra.Connections;
 using POne.Infra.Repositories;
@@ -31,7 +30,7 @@ namespace POne.Financial.Infra.Repositories
                     (_authenticatedUser.IsStandalone && category.UserId != null && category.UserId == _authenticatedUser.Id)
                 ));
 
-            if (filter.Type is EntryOperation type)
+            if (filter.Operation is EntryOperation type)
                 query = _dbContext
                     .Categories
                     .Where(category => category.Type == type);

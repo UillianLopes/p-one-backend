@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using POne.Core.Contracts;
 using POne.Core.Entities;
 using System;
@@ -37,7 +36,7 @@ namespace POne.Infra.UnityOfWork
                         {
                             await _mediator.Publish(command, cancellationToken);
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                             continue;
                         }

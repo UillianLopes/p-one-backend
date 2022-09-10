@@ -1,6 +1,5 @@
 ﻿using POne.Core.Entities;
 using POne.Core.Enums;
-using POne.Core.ValueObjects;
 using System;
 using System.Collections.Generic;
 
@@ -11,46 +10,52 @@ namespace POne.Financial.Domain.Entities
         protected Entry() : base()
         {
             Payments = new HashSet<Payment>();
+            Children = new HashSet<Entry>();
         }
 
-        public Entry(
-            DateTime dueDate,
+        private Entry(
+            DateTime? dueDate,
             decimal value,
             EntryOperation operation,
             string barCode, string currency,
             string description, string title,
-            Category category, SubCategory subCategory,
+            Category category,
+            SubCategory subCategory,
             Entry parent,
             Guid? accountId,
             Guid? userId,
             EntryRecurrence? recurrence,
-            MonthReference recurrenceEnd,
+            DateTime? recurrenceBegin,
+            DateTime? recurrenceEnd,
             DayOfWeek? recurrenceDayOfWeek,
-            int? recurrenceDay,
+            int? recurrenceDayOfMonth,
             Guid? installmentId,
             int? installments,
             int? index
-        )
+        ) : this()
         {
             DueDate = dueDate;
-            RecurrenceEnd = recurrenceEnd;
             Value = value;
             Operation = operation;
-            Recurrence = recurrence;
-            AccountId = accountId;
-            InstallmentId = installmentId;
-            UserId = userId;
-            Index = index;
-            Installments = installments;
-            RecurrenceDayOfMonth = recurrenceDay;
             BarCode = barCode;
             Currency = currency;
             Description = description;
             Title = title;
             Category = category;
-            Parent = parent;
             SubCategory = subCategory;
+            Parent = parent;
+            AccountId = accountId;
+            UserId = userId;
+
+            Recurrence = recurrence;
+            RecurrenceBegin = recurrenceBegin;
+            RecurrenceEnd = recurrenceEnd;
             RecurrenceDayOfWeek = recurrenceDayOfWeek;
+            RecurrenceDayOfMonth = recurrenceDayOfMonth;
+
+            InstallmentId = installmentId;
+            Index = index;
+            Installments = installments;
         }
 
         public static Entry Standard(
@@ -87,6 +92,7 @@ namespace POne.Financial.Domain.Entities
                 null,
                 null,
                 null,
+                null,
                 null
             );
         }
@@ -94,7 +100,6 @@ namespace POne.Financial.Domain.Entities
         public static Entry Recurrent(
                 Guid? accountId,
                 Guid? userId,
-                DateTime dueDate,
                 decimal value,
                 EntryOperation operation,
                 string barCode,
@@ -104,14 +109,15 @@ namespace POne.Financial.Domain.Entities
                 Category category,
                 SubCategory subCategory,
                 Entry parent,
-                EntryRecurrence? recurrence,
-                MonthReference recurrenceEnd,
+                EntryRecurrence recurrence,
+                DateTime recurrenceBegin,
+                DateTime? recurrenceEnd,
                 DayOfWeek? recurrenceDayOfWeek,
-                int? recurrenceDay
+                int? recurrenceDayOfMonth
             )
         {
             return new Entry(
-                dueDate,
+                null,
                 value,
                 operation,
                 barCode,
@@ -124,9 +130,10 @@ namespace POne.Financial.Domain.Entities
                 accountId,
                 userId,
                 recurrence,
+                recurrenceBegin,
                 recurrenceEnd,
                 recurrenceDayOfWeek,
-                recurrenceDay,
+                recurrenceDayOfMonth,
                 null,
                 null,
                 null
@@ -168,14 +175,16 @@ namespace POne.Financial.Domain.Entities
                 null,
                 null,
                 null,
+                null,
                 installmentId,
                 installments,
                 index
             );
         }
 
-        public DateTime DueDate { get; private set; }
-        public MonthReference RecurrenceEnd { get; private set; }
+        public DateTime? DueDate { get; private set; }
+        public DateTime? RecurrenceBegin { get; private set; }
+        public DateTime? RecurrenceEnd { get; private set; }
         public decimal Value { get; private set; }
         public EntryOperation Operation { get; private set; }
         public EntryRecurrence? Recurrence { get; private set; }
@@ -217,7 +226,7 @@ namespace POne.Financial.Domain.Entities
             SubCategory = subCategory;
         }
 
-        public Entry GenerateChildEntry(DateTime dueDate) => Entry.Standard(AccountId, UserId, dueDate, Value, Operation, null, Currency, Description, Title, Category, SubCategory, this);
+        public Entry GenerateChildEntry(DateTime dueDate) => Standard(AccountId, UserId, dueDate, Value, Operation, null, Currency, Description, Title, Category, SubCategory, this);
 
         public void Pay(Wallet wallet, decimal value, decimal fees = 0.00m, decimal fine = 0.00m)
         {

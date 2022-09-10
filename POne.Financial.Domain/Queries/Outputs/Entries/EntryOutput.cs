@@ -1,7 +1,6 @@
 ﻿using POne.Core.Enums;
 using POne.Core.Models;
 using System;
-using System.Collections.Generic;
 
 namespace POne.Financial.Domain.Queries.Outputs.Entries
 {
@@ -11,7 +10,7 @@ namespace POne.Financial.Domain.Queries.Outputs.Entries
         public int? Index { get; set; }
         public EntryOperation Type { get; set; }
         public decimal Value { get; set; }
-        public DateTime DueDate { get; set; }
+        public DateTime? DueDate { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public OptionModel Category { get; set; }
@@ -30,10 +29,10 @@ namespace POne.Financial.Domain.Queries.Outputs.Entries
                 if (PaidValue >= Value)
                     return EntryPaymentStatus.Paid;
 
-                if (DueDate.Date < DateTime.Now.Date)
+                if (DueDate != null && DueDate.Value.Date < DateTime.Now.Date)
                     return EntryPaymentStatus.Overdue;
 
-                if (DueDate.Date == DateTime.Now.Date)
+                if (DueDate != null && DueDate.Value.Date == DateTime.Now.Date)
                     return EntryPaymentStatus.ToPayToday;
 
                 return EntryPaymentStatus.Opened;

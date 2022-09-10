@@ -43,18 +43,15 @@ namespace POne.Financial.Infra.Mappings
 
             builder.Property(e => e.RecurrenceDayOfMonth);
 
-            builder.OwnsOne(e => e.RecurrenceEnd, (config) =>
-            {
-                config.Property(c => c.Year);
-                config.Property(c => c.Month);
-            });
+            builder.Property(e => e.RecurrenceBegin);
+
+            builder.Property(e => e.RecurrenceEnd);
 
             builder.Property(e => e.Value)
                 .IsRequired()
                 .HasColumnType("Decimal(10,4)");
 
-            builder.Property(e => e.DueDate)
-                .IsRequired();
+            builder.Property(e => e.DueDate);
 
             builder.Property(e => e.Title)
                 .IsRequired()

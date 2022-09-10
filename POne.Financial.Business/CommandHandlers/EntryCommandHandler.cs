@@ -15,7 +15,9 @@ using System.Threading.Tasks;
 namespace POne.Financial.Business.CommandHandlers
 {
     public class EntryCommandHandler : ICommandHandler<CreatEntryInstallments>,
-        ICommandHandler<CreateEntryCommand>,
+        ICommandHandler<CreateStandardEntryCommand>,
+        ICommandHandler<CreateRecurrentEntryCommand>,
+        ICommandHandler<CreateInstallmentEntriesCommand>,
         ICommandHandler<DeleteEntryCommand>,
         ICommandHandler<DeleteEntriesCommand>,
         ICommandHandler<PayEntryCommand>,
@@ -36,7 +38,7 @@ namespace POne.Financial.Business.CommandHandlers
             _balanceRepository = balanceRepository;
         }
 
-        private IEnumerable<ProcessEntryRecurrencyItem> CreateEntryInstallments(CreatEntryInstallments request)
+        private static IEnumerable<ProcessEntryRecurrencyItem> CreateEntryInstallments(CreatEntryInstallments request)
         {
             var firstDueDate = new DateTime(request.Begin.Year, request.Begin.Month, 1);
             var value = request.ValueDistribuition switch
@@ -96,7 +98,7 @@ namespace POne.Financial.Business.CommandHandlers
             });
         }
 
-        public async Task<ICommandOuput> Handle(CreateEntryCommand request, CancellationToken cancellationToken)
+        public async Task<ICommandOuput> Handle(CreateRecurrentEntryCommand request, CancellationToken cancellationToken)
         {
             if (await _categoryRepository.FindByIdAync(request.CategoryId, cancellationToken) is not Category category)
                 return CommandOutput.NotFound("PONE.MESSAGES.CATEGORY_NOT_FOUND");
@@ -106,51 +108,39 @@ namespace POne.Financial.Business.CommandHandlers
             if (request.SubCategoryId is Guid subCategoryId)
                 subCategory = await _subCategoryRepository.FindByIdAync(subCategoryId, cancellationToken);
 
-            if (request.Installments is not ICollection<CreateEntryItem> installments || !installments.Any())
-            {
+            var entry = Entry.Recurrent(
+                _authenticatedUser.AccountId,
+                _authenticatedUser.Id,
+                request.Value,
+                request.Operation,
+                request.BarCode,
+                request.Currency,
+                request.Description,
+                request.Title,
+                category,
+                subCategory,
+                null,
+                request.Recurrence,
+                request.Begin,
+                request.End,
+                request.DayOfWeek,
+                request.DayOfMonth
+             );
 
-                Entry entry;
+            await _entryRepository.CreateAync(entry, cancellationToken);
 
-                if (request.Recurrence is EntryRecurrence recurrence)
-                    entry = Entry.Recurrent(
-                        _authenticatedUser.AccountId,
-                        _authenticatedUser.Id,
-                        request.DueDate,
-                        request.Value,
-                        request.Operation,
-                        request.BarCode,
-                        request.Currency,
-                        request.Description,
-                        request.Title,
-                        category,
-                        subCategory,
-                        null,
-                        recurrence,
-                        request.RecurrenceEnd,
-                        request.RecurrenceDayOfWeek,
-                        request.RecurrenceDay
-                     );
-                else
-                    entry = Entry.Standard(
-                      _authenticatedUser.AccountId,
-                      _authenticatedUser.Id,
-                      request.DueDate,
-                      request.Value,
-                      request.Operation,
-                      request.BarCode,
-                      request.Currency,
-                      request.Description,
-                      request.Title,
-                      category,
-                      subCategory,
-                      null
-                    );
+            return CommandOutput.Created("/entries", entry.Id, "PONE.MESSAGES.ENTRIES_CREATED");
+        }
 
-                await _entryRepository
-                    .CreateAync(entry, cancellationToken);
+        public async Task<ICommandOuput> Handle(CreateInstallmentEntriesCommand request, CancellationToken cancellationToken)
+        {
+            if (await _categoryRepository.FindByIdAync(request.CategoryId, cancellationToken) is not Category category)
+                return CommandOutput.NotFound("PONE.MESSAGES.CATEGORY_NOT_FOUND");
 
-                return CommandOutput.Created("/entries", entry.Id, "PONE.MESSAGES.ENTRIES_CREATED");
-            }
+            SubCategory subCategory = null;
+
+            if (request.SubCategoryId is Guid subCategoryId)
+                subCategory = await _subCategoryRepository.FindByIdAync(subCategoryId, cancellationToken);
 
             var entryIds = new List<Guid>();
             var installmentId = Guid.NewGuid();
@@ -182,7 +172,38 @@ namespace POne.Financial.Business.CommandHandlers
                 entryIds.Add(entry.Id);
             }
 
+
             return CommandOutput.Created("/entries", entryIds, "PONE.MESSAGES.ENTRIES_CREATED");
+        }
+
+        public async Task<ICommandOuput> Handle(CreateStandardEntryCommand request, CancellationToken cancellationToken)
+        {
+            if (await _categoryRepository.FindByIdAync(request.CategoryId, cancellationToken) is not Category category)
+                return CommandOutput.NotFound("PONE.MESSAGES.CATEGORY_NOT_FOUND");
+
+            SubCategory subCategory = null;
+
+            if (request.SubCategoryId is Guid subCategoryId)
+                subCategory = await _subCategoryRepository.FindByIdAync(subCategoryId, cancellationToken);
+
+
+            var entry = Entry.Standard(
+                _authenticatedUser.AccountId,
+                _authenticatedUser.Id,
+                request.DueDate,
+                request.Value,
+                request.Operation,
+                request.BarCode,
+                request.Currency,
+                request.Description,
+                request.Title,
+                category,
+                subCategory,
+                null
+            );
+
+            await _entryRepository.CreateAync(entry, cancellationToken);
+            return CommandOutput.Created("/entries", entry.Id, "PONE.MESSAGES.ENTRIES_CREATED");
         }
 
         public async Task<ICommandOuput> Handle(DeleteEntryCommand request, CancellationToken cancellationToken)
@@ -249,5 +270,7 @@ namespace POne.Financial.Business.CommandHandlers
 
             return CommandOutput.Ok("@PONE.MESSAGES.ENTRY_UPDATED_WITH_SUCESSS");
         }
+
+
     }
 }
