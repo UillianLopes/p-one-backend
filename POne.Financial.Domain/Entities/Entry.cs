@@ -106,7 +106,7 @@ namespace POne.Financial.Domain.Entities
                 Entry parent,
                 EntryRecurrence? recurrence,
                 MonthReference recurrenceEnd,
-                DayOfWeek recurrenceDayOfWeek,
+                DayOfWeek? recurrenceDayOfWeek,
                 int? recurrenceDay
             )
         {
@@ -216,6 +216,8 @@ namespace POne.Financial.Domain.Entities
             Category = category;
             SubCategory = subCategory;
         }
+
+        public Entry GenerateChildEntry(DateTime dueDate) => Entry.Standard(AccountId, UserId, dueDate, Value, Operation, null, Currency, Description, Title, Category, SubCategory, this);
 
         public void Pay(Wallet wallet, decimal value, decimal fees = 0.00m, decimal fine = 0.00m)
         {

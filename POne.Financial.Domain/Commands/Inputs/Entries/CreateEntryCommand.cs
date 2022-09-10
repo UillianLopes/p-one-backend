@@ -27,9 +27,9 @@ namespace POne.Financial.Domain.Commands.Inputs.Entries
         public DateTime DueDate { get; set; }
         public string BarCode { get; set; }
         public string Currency { get; set; }
-
         public MonthReference RecurrenceEnd { get; set; }
         public EntryRecurrence? Recurrence { get; set; }
         public int? RecurrenceDay { get; set; }
+        public DayOfWeek? RecurrenceDayOfWeek { get; set; }
     }
 }

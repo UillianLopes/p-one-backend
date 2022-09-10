@@ -2,10 +2,8 @@
 {
     public enum EntryRecurrence
     {
-        EveryCurrentDayOfMonth = 1,
-        EveryLastDayOfMonth = 2,
-        EveryIntervalOfDays = 3,
-        EverySpecificDayOfMonth = 4,
-        EveryWeek = 5
+        EveryLastDayOfMonth = 1,
+        EverySpecificDayOfMonth = 2,
+        EveryWeek = 3
     }
 }
