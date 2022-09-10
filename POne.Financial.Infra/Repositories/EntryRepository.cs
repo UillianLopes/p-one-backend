@@ -133,11 +133,11 @@ namespace POne.Financial.Infra.Repositories
             var recurrentEntiresQueryable = ApplyGeneralFilter(entries, filter);
             recurrentEntiresQueryable = ApplyRecurrentEntriesFilter(recurrentEntiresQueryable, filter);
 
-            var recurrentEntries = new List<Entry>();
-            var recurrentEntriess = await recurrentEntiresQueryable
-                .ToListAsync(cancellationToken);
+            var generatedRecurrentEntries = new List<Entry>();
 
-            foreach (var entry in recurrentEntriess)
+            var recurrentEntries = await recurrentEntiresQueryable.ToListAsync(cancellationToken);
+
+            foreach (var entry in recurrentEntries)
             {
                 var dueDates = new List<DateTime>();
                 var referenceDate = new DateTime(filter.Year, filter.Month, 1);
@@ -170,7 +170,7 @@ namespace POne.Financial.Infra.Repositories
 
                 generatedEntries = ApplyRecurrentEntriesFilter(generatedEntries, filter);
 
-                recurrentEntries.AddRange(generatedEntries);
+                generatedRecurrentEntries.AddRange(generatedEntries);
             }
 
             var entriesOutputs = await normalEntriesQueryable
@@ -215,7 +215,7 @@ namespace POne.Financial.Infra.Repositories
                 .AsNoTracking()
                 .ToListAsync(cancellationToken);
 
-            var recurrentEntriesOutputs = recurrentEntries
+            var recurrentEntriesOutputs = generatedRecurrentEntries
                 .Select(e => new EntryOutput
                 {
                     Id = e.Id,
