@@ -10,7 +10,8 @@ using System.Threading.Tasks;
 
 namespace POne.Financial.Business.CommandHandlers
 {
-    public class CategoryCommandHandler : ICommandHandler<CreateSubCategoryCommand>,
+    public class CategoryCommandHandler : 
+        ICommandHandler<CreateSubCategoryCommand>,
         ICommandHandler<UpdateSubCategoryCommand>,
         ICommandHandler<DeleteSubCategoryCommand>,
         ICommandHandler<DeleteSubCategoriesCommand>

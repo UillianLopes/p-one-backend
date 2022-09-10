@@ -5,6 +5,6 @@ namespace POne.Financial.Domain.Queries.Inputs.Categories
 {
     public class GetAllCategories : IQuery
     {
-        public EntryType? Type { get; set; }
+        public EntryOperation? Type { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using POne.Financial.Infra.Connections;
 
@@ -11,9 +12,10 @@ using POne.Financial.Infra.Connections;
 namespace POne.Financial.Infra.Migrations
 {
     [DbContext(typeof(POneFinancialDbContext))]
-    partial class POneFinancialDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220910133420_V8")]
+    partial class V8
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1692,6 +1694,7 @@ namespace POne.Financial.Infra.Migrations
                         .HasColumnType("nvarchar(250)");
 
                     b.Property<DateTime?>("DueDate")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("Index")

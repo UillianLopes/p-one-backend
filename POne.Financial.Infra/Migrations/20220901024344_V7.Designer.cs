@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using POne.Financial.Infra.Connections;
 
@@ -11,9 +12,10 @@ using POne.Financial.Infra.Connections;
 namespace POne.Financial.Infra.Migrations
 {
     [DbContext(typeof(POneFinancialDbContext))]
-    partial class POneFinancialDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220901024344_V7")]
+    partial class V7
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1691,7 +1693,7 @@ namespace POne.Financial.Infra.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
-                    b.Property<DateTime?>("DueDate")
+                    b.Property<DateTime>("DueDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("Index")
@@ -1719,17 +1721,11 @@ namespace POne.Financial.Infra.Migrations
                     b.Property<string>("Recurrence")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("RecurrenceBegin")
-                        .HasColumnType("datetime2");
-
                     b.Property<int?>("RecurrenceDayOfMonth")
                         .HasColumnType("int");
 
                     b.Property<string>("RecurrenceDayOfWeek")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("RecurrenceEnd")
-                        .HasColumnType("datetime2");
 
                     b.Property<Guid?>("SubCategoryId")
                         .HasColumnType("uniqueidentifier");
@@ -1924,9 +1920,30 @@ namespace POne.Financial.Infra.Migrations
                         .WithMany("Entries")
                         .HasForeignKey("SubCategoryId");
 
+                    b.OwnsOne("POne.Core.ValueObjects.MonthReference", "RecurrenceEnd", b1 =>
+                        {
+                            b1.Property<Guid>("EntryId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<int>("Month")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("Year")
+                                .HasColumnType("int");
+
+                            b1.HasKey("EntryId");
+
+                            b1.ToTable("Entries", "fin");
+
+                            b1.WithOwner()
+                                .HasForeignKey("EntryId");
+                        });
+
                     b.Navigation("Category");
 
                     b.Navigation("Parent");
+
+                    b.Navigation("RecurrenceEnd");
 
                     b.Navigation("SubCategory");
                 });

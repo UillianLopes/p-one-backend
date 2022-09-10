@@ -12,5 +12,6 @@ namespace POne.Financial.Domain.Commands.Inputs.Wallets
         public Guid CategoryId { get; set; }
         public Guid? SubCategoryId { get; set; }
         public decimal Withdraw { get; set; }
+        public string Description { get; set; }
     }
 }

@@ -22,12 +22,20 @@ namespace POne.Financial.Api.Controllers
         }
 
         [HttpPost]
-        [POneAuthorize(Roles.Financial.Entry.Read)]
-        public Task<IActionResult> CreateAsync([FromBody] CreateEntryCommand command, CancellationToken cancellationToken) => SendAsync(command, cancellationToken);
+        [POneAuthorize(Roles.Financial.Entry.Create)]
+        public Task<IActionResult> CreateStandardEntryAsync([FromBody] CreateStandardEntryCommand command, CancellationToken cancellationToken) => SendAsync(command, cancellationToken);
 
         [HttpPost("[action]")]
         [POneAuthorize(Roles.Financial.Entry.Create)]
-        public Task<IActionResult> BuildEntryRecurrenceAsync([FromBody] BuildEntryRecurrenceCommand command, CancellationToken cancellationToken) => SendAsync(command, cancellationToken);
+        public Task<IActionResult> CreateInstallmentEntriesAsync([FromBody] CreateInstallmentEntriesCommand command, CancellationToken cancellationToken) => SendAsync(command, cancellationToken);
+
+        [HttpPost("[action]")]
+        [POneAuthorize(Roles.Financial.Entry.Create)]
+        public Task<IActionResult> CreateRecurrentEntryAsync([FromBody] CreateRecurrentEntryCommand command, CancellationToken cancellationToken) => SendAsync(command, cancellationToken);
+
+        [HttpPost("[action]")]
+        [POneAuthorize(Roles.Financial.Entry.Create)]
+        public Task<IActionResult> BuildEntryRecurrenceAsync([FromBody] CreatEntryInstallments command, CancellationToken cancellationToken) => SendAsync(command, cancellationToken);
 
         [HttpPut("{Id}/[action]")]
         [POneAuthorize(Roles.Financial.Entry.Update)]

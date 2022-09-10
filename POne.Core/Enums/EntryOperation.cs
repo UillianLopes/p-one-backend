@@ -1,6 +1,6 @@
 ﻿namespace POne.Core.Enums
 {
-    public enum EntryType
+    public enum EntryOperation
     {
         Credit = 1,
         Debit = 2

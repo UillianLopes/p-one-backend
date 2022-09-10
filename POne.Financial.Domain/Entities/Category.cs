@@ -14,7 +14,7 @@ namespace POne.Financial.Domain.Entities
             SubCategories = new HashSet<SubCategory>();
         }
 
-        public Category(Guid? userId, Guid? accountId, string name, string description, string color, EntryType type) : base(name, description, color)
+        public Category(Guid? userId, Guid? accountId, string name, string description, string color, EntryOperation type) : base(name, description, color)
         {
             UserId = userId;
             AccountId = accountId;
@@ -24,11 +24,11 @@ namespace POne.Financial.Domain.Entities
 
         public Guid? UserId { get; private set; }
         public Guid? AccountId { get; private set; }
-        public EntryType Type { get; private set; }
+        public EntryOperation Type { get; private set; }
         public virtual ISet<Entry> Entries { get; }
         public virtual ISet<SubCategory> SubCategories { get; }
 
-        public void Update(string name, string description, string color, EntryType type)
+        public void Update(string name, string description, string color, EntryOperation type)
         {
             Update(name, description, color);
             Type = type;

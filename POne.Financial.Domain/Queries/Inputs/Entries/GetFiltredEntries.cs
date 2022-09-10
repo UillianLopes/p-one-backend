@@ -10,7 +10,7 @@ namespace POne.Financial.Domain.Queries.Inputs.Entries
         public string Text { get; set; }
         public Guid[] Categories { get; set; }
         public Guid[] SubCategories { get; set; }
-        public EntryType? Type { get; set; }
+        public EntryOperation? Operation { get; set; }
         public EntryPaymentStatus? PaymentStatus { get; set; }
         public bool? IsPaid { get; set; }
 

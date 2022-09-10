@@ -14,8 +14,10 @@ using System.Threading.Tasks;
 
 namespace POne.Financial.Business.CommandHandlers
 {
-    public class EntryCommandHandler : ICommandHandler<BuildEntryRecurrenceCommand>,
-        ICommandHandler<CreateEntryCommand>,
+    public class EntryCommandHandler : ICommandHandler<CreatEntryInstallments>,
+        ICommandHandler<CreateStandardEntryCommand>,
+        ICommandHandler<CreateRecurrentEntryCommand>,
+        ICommandHandler<CreateInstallmentEntriesCommand>,
         ICommandHandler<DeleteEntryCommand>,
         ICommandHandler<DeleteEntriesCommand>,
         ICommandHandler<PayEntryCommand>,
@@ -36,49 +38,67 @@ namespace POne.Financial.Business.CommandHandlers
             _balanceRepository = balanceRepository;
         }
 
-        private static IEnumerable<ProcessEntryRecurrencyItem> CreateEntries(BuildEntryRecurrenceCommand request)
+        private static IEnumerable<ProcessEntryRecurrencyItem> CreateEntryInstallments(CreatEntryInstallments request)
         {
-            var firstDueDate = request.DueDate;
+            var firstDueDate = new DateTime(request.Begin.Year, request.Begin.Month, 1);
             var value = request.ValueDistribuition switch
             {
-                EntryValueDistribuition.Divide => request.Value / request.Times,
+                EntryValueDistribuition.Divide => request.Value / request.Installments,
                 _ => request.Value
             };
 
-            for (var index = 0; index < request.Times; index++)
+
+            switch (request.Recurrence)
             {
+                case EntryRecurrence.EveryLastDayOfMonth:
+                case EntryRecurrence.EverySpecificDayOfMonth:
+                    for (var index = 0; index < request.Installments; index++)
+                    {
 
-                var dueDate = request.Recurrence switch
-                {
-                    EntryRecurrence.Every15Days => firstDueDate.AddDays(index * 15),
-                    EntryRecurrence.Every30Days => firstDueDate.AddDays(index * 30),
-                    EntryRecurrence.EveryExactNumberOfDays => firstDueDate.AddDays(index * request.IntervalInDays),
-                    EntryRecurrence.EveryLastMonthDay => firstDueDate.AddMonths(index).GoToLastDayOfMonth(),
-                    EntryRecurrence.EveveryDay => firstDueDate.AddMonths(index).GoToThatDay(request.Day),
-                    _ => firstDueDate
-                };
+                        var dueDate = request.Recurrence switch
+                        {
+                            EntryRecurrence.EveryLastDayOfMonth => firstDueDate.AddMonths(index).GoToLastDayOfMonth(),
+                            EntryRecurrence.EverySpecificDayOfMonth => firstDueDate.AddMonths(index).GoToThatDay(request.Day),
+                            _ => firstDueDate
+                        };
 
-                yield return new()
-                {
-                    Index = index + 1,
-                    Value = Math.Round(value, 2),
-                    DueDate = dueDate
-                };
+                        yield return new()
+                        {
+                            Index = index + 1,
+                            Value = Math.Round(value, 2),
+                            DueDate = dueDate
+                        };
+                    }
+                    break;
+
+                case EntryRecurrence.EveryWeek:
+                    if (request.DayOfWeek is not DayOfWeek dayOfWeek)
+                        yield break;
+
+                    var weekIndex = 0;
+                    foreach (var dueDate in firstDueDate.GetASequenceOfMonthDaysBasedOnThisDayOfWeek(dayOfWeek, request.Installments))
+                        yield return new()
+                        {
+                            Index = ++weekIndex,
+                            Value = Math.Round(value, 2),
+                            DueDate = dueDate
+                        };
+                    break;
             }
+
         }
 
-        public async Task<ICommandOuput> Handle(BuildEntryRecurrenceCommand request, CancellationToken cancellationToken)
+        public async Task<ICommandOuput> Handle(CreatEntryInstallments request, CancellationToken cancellationToken)
         {
             return await Task.Run(() =>
             {
-                var entries = CreateEntries(request)
-                    .ToList();
+                var entries = CreateEntryInstallments(request).ToList();
 
-                return ProcessEntryRecurrencyOutput.Ok(entries, "");
+                return ProcessEntryRecurrencyOutput.Ok(entries, "PONE.MESSAGES.INSTALLMENTS_CREATED_SUCCESS");
             });
         }
 
-        public async Task<ICommandOuput> Handle(CreateEntryCommand request, CancellationToken cancellationToken)
+        public async Task<ICommandOuput> Handle(CreateRecurrentEntryCommand request, CancellationToken cancellationToken)
         {
             if (await _categoryRepository.FindByIdAync(request.CategoryId, cancellationToken) is not Category category)
                 return CommandOutput.NotFound("PONE.MESSAGES.CATEGORY_NOT_FOUND");
@@ -88,54 +108,102 @@ namespace POne.Financial.Business.CommandHandlers
             if (request.SubCategoryId is Guid subCategoryId)
                 subCategory = await _subCategoryRepository.FindByIdAync(subCategoryId, cancellationToken);
 
-            if (!request.Recurrences.Any())
-            {
-                var entry = new Entry(
-                    _authenticatedUser.Id,
-                    _authenticatedUser.AccountId,
-                    null, 1, 1,
-                    request.Type,
-                    request.Value,
-                    request.DueDate,
-                    request.Title,
-                    request.BarCode,
-                    request.Description,
-                    category,
-                    subCategory,
-                    request.Currency
-                );
+            var entry = Entry.Recurrent(
+                _authenticatedUser.AccountId,
+                _authenticatedUser.Id,
+                request.Value,
+                request.Operation,
+                request.BarCode,
+                request.Currency,
+                request.Description,
+                request.Title,
+                category,
+                subCategory,
+                null,
+                request.Recurrence,
+                request.Begin,
+                request.End,
+                request.DayOfWeek,
+                request.DayOfMonth
+             );
 
-                await _entryRepository.CreateAync(entry, cancellationToken);
-                return CommandOutput.Created("/entries", entry.Id, "PONE.MESSAGES.ENTRIES_CREATED");
-            }
+            await _entryRepository.CreateAync(entry, cancellationToken);
+
+            return CommandOutput.Created("/entries", entry.Id, "PONE.MESSAGES.ENTRIES_CREATED");
+        }
+
+        public async Task<ICommandOuput> Handle(CreateInstallmentEntriesCommand request, CancellationToken cancellationToken)
+        {
+            if (await _categoryRepository.FindByIdAync(request.CategoryId, cancellationToken) is not Category category)
+                return CommandOutput.NotFound("PONE.MESSAGES.CATEGORY_NOT_FOUND");
+
+            SubCategory subCategory = null;
+
+            if (request.SubCategoryId is Guid subCategoryId)
+                subCategory = await _subCategoryRepository.FindByIdAync(subCategoryId, cancellationToken);
 
             var entryIds = new List<Guid>();
-            var recurrenceId = Guid.NewGuid();
+            var installmentId = Guid.NewGuid();
+            var installmentsCount = request.Installments.Count;
+            var installment = 0;
 
-            foreach (var item in request.Recurrences)
+            foreach (var item in request.Installments)
             {
-                var entry = new Entry(
-                    _authenticatedUser.Id,
+                installment += 1;
+                var entry = Entry.Installment(
                     _authenticatedUser.AccountId,
-                    recurrenceId,
-                    item.Index,
-                    request.Recurrences.Count,
-                    request.Type,
-                    item.Value,
+                    _authenticatedUser.Id,
                     item.DueDate,
-                    request.Title,
+                    item.Value,
+                    request.Operation,
                     item.BarCode,
+                    request.Currency,
                     request.Description,
+                    request.Title,
                     category,
                     subCategory,
-                    request.Currency
+                    null,
+                    installmentId,
+                    installmentsCount,
+                    installment
                 );
 
                 await _entryRepository.CreateAync(entry, cancellationToken);
                 entryIds.Add(entry.Id);
             }
 
+
             return CommandOutput.Created("/entries", entryIds, "PONE.MESSAGES.ENTRIES_CREATED");
+        }
+
+        public async Task<ICommandOuput> Handle(CreateStandardEntryCommand request, CancellationToken cancellationToken)
+        {
+            if (await _categoryRepository.FindByIdAync(request.CategoryId, cancellationToken) is not Category category)
+                return CommandOutput.NotFound("PONE.MESSAGES.CATEGORY_NOT_FOUND");
+
+            SubCategory subCategory = null;
+
+            if (request.SubCategoryId is Guid subCategoryId)
+                subCategory = await _subCategoryRepository.FindByIdAync(subCategoryId, cancellationToken);
+
+
+            var entry = Entry.Standard(
+                _authenticatedUser.AccountId,
+                _authenticatedUser.Id,
+                request.DueDate,
+                request.Value,
+                request.Operation,
+                request.BarCode,
+                request.Currency,
+                request.Description,
+                request.Title,
+                category,
+                subCategory,
+                null
+            );
+
+            await _entryRepository.CreateAync(entry, cancellationToken);
+            return CommandOutput.Created("/entries", entry.Id, "PONE.MESSAGES.ENTRIES_CREATED");
         }
 
         public async Task<ICommandOuput> Handle(DeleteEntryCommand request, CancellationToken cancellationToken)
@@ -155,7 +223,7 @@ namespace POne.Financial.Business.CommandHandlers
             if (await _entryRepository.FindByIdsAync(request.Ids, cancellationToken) is not List<Entry> entries || entries.Count == 0)
                 return CommandOutput.NotFound("@PONE.MESSAGES.ENTRIES_NOT_FOUND");
 
-            foreach(var entry in entries)
+            foreach (var entry in entries)
                 entry.RevertPayments();
 
             _entryRepository.DeleteRange(entries.ToArray());
@@ -202,5 +270,7 @@ namespace POne.Financial.Business.CommandHandlers
 
             return CommandOutput.Ok("@PONE.MESSAGES.ENTRY_UPDATED_WITH_SUCESSS");
         }
+
+
     }
 }

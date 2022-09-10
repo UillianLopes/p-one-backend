@@ -14,6 +14,7 @@ namespace POne.Financial.Domain.Commands.Inputs.Wallets
     public class TransferCommand : ICommand
     {
         public string Title { get; set; }
+        public string Description { get; set; }
         public decimal Value { get; set; }
         public TransferSubject Origin { get; set; }
         public TransferSubject Destination { get; set; }

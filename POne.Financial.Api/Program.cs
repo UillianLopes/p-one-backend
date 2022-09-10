@@ -34,10 +34,6 @@ var services = builder.Services;
 var connectionString = configuration
     .GetConnectionString("POneFinancial");
 
-Console.ForegroundColor = ConsoleColor.Yellow;
-Console.WriteLine($"CONNECTION STRING -> {connectionString}");
-Console.ForegroundColor = ConsoleColor.White;
-
 services.AddDbContext<POneFinancialDbContext>(opts => opts
     .UseSqlServer(connectionString)
         .UseLazyLoadingProxies(),
