@@ -11,7 +11,7 @@ namespace POne.Financial.Domain.Commands.Inputs.Entries
         public string BarCode { get; set; }
     }
 
-    public class CreateInstallmentEntriesCommand : CreateStandardEntryCommand
+    public class CreateInstallmentEntriesCommand : CreateEntryCommand
     {
         public ICollection<Installment> Installments { get; set; }
     }

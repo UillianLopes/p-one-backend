@@ -7,7 +7,7 @@ namespace POne.Financial.Domain.Commands.Inputs.Entries
 
 
 
-    public class CreateStandardEntryCommand : ICommand
+    public abstract class CreateEntryCommand : ICommand
     {
         public EntryOperation Operation { get; set; }
         public string Title { get; set; }
@@ -18,6 +18,15 @@ namespace POne.Financial.Domain.Commands.Inputs.Entries
         public decimal Value { get; set; }
         public string BarCode { get; set; }
         public string Currency { get; set; }
+        public Guid? WalletId { get; set; }
+    }
+
+    public class CreateStandardEntryCommand : CreateEntryCommand
+    {
+        public bool Paid { get; set; }
+        public decimal Fine { get; set; } = 0.00m;
+        public decimal Fees { get; set; } = 0.00m;
+        public decimal PaidValue { get; set; } = 0.00m;
 
     }
 }

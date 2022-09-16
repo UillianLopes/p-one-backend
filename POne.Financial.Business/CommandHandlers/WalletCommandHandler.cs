@@ -146,6 +146,7 @@ namespace POne.Financial.Business.CommandHandlers
                 request.Title,
                 category,
                 subCategory,
+                wallet,
                 null
             );
 
@@ -181,6 +182,7 @@ namespace POne.Financial.Business.CommandHandlers
                 request.Title,
                 category,
                 subCategory,
+                wallet,
                 null
             );
 
@@ -218,6 +220,7 @@ namespace POne.Financial.Business.CommandHandlers
                     request.Title,
                     category,
                     subCategory,
+                    wallet,
                     null
                 );
 
@@ -250,6 +253,7 @@ namespace POne.Financial.Business.CommandHandlers
                     request.Title,
                     category,
                     subCategory,
+                    wallet,
                     null
                 );
 

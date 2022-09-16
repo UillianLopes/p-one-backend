@@ -49,7 +49,8 @@ namespace POne.Financial.Infra.Repositories
         private IQueryable<Entry> ApplyNormalEntriesFilter(IQueryable<Entry> entries, GetFiltredEntries filter)
         {
             entries = entries.Where((entry) =>
-                entry.Recurrence == null
+                !entry.IsDeleted
+                && entry.Recurrence == null
                 && entry.DueDate != null
                 && entry.DueDate.Value.Year == filter.Year
                 && entry.DueDate.Value.Month == filter.Month
@@ -97,6 +98,7 @@ namespace POne.Financial.Infra.Repositories
 
         private IEnumerable<Entry> ApplyRecurrentEntriesFilter(IEnumerable<Entry> entries, GetFiltredEntries filter)
         {
+            entries = entries.Where(e => !e.IsDeleted);
             if (filter.IsPaid is bool isPaid)
                 if (isPaid)
                     entries = entries.Where(entry => entry.Payments.Sum(p => p.Value) >= entry.Value);
@@ -118,7 +120,7 @@ namespace POne.Financial.Infra.Repositories
 
         public async Task<List<EntryOutput>> GetAllAsync(GetFiltredEntries filter, CancellationToken cancellationToken)
         {
-            var entries = _dbContext
+            var entriesQueryable = _dbContext
                 .Entries
                 .Where(entry =>
                  (
@@ -127,15 +129,17 @@ namespace POne.Financial.Infra.Repositories
                  )
                 );
 
-            var normalEntriesQueryable = ApplyGeneralFilter(entries, filter);
+            var normalEntriesQueryable = ApplyGeneralFilter(entriesQueryable, filter);
             normalEntriesQueryable = ApplyNormalEntriesFilter(normalEntriesQueryable, filter);
 
-            var recurrentEntiresQueryable = ApplyGeneralFilter(entries, filter);
+            var recurrentEntiresQueryable = ApplyGeneralFilter(entriesQueryable, filter);
             recurrentEntiresQueryable = ApplyRecurrentEntriesFilter(recurrentEntiresQueryable, filter);
 
-            var generatedRecurrentEntries = new List<Entry>();
+            var recurrentEntries = await recurrentEntiresQueryable
+                .ToListAsync(cancellationToken);
 
-            var recurrentEntries = await recurrentEntiresQueryable.ToListAsync(cancellationToken);
+            var entries = await normalEntriesQueryable
+                .ToListAsync(cancellationToken);
 
             foreach (var entry in recurrentEntries)
             {
@@ -166,40 +170,50 @@ namespace POne.Financial.Infra.Repositories
                 var generatedEntries = dueDates
                     .Select((dueDate) => entry
                         .Children
-                        .FirstOrDefault(c => c.DueDate != null && c.DueDate.Value.Date == dueDate.Date) ?? entry.GenerateChildEntry(dueDate));
+                        .FirstOrDefault(child => child.DueDate != null && child.DueDate.Value.Date == dueDate.Date) ?? entry.CreateAChildEntryWithEmptyId(dueDate));
 
                 generatedEntries = ApplyRecurrentEntriesFilter(generatedEntries, filter);
-
-                generatedRecurrentEntries.AddRange(generatedEntries);
+                entries.AddRange(generatedEntries);
             }
 
-            var entriesOutputs = await normalEntriesQueryable
-                .Select(e => new EntryOutput
+            return entries
+                .Select(entry => new EntryOutput
                 {
-                    Id = e.Id,
-                    Type = e.Operation,
-                    Recurrences = e.Installments,
-                    Value = e.Value,
-                    Index = e.Index,
-                    Title = e.Title,
-                    DueDate = e.DueDate,
-                    Description = e.Description,
-                    BarCode = e.BarCode,
-                    PaidValue = e.Payments.Sum((payment) => payment.Value),
-                    Category = e.Category != null ? new OptionModel
+                    Id = entry.Id != Guid.Empty ? entry.Id : null,
+                    ParentId = entry.Parent?.Id,
+                    InstallmentId = entry.InstallmentId,
+                    Type = entry.Operation,
+                    Recurrences = entry.Installments,
+                    Value = entry.Value,
+                    Index = entry.Index,
+                    Title = entry.Title,
+                    DueDate = entry.DueDate,
+                    Description = entry.Description,
+                    BarCode = entry.BarCode,
+                    PaidValue = entry.Payments.Sum((payment) => payment.Value),
+                    RecurrenceBegin = entry.Parent != null ? entry.Parent.RecurrenceBegin : null,
+                    RecurrenceEnd = entry.Parent != null ? entry.Parent.RecurrenceEnd : null,
+                    Recurrence = entry.Recurrence,
+                    Wallet = entry.Wallet != null ? new OptionModel
                     {
-                        Id = e.Category.Id,
-                        Title = e.Category.Name,
-                        Color = e.Category.Color
+                        Id = entry.Wallet.Id,
+                        Color = entry.Wallet.Color,
+                        Title = entry.Wallet.Name
                     } : null,
-                    SubCategory = e.SubCategory != null ? new OptionModel
+                    Category = entry.Category != null ? new OptionModel
                     {
-                        Id = e.SubCategory.Id,
-                        Title = e.SubCategory.Name,
-                        Color = e.SubCategory.Color
+                        Id = entry.Category.Id,
+                        Title = entry.Category.Name,
+                        Color = entry.Category.Color
                     } : null,
-                    Currency = e.Currency,
-                    Payments = e.Payments.Select((payment) => new PaymentOutput
+                    SubCategory = entry.SubCategory != null ? new OptionModel
+                    {
+                        Id = entry.SubCategory.Id,
+                        Title = entry.SubCategory.Name,
+                        Color = entry.SubCategory.Color
+                    } : null,
+                    Currency = entry.Currency,
+                    Payments = entry.Payments.Select((payment) => new PaymentOutput
                     {
                         Value = payment.Value,
                         Fees = payment.Fees,
@@ -212,53 +226,6 @@ namespace POne.Financial.Infra.Repositories
                         }
                     }).ToArray()
                 })
-                .AsNoTracking()
-                .ToListAsync(cancellationToken);
-
-            var recurrentEntriesOutputs = generatedRecurrentEntries
-                .Select(e => new EntryOutput
-                {
-                    Id = e.Id,
-                    Type = e.Operation,
-                    Recurrences = e.Installments,
-                    Value = e.Value,
-                    Index = e.Index,
-                    Title = e.Title,
-                    DueDate = e.DueDate,
-                    Description = e.Description,
-                    BarCode = e.BarCode,
-                    PaidValue = e.Payments.Sum((payment) => payment.Value),
-                    Category = e.Category != null ? new OptionModel
-                    {
-                        Id = e.Category.Id,
-                        Title = e.Category.Name,
-                        Color = e.Category.Color
-                    } : null,
-                    SubCategory = e.SubCategory != null ? new OptionModel
-                    {
-                        Id = e.SubCategory.Id,
-                        Title = e.SubCategory.Name,
-                        Color = e.SubCategory.Color
-                    } : null,
-                    Currency = e.Currency,
-                    Payments = e.Payments.Select((payment) => new PaymentOutput
-                    {
-                        Value = payment.Value,
-                        Fees = payment.Fees,
-                        Fine = payment.Fine,
-                        Wallet = new OptionModel
-                        {
-                            Title = payment.Wallet.Name,
-                            Color = payment.Wallet.Color,
-                            Id = payment.Wallet.Id
-                        }
-                    }).ToArray()
-                })
-                .ToList();
-
-            entriesOutputs.AddRange(recurrentEntriesOutputs);
-
-            return entriesOutputs
                 .OrderBy(e => e.PaymentStatus)
                 .ThenBy(e => e.DueDate)
                 .ToList();

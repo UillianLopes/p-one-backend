@@ -108,6 +108,10 @@ namespace POne.Financial.Business.CommandHandlers
             if (request.SubCategoryId is Guid subCategoryId)
                 subCategory = await _subCategoryRepository.FindByIdAync(subCategoryId, cancellationToken);
 
+            Wallet wallet = null;
+            if (request.WalletId is Guid walletId)
+                wallet = await _balanceRepository.FindByIdAync(walletId, cancellationToken);
+
             var entry = Entry.Recurrent(
                 _authenticatedUser.AccountId,
                 _authenticatedUser.Id,
@@ -119,6 +123,7 @@ namespace POne.Financial.Business.CommandHandlers
                 request.Title,
                 category,
                 subCategory,
+                wallet,
                 null,
                 request.Recurrence,
                 request.Begin,
@@ -141,6 +146,10 @@ namespace POne.Financial.Business.CommandHandlers
 
             if (request.SubCategoryId is Guid subCategoryId)
                 subCategory = await _subCategoryRepository.FindByIdAync(subCategoryId, cancellationToken);
+            
+            Wallet wallet = null;
+            if (request.WalletId is Guid walletId)
+                wallet = await _balanceRepository.FindByIdAync(walletId, cancellationToken);
 
             var entryIds = new List<Guid>();
             var installmentId = Guid.NewGuid();
@@ -162,6 +171,7 @@ namespace POne.Financial.Business.CommandHandlers
                     request.Title,
                     category,
                     subCategory,
+                    wallet,
                     null,
                     installmentId,
                     installmentsCount,
@@ -186,6 +196,10 @@ namespace POne.Financial.Business.CommandHandlers
             if (request.SubCategoryId is Guid subCategoryId)
                 subCategory = await _subCategoryRepository.FindByIdAync(subCategoryId, cancellationToken);
 
+            Wallet wallet = null;
+
+            if (request.WalletId is Guid walletId)
+                wallet = await _balanceRepository.FindByIdAync(walletId, cancellationToken);
 
             var entry = Entry.Standard(
                 _authenticatedUser.AccountId,
@@ -199,10 +213,20 @@ namespace POne.Financial.Business.CommandHandlers
                 request.Title,
                 category,
                 subCategory,
+                wallet,
                 null
             );
 
             await _entryRepository.CreateAync(entry, cancellationToken);
+
+            if (request.Paid)
+            {
+                if (wallet == null)
+                    return CommandOutput.NotFound("@PONE.MESSAGES.YOU_CANT_PAY_AN_ENTRY_WITHOUT_A_WALLET");
+
+                entry.Pay(wallet, request.PaidValue, request.Fine, request.Fees);
+            }
+
             return CommandOutput.Created("/entries", entry.Id, "PONE.MESSAGES.ENTRIES_CREATED");
         }
 
@@ -212,8 +236,7 @@ namespace POne.Financial.Business.CommandHandlers
                 return CommandOutput.NotFound("@PONE.MESSAGES.ENTRY_NOT_FOUND");
 
             entry.RevertPayments();
-
-            _entryRepository.Delete(entry);
+            entry.Delete(request.DueDate);
 
             return CommandOutput.Ok("@PONE.MESSAGES.ENTRY_DELETED");
         }
@@ -224,9 +247,10 @@ namespace POne.Financial.Business.CommandHandlers
                 return CommandOutput.NotFound("@PONE.MESSAGES.ENTRIES_NOT_FOUND");
 
             foreach (var entry in entries)
+            {
                 entry.RevertPayments();
-
-            _entryRepository.DeleteRange(entries.ToArray());
+                entry.Delete();
+            }
 
             return CommandOutput.Ok("@PONE.MESSAGES.ENTRIES_DELETED");
         }
@@ -236,10 +260,27 @@ namespace POne.Financial.Business.CommandHandlers
             if (await _entryRepository.FindByIdAync(request.Id, cancellationToken) is not Entry entry)
                 return CommandOutput.NotFound("@PONE.MESSAGES.ENTRY_NOT_FOUND");
 
-            if (await _balanceRepository.FindByIdAync(request.BalanceId, cancellationToken) is not Wallet balance)
+            if (await _balanceRepository.FindByIdAync(request.WalletId, cancellationToken) is not Wallet wallet)
                 return CommandOutput.NotFound("@PONE.MESSAGES.BALANCE_NOT_FOUND");
 
-            entry.Pay(balance, request.Value, request.Fees, request.Fine);
+            if (entry.Recurrence is not null)
+            {
+                if (!(request.NewValue is decimal newValue && request.DueDate is DateTime dueDate))
+                    return CommandOutput.NotFound("@PONE.MESSAGES.PLEASE_SELECT_DUE_DATE_AND_NEW_VALUE");
+
+                entry.CreateAPaidChildEntry(
+                    wallet,
+                    request.Value,
+                    request.Fees,
+                    request.Fine,
+                    dueDate,
+                    newValue
+                );
+
+                return CommandOutput.Ok("@PONE.MESSAGES.ENTRY_PAID");
+            }
+
+            entry.Pay(wallet, request.Value, request.Fees, request.Fine);
 
             return CommandOutput.Ok("@PONE.MESSAGES.ENTRY_PAID");
         }

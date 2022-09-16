@@ -11,6 +11,8 @@ namespace POne.Financial.Domain.Commands.Inputs.Entries
         public decimal Value { get; set; }
         public decimal Fees { get; set; }
         public decimal Fine { get; set; }
-        public Guid BalanceId { get; set; }
+        public Guid WalletId { get; set; }
+        public decimal? NewValue { get; set; }
+        public DateTime? DueDate { get; set; }
     }
 }

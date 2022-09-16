@@ -21,6 +21,9 @@ namespace POne.Core.Entities
             IsDeleted = false;
         }
 
+
+        public virtual void Delete() => IsDeleted = true;
+
         public void AddEvent<T>(T param) where T : IEvent
         {
             _events.Add(param);
@@ -39,6 +42,11 @@ namespace POne.Core.Entities
         public void MarkAsDeleted()
         {
             IsDeleted = true;
+        }
+
+        protected void MakeThatIdEmpty()
+        {
+            Id = Guid.Empty;
         }
     }
 }

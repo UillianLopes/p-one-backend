@@ -11,17 +11,18 @@ namespace POne.Financial.Domain.Entities
         {
             Payments = new HashSet<Payment>();
             Balances = new HashSet<Balance>();
+            Entries = new HashSet<Entry>();
         }
 
         public Wallet(
-            Guid? userId, 
+            Guid? userId,
             Guid? accountId,
             decimal value,
-            string name, 
+            string name,
             Bank bank,
-            string number, 
+            string number,
             string agency,
-            BalanceType type, 
+            BalanceType type,
             string color,
             string currency
         ) : this()
@@ -60,6 +61,7 @@ namespace POne.Financial.Domain.Entities
         public virtual Bank Bank { get; private set; }
         public virtual ISet<Payment> Payments { get; }
         public virtual ISet<Balance> Balances { get; }
+        public virtual ISet<Entry> Entries { get; }
 
         public virtual void Add(decimal value)
         {
