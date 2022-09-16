@@ -55,7 +55,11 @@ namespace POne.Financial.Api.Controllers
 
         [HttpDelete("{Id}")]
         [POneAuthorize(Roles.Financial.Entry.Delete)]
-        public Task<IActionResult> DeleteAsync([FromRoute] DeleteEntryCommand command, CancellationToken cancellationToken) => SendAsync(command, cancellationToken);
+        public Task<IActionResult> DeleteAsync([FromRoute] Guid id, [FromQuery] DeleteEntryCommand command, CancellationToken cancellationToken)
+        {
+            command.Id = id;
+            return SendAsync(command, cancellationToken);
+        }
 
         [HttpDelete]
         [POneAuthorize(Roles.Financial.Entry.Delete)]

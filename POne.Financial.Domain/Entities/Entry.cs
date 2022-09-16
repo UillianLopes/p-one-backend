@@ -21,6 +21,7 @@ namespace POne.Financial.Domain.Entities
             string description, string title,
             Category category,
             SubCategory subCategory,
+            Wallet wallet,
             Entry parent,
             Guid? accountId,
             Guid? userId,
@@ -43,16 +44,15 @@ namespace POne.Financial.Domain.Entities
             Title = title;
             Category = category;
             SubCategory = subCategory;
+            Wallet = wallet;
             Parent = parent;
             AccountId = accountId;
             UserId = userId;
-
             Recurrence = recurrence;
             RecurrenceBegin = recurrenceBegin;
             RecurrenceEnd = recurrenceEnd;
             RecurrenceDayOfWeek = recurrenceDayOfWeek;
             RecurrenceDayOfMonth = recurrenceDayOfMonth;
-
             InstallmentId = installmentId;
             Index = index;
             Installments = installments;
@@ -70,6 +70,7 @@ namespace POne.Financial.Domain.Entities
             string title,
             Category category,
             SubCategory subCategory,
+            Wallet wallet,
             Entry parent
         )
         {
@@ -83,6 +84,7 @@ namespace POne.Financial.Domain.Entities
                 title,
                 category,
                 subCategory,
+                wallet,
                 parent,
                 accountId,
                 userId,
@@ -108,6 +110,7 @@ namespace POne.Financial.Domain.Entities
                 string title,
                 Category category,
                 SubCategory subCategory,
+                Wallet wallet,
                 Entry parent,
                 EntryRecurrence recurrence,
                 DateTime recurrenceBegin,
@@ -126,6 +129,7 @@ namespace POne.Financial.Domain.Entities
                 title,
                 category,
                 subCategory,
+                wallet,
                 parent,
                 accountId,
                 userId,
@@ -152,6 +156,7 @@ namespace POne.Financial.Domain.Entities
                string title,
                Category category,
                SubCategory subCategory,
+               Wallet wallet,
                Entry parent,
                Guid installmentId,
                int installments,
@@ -168,6 +173,7 @@ namespace POne.Financial.Domain.Entities
                 title,
                 category,
                 subCategory,
+                wallet,
                 parent,
                 accountId,
                 userId,
@@ -204,6 +210,7 @@ namespace POne.Financial.Domain.Entities
         public virtual SubCategory SubCategory { get; private set; }
         public virtual ISet<Entry> Children { get; private set; }
         public virtual ISet<Payment> Payments { get; private set; }
+        public virtual Wallet Wallet { get; private set; }
 
         public void Update(
             string title,
@@ -226,10 +233,78 @@ namespace POne.Financial.Domain.Entities
             SubCategory = subCategory;
         }
 
-        public Entry GenerateChildEntry(DateTime dueDate) => Standard(AccountId, UserId, dueDate, Value, Operation, null, Currency, Description, Title, Category, SubCategory, this);
+        public void CreateAPaidChildEntry(
+            Wallet wallet,
+            decimal paymentValue,
+            decimal paymentFees,
+            decimal paymentFine,
+            DateTime dueDate,
+            decimal value
+        )
+        {
+            var entry = CreateAChildEntry(dueDate, value);
+            Children.Add(entry);
+            entry.Pay(wallet, paymentValue, paymentFees, paymentFine);
+        }
+
+        public void CreateADeletedChildEntry(DateTime dueDate)
+        {
+            var entry = CreateAChildEntry(dueDate, Value);
+            Children.Add(entry);
+            entry.Delete();
+        }
+
+        public Entry CreateAChildEntry(DateTime dueDate, decimal value)
+        {
+            var childEntry = Standard(
+                AccountId,
+                UserId,
+                dueDate,
+                value,
+                Operation,
+                null,
+                Currency,
+                Description,
+                Title,
+                Category,
+                SubCategory,
+                Wallet,
+                this
+            );
+
+            return childEntry;
+        }
+
+        public Entry CreateAChildEntryWithEmptyId(DateTime dueDate)
+        {
+            var childEntry = CreateAChildEntry(dueDate, Value);
+            childEntry.MakeThatIdEmpty();
+            return childEntry;
+        }
+
+        public void Delete(DateTime? dueDate)
+        {
+            if (Recurrence != null && dueDate.HasValue)
+            {
+                CreateADeletedChildEntry(dueDate.Value);
+                return;
+            }
+
+            Delete();
+        }
+
+        public override void Delete()
+        {
+            if (Recurrence != null)
+                return;
+
+            base.Delete();
+        }
 
         public void Pay(Wallet wallet, decimal value, decimal fees = 0.00m, decimal fine = 0.00m)
         {
+            Wallet = wallet;
+
             var payment = new Payment(value, fees, fine, this, wallet);
 
             Payments.Add(payment);

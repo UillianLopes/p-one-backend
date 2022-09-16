@@ -3,7 +3,7 @@ using System;
 
 namespace POne.Financial.Domain.Commands.Inputs.Entries
 {
-    public class CreateRecurrentEntryCommand : CreateStandardEntryCommand
+    public class CreateRecurrentEntryCommand : CreateEntryCommand
     {
         public DateTime Begin { get; set; }
         public DateTime? End { get; set; }

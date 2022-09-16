@@ -6,7 +6,7 @@ namespace POne.Financial.Domain.Queries.Outputs.Entries
 {
     public class EntryOutput
     {
-        public Guid? RecurrenceId { get; set; }
+        public Guid? InstallmentId { get; set; }
         public int? Index { get; set; }
         public EntryOperation Type { get; set; }
         public decimal Value { get; set; }
@@ -15,13 +15,14 @@ namespace POne.Financial.Domain.Queries.Outputs.Entries
         public string Description { get; set; }
         public OptionModel Category { get; set; }
         public OptionModel SubCategory { get; set; }
+        public OptionModel Wallet { get; set; }
         public int? Recurrences { get; set; }
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
+        public Guid? ParentId { get; set; }
         public string BarCode { get; set; }
         public decimal PaidValue { get; set; }
         public string Currency { get; set; }
         public PaymentOutput[] Payments { get; set; }
-
         public EntryPaymentStatus PaymentStatus
         {
             get
@@ -38,5 +39,8 @@ namespace POne.Financial.Domain.Queries.Outputs.Entries
                 return EntryPaymentStatus.Opened;
             }
         }
+        public DateTime? RecurrenceBegin { get; set; }
+        public DateTime? RecurrenceEnd { get; set; }
+        public EntryRecurrence? Recurrence { get; set; }
     }
 }

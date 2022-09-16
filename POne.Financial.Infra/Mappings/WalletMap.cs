@@ -42,6 +42,9 @@ namespace POne.Financial.Infra.Mappings
                 .HasConversion((e) => e.ToString(), (e) => Enum.IsDefined(typeof(BalanceType), e) ? (BalanceType)Enum.Parse(typeof(BalanceType), e) : default)
                 .IsRequired();
 
+            builder.HasMany(e => e.Entries)
+                .WithOne(e => e.Wallet);
+
             builder.Property(e => e.UserId);
 
             builder.HasIndex(e => e.UserId);

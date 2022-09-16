@@ -47,6 +47,9 @@ namespace POne.Financial.Infra.Mappings
 
             builder.Property(e => e.RecurrenceEnd);
 
+            builder.HasOne(e => e.Wallet)
+                .WithMany(e => e.Entries);
+
             builder.Property(e => e.Value)
                 .IsRequired()
                 .HasColumnType("Decimal(10,4)");
