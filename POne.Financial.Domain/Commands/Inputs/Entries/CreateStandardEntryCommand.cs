@@ -24,9 +24,9 @@ namespace POne.Financial.Domain.Commands.Inputs.Entries
     public class CreateStandardEntryCommand : CreateEntryCommand
     {
         public bool Paid { get; set; }
-        public decimal Fine { get; set; } = 0.00m;
-        public decimal Fees { get; set; } = 0.00m;
-        public decimal PaidValue { get; set; } = 0.00m;
+        public decimal? Fine { get; set; } = 0.00m;
+        public decimal? Fees { get; set; } = 0.00m;
+        public decimal? PaidValue { get; set; } = 0.00m;
 
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using POne.Core.Contracts;
+using POne.Core.Models;
 using POne.Financial.Domain.Contracts;
 using POne.Financial.Domain.Entities;
 using POne.Financial.Domain.Queries.Inputs.Wallets;
@@ -19,6 +20,36 @@ namespace POne.Financial.Infra.Repositories
         private readonly IAuthenticatedUser _authenticatedUser;
 
         public WalletRepository(IAuthenticatedUser authenticatedUser, POneFinancialDbContext dbContext) : base(dbContext) => _authenticatedUser = authenticatedUser;
+
+        public Task<List<OptionModel<WalletOptionsExtra>>> GetAllAsOptionsAsync(GetAllWalletsAsOptions filter, CancellationToken cancellationToken)
+        {
+            var query = _dbContext
+               .Wallets
+               .Where(wallet => (
+                   (!_authenticatedUser.IsStandalone && wallet.AccountId != null && wallet.AccountId == _authenticatedUser.AccountId) ||
+                   (_authenticatedUser.IsStandalone && wallet.UserId != null && wallet.UserId == _authenticatedUser.Id)
+               ));
+
+            if (filter.Currency is string curreny)
+                query = query
+                    .Where(c => c.Currency == curreny);
+
+            return query
+                .OrderBy(c => c.Name)
+                .Select(e => new OptionModel<WalletOptionsExtra>
+                {
+                    Id = e.Id,
+                    Title = e.Name,
+                    SubTitle = e.Bank != null ? e.Bank.Name : string.Empty,
+                    Color = e.Color,
+                    Extra = new WalletOptionsExtra
+                    {
+                        Currency = e.Currency,
+                        Value = e.Value
+                    }
+                })
+                .ToListAsync(cancellationToken);
+        }
 
         public Task<List<WalletOutput>> GetAllAsync(GetAllWallets filter, CancellationToken cancellationToken)
         {

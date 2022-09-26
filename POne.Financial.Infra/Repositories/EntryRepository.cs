@@ -7,6 +7,7 @@ using POne.Financial.Domain.Contracts;
 using POne.Financial.Domain.Entities;
 using POne.Financial.Domain.Queries.Inputs.Entries;
 using POne.Financial.Domain.Queries.Outputs.Entries;
+using POne.Financial.Domain.Queries.Outputs.Wallets;
 using POne.Financial.Infra.Connections;
 using POne.Infra.Repositories;
 using System;
@@ -21,9 +22,12 @@ namespace POne.Financial.Infra.Repositories
     {
         private readonly IAuthenticatedUser _authenticatedUser;
 
-        public EntryRepository(IAuthenticatedUser authenticatedUser, POneFinancialDbContext dbContext) : base(dbContext) => _authenticatedUser = authenticatedUser;
+        public EntryRepository(
+            IAuthenticatedUser authenticatedUser, 
+            POneFinancialDbContext dbContext
+        ) : base(dbContext) => _authenticatedUser = authenticatedUser;
 
-        private IQueryable<Entry> ApplyGeneralFilter(IQueryable<Entry> entries, GetFiltredEntries filter)
+        private static IQueryable<Entry> ApplyGeneralFilter(IQueryable<Entry> entries, GetFiltredEntries filter)
         {
             if (filter.Text is string text)
                 entries = entries.Where(entry => EF.Functions.Like(entry.Title.ToLower(), $"{text.ToLower()}%"));
@@ -46,7 +50,7 @@ namespace POne.Financial.Infra.Repositories
             return entries;
         }
 
-        private IQueryable<Entry> ApplyNormalEntriesFilter(IQueryable<Entry> entries, GetFiltredEntries filter)
+        private static IQueryable<Entry> ApplyNormalEntriesFilter(IQueryable<Entry> entries, GetFiltredEntries filter)
         {
             entries = entries.Where((entry) =>
                 !entry.IsDeleted
@@ -75,7 +79,7 @@ namespace POne.Financial.Infra.Repositories
             return entries;
         }
 
-        private IQueryable<Entry> ApplyRecurrentEntriesFilter(IQueryable<Entry> entries, GetFiltredEntries filter)
+        private static IQueryable<Entry> ApplyRecurrentEntriesFilter(IQueryable<Entry> entries, GetFiltredEntries filter)
         {
             entries = entries
                 .Where(e =>
@@ -96,7 +100,7 @@ namespace POne.Financial.Infra.Repositories
             return entries;
         }
 
-        private IEnumerable<Entry> ApplyRecurrentEntriesFilter(IEnumerable<Entry> entries, GetFiltredEntries filter)
+        private static IEnumerable<Entry> ApplyRecurrentEntriesFilter(IEnumerable<Entry> entries, GetFiltredEntries filter)
         {
             entries = entries.Where(e => !e.IsDeleted);
             if (filter.IsPaid is bool isPaid)
@@ -116,7 +120,6 @@ namespace POne.Financial.Infra.Repositories
 
             return entries;
         }
-
 
         public async Task<List<EntryOutput>> GetAllAsync(GetFiltredEntries filter, CancellationToken cancellationToken)
         {
@@ -194,11 +197,16 @@ namespace POne.Financial.Infra.Repositories
                     RecurrenceBegin = entry.Parent != null ? entry.Parent.RecurrenceBegin : null,
                     RecurrenceEnd = entry.Parent != null ? entry.Parent.RecurrenceEnd : null,
                     Recurrence = entry.Recurrence,
-                    Wallet = entry.Wallet != null ? new OptionModel
+                    Wallet = entry.Wallet != null ? new OptionModel<WalletOptionsExtra>
                     {
                         Id = entry.Wallet.Id,
                         Color = entry.Wallet.Color,
-                        Title = entry.Wallet.Name
+                        Title = entry.Wallet.Name,
+                        Extra = new WalletOptionsExtra
+                        {
+                            Value = entry.Wallet.Value,
+                            Currency = entry.Wallet.Currency
+                        }
                     } : null,
                     Category = entry.Category != null ? new OptionModel
                     {
@@ -218,11 +226,16 @@ namespace POne.Financial.Infra.Repositories
                         Value = payment.Value,
                         Fees = payment.Fees,
                         Fine = payment.Fine,
-                        Wallet = new OptionModel
+                        Wallet = new OptionModel<WalletOptionsExtra>
                         {
                             Title = payment.Wallet.Name,
                             Color = payment.Wallet.Color,
-                            Id = payment.Wallet.Id
+                            Id = payment.Wallet.Id,
+                            Extra = new WalletOptionsExtra
+                            {
+                                Value = payment.Wallet.Value,
+                                Currency = payment.Wallet.Currency
+                            }
                         }
                     }).ToArray()
                 })

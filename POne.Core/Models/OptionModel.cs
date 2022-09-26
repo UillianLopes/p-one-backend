@@ -10,8 +10,8 @@ namespace POne.Core.Models
         public string Color { get; set; }
     }
 
-    public class OptionModel<T> : OptionModel
+    public class OptionModel<TExtra> : OptionModel
     {
-        public T Extra { get; set; }
+        public TExtra Extra { get; set; }
     }
 }

@@ -21,6 +21,10 @@ namespace POne.Financial.Api.Controllers
         {
         }
 
+        [HttpGet("[action]")]
+        [POneAuthorize(Roles.Financial.Wallet.Read)]
+        public Task<IActionResult> GetAllAsOptionsAsync([FromQuery] GetAllWalletsAsOptions query, CancellationToken cancellationToken) => QueryAsync(query, cancellationToken);
+
         [HttpPost]
         [POneAuthorize(Roles.Financial.Wallet.Create)]
         public Task<IActionResult> CreateAsync([FromBody] CreateWalletCommand command, CancellationToken cancellationToken) => SendAsync(command, cancellationToken);

@@ -137,7 +137,7 @@ namespace POne.Financial.Business.CommandHandlers
             var entry = Entry.Standard(
                 _authenticatedUser.AccountId,
                 _authenticatedUser.Id,
-                DateTime.Now,
+                request.DueDate,
                 request.Deposit,
                 EntryOperation.Credit,
                 null,
@@ -173,7 +173,7 @@ namespace POne.Financial.Business.CommandHandlers
             var entry = Entry.Standard(
                 _authenticatedUser.AccountId,
                 _authenticatedUser.Id,
-                DateTime.Now,
+                request.DueDate,
                 request.Withdraw,
                 EntryOperation.Debit,
                 null,
@@ -211,7 +211,7 @@ namespace POne.Financial.Business.CommandHandlers
                 var entry = Entry.Standard(
                     _authenticatedUser.AccountId,
                     _authenticatedUser.Id,
-                    DateTime.Now,
+                    request.DueDate,
                     request.Value,
                     EntryOperation.Debit,
                     null,
@@ -244,7 +244,7 @@ namespace POne.Financial.Business.CommandHandlers
                 var entry = Entry.Standard(
                     _authenticatedUser.AccountId,
                     _authenticatedUser.Id,
-                    DateTime.Now,
+                    request.DueDate,
                     request.Value,
                     EntryOperation.Credit,
                     null,
