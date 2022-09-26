@@ -224,7 +224,7 @@ namespace POne.Financial.Business.CommandHandlers
                 if (wallet == null)
                     return CommandOutput.NotFound("@PONE.MESSAGES.YOU_CANT_PAY_AN_ENTRY_WITHOUT_A_WALLET");
 
-                entry.Pay(wallet, request.PaidValue, request.Fine, request.Fees);
+                entry.Pay(wallet, request.PaidValue.Value, request.Fine ?? 0.00m, request.Fees ?? 0.00m);
             }
 
             return CommandOutput.Created("/entries", entry.Id, "PONE.MESSAGES.ENTRIES_CREATED");

@@ -13,5 +13,6 @@ namespace POne.Financial.Domain.Commands.Inputs.Wallets
         public Guid? SubCategoryId { get; set; }
         public string Description { get; set; }
         public decimal Deposit { get; set; }
+        public DateTime DueDate { get; set; }
     }
 }
