@@ -12,6 +12,7 @@ namespace POne.Financial.Domain.Commands.Inputs.Entries
         public string Description { get; set; }
         public Guid CategoryId { get; set; }
         public Guid? SubCategoryId { get; set; }
+        public Guid WalletId { get; set; }
         public decimal Value { get; set; }
         public string BarCode { get; set; }
     }

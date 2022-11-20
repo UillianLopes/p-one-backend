@@ -2,7 +2,6 @@
 using POne.Core.Contracts;
 using POne.Core.Queries.Outputs;
 using POne.Financial.Domain.Contracts;
-using POne.Financial.Domain.Entities;
 using POne.Financial.Domain.Queries.Inputs.Dashboards;
 using POne.Financial.Infra.Connections;
 using System;
@@ -55,14 +54,7 @@ namespace POne.Financial.Infra.Repositories
 
                 var series = new List<LineChartDataSerie>();
                 var lastValue = 0.00m;
-                var userReferenceValue = false;
-                var referenceValue = 0.00m;
 
-                if (!balances.Any() && wallet.Balances.OrderBy((d) => d.Creation).LastOrDefault() is Balance lastBalance)
-                {
-                    userReferenceValue = true;
-                    referenceValue = lastBalance.Value;
-                }
 
                 foreach (var date in dates)
                 {
@@ -71,14 +63,25 @@ namespace POne.Financial.Infra.Repositories
                         .OrderByDescending(balance => balance.Creation)
                         .FirstOrDefault();
 
-                    var nextRamdom = (decimal)ramdom.Next(0, 100);
+                    decimal balanceValue = 0.00m;
+                    if (balance != null)
+                        balanceValue = balance.Value;
+                    else if (lastValue != 0.00m)
+                        balanceValue = lastValue;
+                    else
+                    {
+                        var retroativeBalance = wallet.Balances
+                            .Where(balance => balance.Creation.Date < date)
+                            .OrderByDescending(balance => balance.Creation)
+                            .FirstOrDefault();
 
-                    var balanceValue = balance?.Value ?? lastValue;
+                        balanceValue = retroativeBalance?.Value ?? lastValue;
+                    }
 
                     series.Add(new LineChartDataSerie
                     {
                         Name = date.ToString("dd/MM/yyyy"),
-                        Value = (date.Date >= wallet.Creation.Date && date.Date <= DateTime.Now.Date ? (userReferenceValue ? referenceValue : balanceValue) : null)
+                        Value = (date.Date >= wallet.Creation.Date && date.Date <= DateTime.Now.Date ? balanceValue : null)
                     });
 
                     lastValue = balanceValue;

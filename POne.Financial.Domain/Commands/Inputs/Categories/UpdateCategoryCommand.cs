@@ -12,7 +12,7 @@ namespace POne.Financial.Domain.Commands.Inputs.Categories
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public EntryOperation Type { get; set; }
+        public EntryOperation Operation { get; set; }
         public string Color { get; set; }
     }
 }

@@ -92,7 +92,5 @@ namespace POne.Identity.Domain.Entities
             foreach (var role in Profile.Roles)
                 yield return new Claim(JwtClaimTypes.Role, role.Key);
         }
-
-
     }
 }

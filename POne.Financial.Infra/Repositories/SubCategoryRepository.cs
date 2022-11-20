@@ -69,7 +69,7 @@ namespace POne.Financial.Infra.Repositories
                         Name = c.Category.Name,
                         Id = c.Category.Id,
                         Description = c.Category.Description,
-                        Type = c.Category.Type,
+                        Operation = c.Category.Operation,
                         Color = c.Category.Color
                     }
                 })
