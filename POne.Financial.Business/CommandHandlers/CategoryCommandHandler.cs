@@ -31,7 +31,7 @@ namespace POne.Financial.Business.CommandHandlers
                 request.Name,
                 request.Description,
                 request.Color,
-                request.Type
+                request.Operation
              );
 
             await _categoryRepsitory.CreateAync(category, cancellationToken);
@@ -41,7 +41,7 @@ namespace POne.Financial.Business.CommandHandlers
                 category.Id,
                 category.Name,
                 category.Description,
-                category.Type,
+                category.Operation,
                 category.Color
             }, "@PONE.MESSAGES.CATEGORY_CREATED");
         }
@@ -51,14 +51,19 @@ namespace POne.Financial.Business.CommandHandlers
             if (await _categoryRepsitory.FindByIdAync(request.Id, cancellationToken) is not Category category)
                 return CommandOutput.NotFound("@PONE.MESSAGES.CATEGORY_NOT_FOUND");
 
-            category.Update(request.Name, request.Description, request.Color, request.Type);
+            category.Update(
+                request.Name, 
+                request.Description, 
+                request.Color, 
+                request.Operation
+            );
 
             return CommandOutput.Ok(new
             {
                 category.Id,
                 category.Name,
                 category.Description,
-                category.Type,
+                category.Operation,
                 category.Color
             }, "@PONE.MESSAGES.CATEGORY_UPDATED");
         }

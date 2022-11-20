@@ -33,7 +33,7 @@ namespace POne.Financial.Infra.Repositories
             if (filter.Operation is EntryOperation type)
                 query = _dbContext
                     .Categories
-                    .Where(category => category.Type == type);
+                    .Where(category => category.Operation == type);
 
             return query
                 .OrderBy(c => c.Name)
@@ -41,7 +41,7 @@ namespace POne.Financial.Infra.Repositories
                 {
                     Title = c.Name,
                     Id = c.Id,
-                    Color = c.Color
+                    Color = c.Color,
                 })
                 .AsNoTracking()
                 .ToListAsync(cancellationToken);
@@ -58,7 +58,7 @@ namespace POne.Financial.Infra.Repositories
                 ));
 
             if (filter.Type is EntryOperation type)
-                query = query.Where(category => category.Type == type);
+                query = query.Where(category => category.Operation == type);
 
             return query
                 .OrderBy(c => c.Name)
@@ -67,7 +67,7 @@ namespace POne.Financial.Infra.Repositories
                     Name = c.Name,
                     Description = c.Description,
                     Id = c.Id,
-                    Type = c.Type,
+                    Operation = c.Operation,
                     Color = c.Color
                 })
                 .AsNoTracking()

@@ -146,7 +146,7 @@ namespace POne.Financial.Business.CommandHandlers
 
             if (request.SubCategoryId is Guid subCategoryId)
                 subCategory = await _subCategoryRepository.FindByIdAync(subCategoryId, cancellationToken);
-            
+
             Wallet wallet = null;
             if (request.WalletId is Guid walletId)
                 wallet = await _balanceRepository.FindByIdAync(walletId, cancellationToken);
@@ -291,12 +291,38 @@ namespace POne.Financial.Business.CommandHandlers
                 return CommandOutput.NotFound("@PONE.MESSAGES.ENTRY_NOT_FOUND");
 
             if (await _categoryRepository.FindByIdAync(request.CategoryId, cancellationToken) is not Category category)
-                return CommandOutput.NotFound("PONE.MESSAGES.CATEGORY_NOT_FOUND");
+                return CommandOutput.NotFound("@PONE.MESSAGES.CATEGORY_NOT_FOUND");
+
+            if (await _balanceRepository.FindByIdAync(request.WalletId, cancellationToken) is Wallet wallet)
+                return CommandOutput.NotFound("@PONE.MESSAGES.CATEGORY_NOT_FOUND");
 
             SubCategory subCategory = null;
-
             if (request.SubCategoryId is Guid subCategoryId)
                 subCategory = await _subCategoryRepository.FindByIdAync(subCategoryId, cancellationToken);
+
+            if (entry.Recurrence is not null)
+            {
+                var childEntry = entry
+                    .CreateAChildEntry(request.DueDate, request.Value);
+                
+                entry
+                    .Children
+                    .Add(childEntry);
+
+                childEntry.Update(
+                    request.Title,
+                    request.Description,
+                    request.BarCode,
+                    request.Currency,
+                    request.Value,
+                    request.DueDate,
+                    category,
+                    subCategory
+                );
+
+                return CommandOutput.Ok("@PONE.MESSAGES.ENTRY_UPDATED_WITH_SUCESSS");
+            }
+
 
             entry.Update(
                 request.Title,

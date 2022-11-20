@@ -36,7 +36,7 @@ namespace POne.Financial.Infra.Mappings
             builder.Property(e => e.Color)
                 .HasMaxLength(7);
 
-            builder.Property(e => e.Type)
+            builder.Property(e => e.Operation)
                 .HasConversion((e) => e.ToString(), (e) => Enum.IsDefined(typeof(EntryOperation), e) ? (EntryOperation)Enum.Parse(typeof(EntryOperation), e) : default)
                 .IsRequired();
 
