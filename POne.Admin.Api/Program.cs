@@ -21,7 +21,7 @@ var configuration = builder.Configuration;
 var services = builder.Services;
 
 var connectionString = configuration
-    .GetConnectionString("POneAdmin");
+    .GetConnectionString("POneAdmin") ?? string.Empty;
 
 services.AddDbContext<POneIdentityDbContext>(opts => opts
     .UseSqlServer(connectionString)
