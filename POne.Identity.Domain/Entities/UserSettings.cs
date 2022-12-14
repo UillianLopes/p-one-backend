@@ -31,9 +31,7 @@ namespace POne.Identity.Domain.Entities
             stream.Position = 0;
 
             using var streamReader = new StreamReader(stream);
-
-
-            if (await streamReader.ReadToEndAsync() is string settings && !string.IsNullOrEmpty(settings))
+            if (await streamReader.ReadToEndAsync(cancellationToken) is string settings && !string.IsNullOrEmpty(settings))
                 Value = Convert.ToBase64String(Encoding.UTF8.GetBytes(settings));
             else
                 Value = null;

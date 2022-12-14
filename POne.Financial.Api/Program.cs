@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using POne.Api.Extensions;
@@ -101,7 +100,6 @@ services.AddSwaggerGen(c =>
     c.OperationFilter<AuthorizeCheckOperationFilter>();
 });
 
-
 services.AddScoped<IBankRepository, BankRepository>();
 services.AddScoped<ICategoryRepository, CategoryRepository>();
 services.AddScoped<ISubCategoryRepository, SubCategoryRepository>();
@@ -111,13 +109,13 @@ services.AddScoped<IWalletRepository, WalletRepository>();
 services.AddScoped<IDashboardRepository, DashboardRepository>();
 services.AddScoped<INotifierApiFacade, NotifierApiFacade>();
 services.AddSingleton<IdentityApiFacade>();
-
 services.AddSignalR();
 
 var endpointsSection = configuration
     .GetSection("ApiEndpoints");
 
-var endpoints = endpointsSection.Get<ApiEndpointOptions>();
+var endpoints = endpointsSection
+    .Get<ApiEndpointOptions>();
 
 services.Configure<ApiEndpointOptions>(endpointsSection);
 
@@ -134,9 +132,7 @@ services.AddHttpClient("POne.Identity.Api.Client", (opts) =>
 var app = builder.Build();
 var env = app.Environment;
 
-
 app.UseDeveloperExceptionPage();
-
 app.UseSwagger();
 app.UseSwaggerUI(options =>
 {
@@ -151,13 +147,7 @@ app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapDefaultControllerRoute();
-});
-
-
+app.MapDefaultControllerRoute();
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto

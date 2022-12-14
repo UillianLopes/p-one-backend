@@ -41,7 +41,6 @@ services.AddPOneApi(builder => builder
     .WithCQRSFromAssemblyOf<UserCommandHandler>()
 );
 
-
 var allowedCorsOrigns = configuration
      .GetSection("AllowedCorsOrigins")
      .Get<string[]>();
@@ -91,12 +90,7 @@ if (!env.IsDocker())
 
 app.UseRouting();
 app.UseIdentityServer();
-
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapDefaultControllerRoute();
-});
-
+app.MapDefaultControllerRoute();
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto

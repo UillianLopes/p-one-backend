@@ -41,7 +41,7 @@ services.AddPOneApi(builder => builder
 
 var allowedCorsOrigns = configuration
      .GetSection("AllowedCorsOrigins")
-     .Get<string[]>();
+     .Get<string[]>() ?? Array.Empty<string>();
 
 
 services.AddCors(cors => cors.AddPolicy("DefaultCors", config => config
@@ -68,9 +68,6 @@ services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
         options.AddQueryStringAccessToken();
     });
-
-
-
 services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
@@ -98,12 +95,10 @@ services.AddSwaggerGen(c =>
 
     c.OperationFilter<AuthorizeCheckOperationFilter>();
 });
-
 services.AddSingleton<NotificationsHub>();
 services.AddScoped<INotificationRepository, NotificationRepository>();
 services.AddScoped<INotificationsHubFacade, NotificationsHubFacade>();
 services.AddControllers();
-
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 services.AddSignalR();
@@ -115,31 +110,26 @@ var env = app.Environment;
 if (env.IsDevelopment())
     app.UseDeveloperExceptionPage();
 
+app.MapHub<NotificationsHub>("/hubs/notifications")
+   .RequireAuthorization();
+
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.OAuthClientId("POne.Notifier.Api.Swagger");
     c.OAuthScopes("ponenotifierapi");
 });
-
 app.UseCors("DefaultCors");
 app.UseStaticFiles();
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseEndpoints(endpoints =>
+app.MapDefaultControllerRoute();
+app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
-    endpoints.MapHub<NotificationsHub>("/hubs/notifications")
-        .RequireAuthorization();
-
-    endpoints.MapDefaultControllerRoute();
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
 });
-
-//app.UseForwardedHeaders(new ForwardedHeadersOptions
-//{
-//    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-//});
 
 using (var scope = app.Services.CreateScope())
 {
