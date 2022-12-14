@@ -21,7 +21,7 @@ var configuration = builder.Configuration;
 var services = builder.Services;
 
 var connectionString = configuration
-    .GetConnectionString("POneAdmin");
+    .GetConnectionString("POneAdmin") ?? string.Empty;
 
 services.AddDbContext<POneIdentityDbContext>(opts => opts
     .UseSqlServer(connectionString)
@@ -37,7 +37,7 @@ services.AddPOneApi(builder => builder
 
 var allowedCorsOrigns = configuration
      .GetSection("AllowedCorsOrigins")
-     .Get<string[]>();
+     .Get<string[]>() ?? Array.Empty<string>();
 
 
 services.AddCors(cors => cors.AddPolicy("DefaultCors", config => config
@@ -127,11 +127,7 @@ app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapDefaultControllerRoute();
-});
-
+app.MapDefaultControllerRoute();
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
