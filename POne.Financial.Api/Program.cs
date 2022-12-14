@@ -114,7 +114,8 @@ services.AddSignalR();
 var endpointsSection = configuration
     .GetSection("ApiEndpoints");
 
-var endpoints = endpointsSection.Get<ApiEndpointOptions>();
+var endpoints = endpointsSection
+    .Get<ApiEndpointOptions>();
 
 services.Configure<ApiEndpointOptions>(endpointsSection);
 
